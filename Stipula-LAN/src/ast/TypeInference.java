@@ -182,7 +182,9 @@ public class TypeInference {
 						types.put(pair,new TimeType());
 					}
 					else if(isNumeric(el.getValue())) {
-						types.put(pair,new RealType());
+						if(!(types.get(pair) instanceof TimeType)) {
+							types.put(pair,new RealType());
+						}
 					}
 					else if(el.getValue().equals("true") || el.getValue().equals("false")) {
 						types.put(pair,new BooleanType());
@@ -198,7 +200,9 @@ public class TypeInference {
 	public void addType(String str, Type t, int index) {
 		for(Pair<String,Integer> pair : types.keySet()) {
 			if((str.equals(pair.getKey()) && (pair.getValue()==index+1) && t!=null)) {
-				types.put(pair,t);
+				if(!(types.get(pair) instanceof TimeType)){
+					types.put(pair,t);
+				}
 			}
 		}
 	}

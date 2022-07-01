@@ -155,6 +155,18 @@ public class Program {
 			}
 		}
 	}
+	
+	public void updateParties(Contract cnt) {
+		for(Disputer fc : cnt.getGlobalDisputers()) {
+			for(Disputer f : parties) {
+				if(f.getId().equals(fc.getId())) {
+					f.setValue((float) fc.getValue());
+					f.setValueStr(fc.getValueStr());
+					f.setValueAsset((float) fc.getValueAsset());
+				}
+			}
+		}
+	}
 
 	public void updateFieldsAgreement(ArrayList<ArrayList<Pair<Field,String>>> values) {
 		ArrayList<Pair<Field,String>> tmp = new ArrayList<Pair<Field,String>>();
@@ -198,37 +210,29 @@ public class Program {
 
 	public void printFields() {
 		for(Field f : fields) {
-			boolean flag = false;
-			for(Disputer p : parties) {
-				if(f.getId().equals(p.getId())) {
-					flag = true;
-				}
-			}
-			if(!flag) {
-				System.out.print("\t");
-				f.printField();
-			}
+
+			System.out.print("\t");
+			f.printField();
 		}
 	}
 
 	public void printAssets() {
 		for(Asset f : assets) {
-			/*
-			 boolean flag = false;
-			 
-			for(Disputer p : parties) {
-				if(f.getId().equals(p.getId())) {
-					flag = true;
-				}
-			}
-			if(!flag) {
-			*/
-				System.out.print("\t");
-				f.printAsset();
-			}
-		
+			System.out.print("\t");
+			f.printAsset();
+		}
+
 	}
 
+
+	public void printParties() {
+		for(Disputer d : parties) {
+			System.out.print("\t");
+			d.printDisputer();
+		}
+
+	}
+	
 	public void print() {
 		System.out.println("programma: "+id);
 		if(initState!=null) {initState.printState();}
@@ -334,6 +338,8 @@ public class Program {
 					printFields();
 					System.out.println("Updated assets:");
 					printAssets();
+					System.out.println("Updated parties:");
+					printParties();
 					System.out.println("############");
 					System.out.println("Next state " + getRunningState().getId());
 					System.out.println("############");
@@ -527,7 +533,7 @@ public class Program {
 
 				String userID = s.substring(0,s.indexOf(".") );
 				String nameContract = s.substring(s.indexOf(".") + 1, s.indexOf("("));;
-				
+
 				String[] varsItems = variables.split(",");
 				String[] assetsItems = assetsVar.split(",");
 
@@ -621,6 +627,7 @@ public class Program {
 
 								this.updateFields(tmpContr);
 								this.updateAssets(tmpContr);
+								this.updateParties(tmpContr);
 								for(Field f : tmpContr.getVars()) {
 									typeinferencer.addType(f.getId(),f.getType(),index);
 								}
@@ -648,6 +655,8 @@ public class Program {
 								this.printFields();
 								System.out.println("Updated assets:");
 								this.printAssets();
+								System.out.println("Updated parties:");
+								this.printParties();
 
 
 							}
@@ -778,7 +787,6 @@ public class Program {
 		if(events!=null) {
 			for(int index = 0; index<events.size(); index++) {
 				int secs = events.get(index).evaluateEvent(this);
-				System.out.println("devo aspettare "+secs+" secondi.");
 				setTimer(index,secs,events.get(index),typeinferencer);
 			}
 		}

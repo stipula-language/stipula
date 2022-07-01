@@ -59,14 +59,10 @@ public class Interpreter extends StipulaBaseVisitor {
 			else if(n.type().PARTY()!=null) {
 				Disputer tmpDisp = new Disputer(n.strings().getText());
 				progDisputers.add(tmpDisp);
-				Asset tmpAsset = new Asset(n.strings().getText());
-				progAssets.add(tmpAsset);
-				Field tmpField = new Field(n.strings().getText());
-				progFields.add(tmpField);
+				
 			}
 			else if(n.type().INIT()!=null) {
 				tmpState = new State(n.strings().getText());
-				//progStates.add(tmpState);
 			}
 		}
 		if(progAssets.size()==0) {
@@ -94,23 +90,19 @@ public class Interpreter extends StipulaBaseVisitor {
 					}
 					if(!flag) {
 						program.addDisputer(disp);
-						Asset tmpAsset = new Asset(disp.getId());
-						program.addAsset(tmpAsset);
 					}
 				}
 
 			}
 			if(program.getDisputers()==null) {
 				program.addDisputers(agr.getDisputers());
-				for(Disputer disp : agr.getDisputers()) {
-					Asset tmpAsset = new Asset(disp.getId());
-					program.addAsset(tmpAsset);
-				}
 			}
 		}
 		for(FunContext f : ctx.fun()) {
 			Contract cnt = visitFun(f);
+			cnt.setGlobalDisputers(progDisputers);
 			program.addContract(cnt);
+			
 		}
 		return program ;
 	}

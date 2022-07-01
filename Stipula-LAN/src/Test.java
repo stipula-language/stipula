@@ -24,8 +24,6 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import ast.*;
 import javafx.util.Pair;
 import parser.*;
-import util.Environment;
-import util.SemanticError;
 
 
 
@@ -45,7 +43,6 @@ public class Test {
 			ParseTree t = parser.prog();
 
 			/* TYPE CHECKING */
-			
 			TypeChecker code = new TypeChecker();
 			Map<Pair<String, Integer>, Type> types = (Map<Pair<String, Integer>, Type>) code.visit(t);
 			ArrayList<Pair<String,ArrayList<Pair<String,Type>>>> funParams = code.getFunParams();
@@ -57,7 +54,6 @@ public class Test {
 			System.out.println("==================");
 
 			/* INTERPRETER */
-
 			Interpreter codeInterpreter = new Interpreter();
 			Object program = codeInterpreter.visit(t);
 			((Program) program).runProgram(typeinferencer);
