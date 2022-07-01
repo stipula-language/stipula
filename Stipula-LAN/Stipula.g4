@@ -17,13 +17,11 @@ id : ID ;
 
 agreement : (AGREEMENT LPAR disputer (COMMA disputer)* RPAR LPAR vardec (COMMA vardec)* RPAR CLPAR (assign)+ CRPAR IMPL AT state);
 
-fun	:  (AT state disputer (COMMA disputer)* COLON id LPAR (vardec ( COMMA vardec)* )? RPAR SLPAR (assetdec ( COMMA assetdec)* )? SRPAR (LPAR prec RPAR)? CLPAR (stat)+ SEMIC (events)+ CRPAR IMPL AT state )   ;
+fun	:  ((AT state)* disputer (COMMA disputer)* COLON id LPAR (vardec ( COMMA vardec)* )? RPAR SLPAR (assetdec ( COMMA assetdec)* )? SRPAR (LPAR prec RPAR)? CLPAR (stat)+ SEMIC (events)+ CRPAR IMPL AT state )   ;
 		
 assign : (disputer (COMMA disputer)* COLON vardec (COMMA vardec)*);
 
 declist : type strings  ;
-
-strings : ID ;
 
 type :  ASSET | FIELD | INTEGER | DOUBLE | BOOLEAN | PARTY | INIT;
 
@@ -69,6 +67,9 @@ value  :  number
       | EMPTY
       | (TRUE | FALSE)				
       ;      
+
+strings :  SINGLE_STRING | DOUBLE_STRING | ID ;
+
 
 real
  : number DOT number
@@ -132,6 +133,13 @@ BOOLEAN : 'bool' ;
 PARTY : 'party' ;
 INIT : 'init' ;
 
+SINGLE_STRING
+    : '\'' ~('\'')+ '\''
+    ;
+
+DOUBLE_STRING
+    : '"' ~('"')+ '"'
+    ;
 
 
 INT

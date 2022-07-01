@@ -233,25 +233,6 @@ public class Program {
 
 	}
 	
-	public void print() {
-		System.out.println("programma: "+id);
-		if(initState!=null) {initState.printState();}
-		if(agreement!=null) {agreement.printAgreement();}
-		for(Field f : fields) {
-			f.printField();
-		}
-		for(Asset a : assets) {
-			a.printAsset();
-		}
-		for(Disputer d : parties ) {
-			d.printDisputer();
-		}
-		for(Contract n: contracts) {
-			n.printContract();
-		}
-
-	}
-
 	public boolean contained(Entity el, ArrayList<Disputer> A) {
 		boolean contains = false;
 		if(A!=null) {
@@ -420,14 +401,13 @@ public class Program {
 			if(flag) {
 				this.updateFieldsAgreement(valuesAgree);
 				typeinferencer.addTypes(valuesAgree);
-				typedVars = typeinferencer.getTypes();
 				typeinferencer.print_map();
+				typedVars = typeinferencer.getTypes();
 			}
 		}
 		if(events!=null) {
 			for(int index = 0; index<events.size(); index++) {
 				int secs = events.get(index).evaluateEvent(this);
-				System.out.println("devo aspettare " +secs);
 				setTimer(index,secs,events.get(index),typeinferencer);
 				lock.add(new Object());				
 				howManyThreads++;
@@ -463,10 +443,25 @@ public class Program {
 				System.out.println("# Please, choose which contract should run: ");
 
 				for(Contract c : this.getContracts()) {
-					if(c.getInitState().getId().equals(state)) {
+					boolean rightInitState = false;
+					for(State initState : c.getInitState()) {
+						if(initState.getId().equals(state)) {
+							rightInitState = true;
+						}
+					}
+
+					if(rightInitState) {
 						found = true;
-						for(Disputer d: c.getDisputer()) {
-							System.out.print("\t"+d.getId()+".");
+						for(int i=0; i<c.getDisputer().size(); i++) {
+							if(i==0) {
+								System.out.print("\t");
+							}
+							if(i==c.getDisputer().size()-1) {
+								System.out.print(c.getDisputer().get(i).getId()+".");
+							}
+							else {
+								System.out.print(c.getDisputer().get(i).getId()+",");
+							}
 						}
 						System.out.print(c.getId()+"(");
 						if(c.getVars()!=null){
@@ -546,7 +541,13 @@ public class Program {
 							rightId = true;
 						}
 					}
-					if(rightId && c.getId().equals(nameContract) && c.getInitState().getId().equals(state)) {
+					boolean rightInitState = false;
+					for(State initState : c.getInitState()) {
+						if(initState.getId().equals(state)) {
+							rightInitState = true;
+						}
+					}
+					if(rightId && c.getId().equals(nameContract) && rightInitState) {
 						tmpContr = c;
 
 						boolean emptyVars = varsItems.length==1 && varsItems[0].length()==0 && tmpContr.getVars().size()==0;
@@ -807,10 +808,19 @@ public class Program {
 			System.out.println("############");
 			System.out.println("# Please, choose which contract should run: ");
 			for(Contract c : this.getContracts()) {
-				if(c.getInitState().getId().equals(state)) {
+				for(State stateInit : c.getInitState()){
+				if(stateInit.getId().equals(state)) {
 					found = true;
-					for(Disputer d: c.getDisputer()) {
-						System.out.print("\t"+d.getId()+".");
+					for(int i=0; i<c.getDisputer().size(); i++) {
+						if(i==0) {
+							System.out.print("\t");
+						}
+						if(i==c.getDisputer().size()-1) {
+							System.out.print(c.getDisputer().get(i).getId()+".");
+						}
+						else {
+							System.out.print(c.getDisputer().get(i).getId()+",");
+						}
 					}
 					System.out.print(c.getId()+"(");
 					if(c.getVars()!=null){
@@ -837,6 +847,7 @@ public class Program {
 					System.out.println("]");
 				}
 			}
+			}
 			if(found) {
 				Scanner in = new Scanner(System.in);
 				String s = in.nextLine();
@@ -859,7 +870,13 @@ public class Program {
 							rightId = true;
 						}
 					}
-					if(rightId && c.getId().equals(nameContract) && c.getInitState().getId().equals(state)) {
+					boolean rightInitState = false;
+					for(State initState : c.getInitState()) {
+						if(initState.getId().equals(state)) {
+							rightInitState = true;
+						}
+					}
+					if(rightId && c.getId().equals(nameContract) && rightInitState) {
 						tmpContr = c;
 
 						boolean emptyVars = varsItems.length==1 && varsItems[0].length()==0 && tmpContr.getVars().size()==0;

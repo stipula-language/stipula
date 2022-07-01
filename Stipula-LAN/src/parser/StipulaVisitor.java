@@ -78,17 +78,17 @@ public interface StipulaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAssetdec(@NotNull StipulaParser.AssetdecContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link StipulaParser#strings}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitStrings(@NotNull StipulaParser.StringsContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link StipulaParser#prec}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitPrec(@NotNull StipulaParser.PrecContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link StipulaParser#strings}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStrings(@NotNull StipulaParser.StringsContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link StipulaParser#expr}.
 	 * @param ctx the parse tree

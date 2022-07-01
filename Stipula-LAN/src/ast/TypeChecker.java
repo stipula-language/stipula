@@ -31,7 +31,7 @@ public class TypeChecker extends StipulaBaseVisitor {
 	ArrayList<String> parties = null;
 
 	ArrayList<Pair<String,ArrayList<Pair<String,Type>>>> funParams = new ArrayList<Pair<String,ArrayList<Pair<String,Type>>>>();
-	
+
 	public ArrayList<String> getNames(){
 		return contractNames;
 	}
@@ -55,7 +55,7 @@ public class TypeChecker extends StipulaBaseVisitor {
 	public ArrayList<Pair<String,ArrayList<Pair<String,Type>>>> getFunParams() {
 		return funParams;
 	}
-	
+
 	public Map<Pair<String,Integer>,Type> setType(Pair<String,Integer> pair, Type type, Map<Pair<String,Integer>,Type> map){
 		for(Pair<String,Integer> s : map.keySet()) {
 			if(s.equals(pair)) {
@@ -212,7 +212,7 @@ public class TypeChecker extends StipulaBaseVisitor {
 	}
 
 	public Map<Pair<String,Integer>,Type> visitStat(StatContext ctx){
-		
+
 
 		Map<Pair<String,Integer>,Type> toRet = new LinkedHashMap<Pair<String,Integer>,Type>();
 		if(ctx.ASSETUP()!=null) {
@@ -253,7 +253,7 @@ public class TypeChecker extends StipulaBaseVisitor {
 				}
 
 			} 
-			
+
 			if(typeLeft==null) {
 				for(Pair<String,Integer> s : tmp.keySet()) {
 					if(getType(s,types) instanceof RealType) {
@@ -275,9 +275,9 @@ public class TypeChecker extends StipulaBaseVisitor {
 					toRet.put(s,tmp.get(s));
 				}
 			}
-			
+
 			Map<Pair<String,Integer>,Type> tmp1 = visitValue(ctx.right);
-			
+
 			Type typeRight = null;
 			for(Pair<String,Integer> s : tmp1.keySet()) {
 
@@ -289,7 +289,7 @@ public class TypeChecker extends StipulaBaseVisitor {
 				}
 
 			} 
-			
+
 			if(typeRight==null) {
 				for(Pair<String,Integer> s : tmp1.keySet()) {
 					if(getType(s,types) instanceof RealType) {
@@ -300,12 +300,12 @@ public class TypeChecker extends StipulaBaseVisitor {
 					}
 				} 
 			}
-			
+
 			if(typeLeft != null && typeRight!=null && !typeLeft.equals(typeRight)) {
 				System.out.println("Expressions not of the same type (" +typeLeft.getTypeName()+" and "+typeRight.getTypeName() +")");
 				System.exit(0);
 			}
-			
+
 			for(Pair<String,Integer> s : tmp1.keySet()) {
 				if(typeLeft!=null) {
 					toRet.put(s,typeLeft);
@@ -313,7 +313,7 @@ public class TypeChecker extends StipulaBaseVisitor {
 				else{
 					toRet.put(s,tmp1.get(s));
 				}
-				
+
 			} 
 
 			if(ctx.COMMA()!=null) {
@@ -347,17 +347,26 @@ public class TypeChecker extends StipulaBaseVisitor {
 
 	public Map<Pair<String,Integer>,Type> visitExpr(ExprContext ctx){
 		Map<Pair<String,Integer>,Type> toRet = new LinkedHashMap<Pair<String,Integer>,Type>();
+		Type typeRight = null;
 
 		if(ctx.right!=null) {
 			Map<Pair<String,Integer>,Type> tmp = visitExpr(ctx.right);
 			for(Pair<String,Integer> s : tmp.keySet()) {
+				if(s.getKey().equals(ctx.right.getText()) && s.getValue()==n_scope) {
+					typeRight = tmp.get(s);
+				}
 				toRet.put(s,tmp.get(s));
 			}
 		}
 
 		Map<Pair<String,Integer>,Type> tmp = visitTerm(ctx.left);
 		for(Pair<String,Integer> s : tmp.keySet()) {
-			toRet.put(s,tmp.get(s));
+			if(typeRight!=null) {
+				toRet.put(s,typeRight);
+			}
+			else{
+				toRet.put(s,tmp.get(s));
+			}
 		}
 
 		return toRet;
@@ -365,16 +374,25 @@ public class TypeChecker extends StipulaBaseVisitor {
 
 	public Map<Pair<String,Integer>,Type> visitTerm(TermContext ctx){
 		Map<Pair<String,Integer>,Type> toRet = new LinkedHashMap<Pair<String,Integer>,Type>();
+		Type typeRight = null;
 
 		if(ctx.right!=null) {
 			Map<Pair<String,Integer>,Type> tmp = visitTerm(ctx.right);
 			for(Pair<String,Integer> s : tmp.keySet()) {
+				if(s.getKey().equals(ctx.right.getText()) && s.getValue()==n_scope) {
+					typeRight = tmp.get(s);
+				}
 				toRet.put(s,tmp.get(s));
 			}
 		}
 		Map<Pair<String,Integer>,Type> tmp = visitFactor(ctx.left);
 		for(Pair<String,Integer> s : tmp.keySet()) {
-			toRet.put(s,tmp.get(s));
+			if(typeRight!=null) {
+				toRet.put(s,typeRight);
+			}
+			else{
+				toRet.put(s,tmp.get(s));
+			}
 		}
 
 		return toRet;
@@ -383,18 +401,25 @@ public class TypeChecker extends StipulaBaseVisitor {
 
 	public Map<Pair<String,Integer>,Type> visitFactor(FactorContext ctx){
 		Map<Pair<String,Integer>,Type> toRet = new LinkedHashMap<Pair<String,Integer>,Type>();
-
+		Type typeRight = null;
 		if(ctx.right!=null) {
 			Map<Pair<String,Integer>,Type> tmp = visitValue(ctx.right);
 			for(Pair<String,Integer> s : tmp.keySet()) {
+				if(s.getKey().equals(ctx.right.getText()) && s.getValue()==n_scope) {
+					typeRight = tmp.get(s);
+				}
 				toRet.put(s,tmp.get(s));
 			}
 		}
 		Map<Pair<String,Integer>,Type> tmp = visitValue(ctx.left);
 		for(Pair<String,Integer> s : tmp.keySet()) {
-			toRet.put(s,tmp.get(s));
+			if(typeRight!=null) {
+				toRet.put(s,typeRight);
+			}
+			else{
+				toRet.put(s,tmp.get(s));
+			}
 		}
-
 		return toRet;
 	} 
 

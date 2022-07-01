@@ -1,6 +1,6 @@
 // Generated from Stipula.g4 by ANTLR 4.4
-
 package parser;
+
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
@@ -96,14 +96,14 @@ public class StipulaBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitStrings(@NotNull StipulaParser.StringsContext ctx) { return visitChildren(ctx); }
+	@Override public T visitPrec(@NotNull StipulaParser.PrecContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitPrec(@NotNull StipulaParser.PrecContext ctx) { return visitChildren(ctx); }
+	@Override public T visitStrings(@NotNull StipulaParser.StringsContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -100,7 +100,7 @@ public class Interpreter extends StipulaBaseVisitor {
 		}
 		for(FunContext f : ctx.fun()) {
 			Contract cnt = visitFun(f);
-			cnt.setGlobalDisputers(progDisputers);
+			cnt.setGlobalDisputers(program.getDisputers());
 			program.addContract(cnt);
 			
 		}
@@ -210,13 +210,15 @@ public class Interpreter extends StipulaBaseVisitor {
 		}
 		else {assets = null;}
 
-		State state1 = null;
+		ArrayList<State> state1 = new ArrayList<State>();
 		State state2 = null;
 		if(ctx.state()!=null) {
 			for(int i = 0; i<ctx.state().size(); i++) {
 				State tmp = new State(ctx.state().get(i).getText());
-				if(i==0) {state1 = tmp;}
-				else if(i==ctx.state().size()-1) {state2 = tmp;}
+				if(i==ctx.state().size()-1) {state2 = tmp;}
+				else {				
+					state1.add(tmp);
+				}
 			}
 		}
 
@@ -236,7 +238,6 @@ public class Interpreter extends StipulaBaseVisitor {
 					if(pair.getKey()==null) {
 						for(Statement stm : pair.getValue()) {
 							newContract.addStatement(stm);
-							//System.out.println(stm.getTextStatement());
 						}
 					}
 					else {

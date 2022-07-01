@@ -15,37 +15,36 @@ agreement (Better1 , Better2 , DataProvider)(source, alea, amount, t_before, t_a
 		Better1 , Better2 : amount , t_before 
 } ==> @Init
 
-@Init Better1 : place_bet(y)[w] (w == amount){
-	w -○ wallet1
-	y -> val1;
-	t_before >> @First { wallet1 -○ Better1 } ==> @Init
+@Init Better1 : place_bet(x)[h] (h == amount){
+	h -○ wallet1
+	x -> val1;
+	t_before >> @First { wallet1 -○ Better1 } ==> @Fail
 } ==> @First
 
-@First Better2 : place_bet(x)[v] (v == amount){
-	v -○ wallet2
-	x -> val2;
+@First Better2 : place_bet(x)[h] (h == amount){
+	h -○ wallet2
+	x -> val2
+	alea -> DataProvider;
 	t_after >> @Run { 
 		wallet1 -○ Better1 
 		wallet2 -○ Better2
 	} ==> @Fail
-} ==> @Init
+} ==> @Run
 
-@Init DataProvider : data(x,y)[](x==alea){
-	wallet2 -○ wallet1 
-	Better2 -○ wallet2
-	if (y==val1 && y==val2){
+@Run DataProvider : data(x,y,z)[](x==source && x==alea){
+	if (z==val1 && z==val2){
 		wallet1 -○ Better1 
 		wallet2 -○ Better2
 		_
 	}
-	else if (y==val1 && y!=val2){
+	else if (z==val1 && z!=val2){
 		wallet2 -○ Better1 
 		wallet1 -○ Better1
 		_
 	}
-	else if (y!=val1 && y==val2){
-		wallet2 -○ Better2 
-		wallet1 -○ Better2
+	else if (z!=val1 && z==val2){
+		wallet1 -○ Better2 
+		wallet2 -○ Better2
 		_
 	}
 	else{

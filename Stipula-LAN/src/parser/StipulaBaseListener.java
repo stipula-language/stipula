@@ -1,6 +1,7 @@
 // Generated from Stipula.g4 by ANTLR 4.4
 package parser;
 
+
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -149,18 +150,6 @@ public class StipulaBaseListener implements StipulaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStrings(@NotNull StipulaParser.StringsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStrings(@NotNull StipulaParser.StringsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterPrec(@NotNull StipulaParser.PrecContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -168,6 +157,18 @@ public class StipulaBaseListener implements StipulaListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPrec(@NotNull StipulaParser.PrecContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStrings(@NotNull StipulaParser.StringsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStrings(@NotNull StipulaParser.StringsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

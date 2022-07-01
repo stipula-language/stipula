@@ -1,5 +1,6 @@
 // Generated from Stipula.g4 by ANTLR 4.4
 package parser;
+
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -119,16 +120,6 @@ public interface StipulaListener extends ParseTreeListener {
 	 */
 	void exitAssetdec(@NotNull StipulaParser.AssetdecContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link StipulaParser#strings}.
-	 * @param ctx the parse tree
-	 */
-	void enterStrings(@NotNull StipulaParser.StringsContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link StipulaParser#strings}.
-	 * @param ctx the parse tree
-	 */
-	void exitStrings(@NotNull StipulaParser.StringsContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link StipulaParser#prec}.
 	 * @param ctx the parse tree
 	 */
@@ -138,6 +129,16 @@ public interface StipulaListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitPrec(@NotNull StipulaParser.PrecContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link StipulaParser#strings}.
+	 * @param ctx the parse tree
+	 */
+	void enterStrings(@NotNull StipulaParser.StringsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link StipulaParser#strings}.
+	 * @param ctx the parse tree
+	 */
+	void exitStrings(@NotNull StipulaParser.StringsContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link StipulaParser#expr}.
 	 * @param ctx the parse tree

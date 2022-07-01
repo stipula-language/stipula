@@ -24,10 +24,10 @@ agreement (Lender,Borrower,Authority)(rentingTime,cost){
 		@Using {
 		EndReached -> Borrower
 		} ==> @Return 
-} ==> @Dispute
+} ==> @Using
 
 @Using Borrower : end()[] { 
-	now -> Lender;
+	"EndReached" -> Lender;
 	_
 } ==> @Return
 
@@ -36,7 +36,7 @@ agreement (Lender,Borrower,Authority)(rentingTime,cost){
 	_
 } ==> @End
 
-@Using Lender, Borrower : dispute(x)[] { 
+@Using@Return Lender, Borrower : dispute(x)[] { 
 	x -> _;
 	_
 } ==> @Dispute

@@ -11,7 +11,7 @@ public class Contract {
 	String id;
 	ArrayList<Field> vars = null;
 	ArrayList<Asset> assets = null;
-	State initState = null;
+	ArrayList<State> initState = null;
 	State endState = null;
 	ArrayList<Field> globalVars = null;
 	ArrayList<Asset> globalAssets = null;
@@ -23,7 +23,7 @@ public class Contract {
 	Event events = null;
 	int index ;
 
-	public Contract(String name, ArrayList<Field> f, ArrayList<Asset> a, ArrayList<Disputer> d, State s1, State s2, int i){
+	public Contract(String name, ArrayList<Field> f, ArrayList<Asset> a, ArrayList<Disputer> d, ArrayList<State> s1, State s2, int i){
 		id = name;
 		vars = f;
 		assets = a;
@@ -93,7 +93,7 @@ public class Contract {
 		return id;
 	}
 
-	public State getInitState() {
+	public ArrayList<State> getInitState() {
 		return initState;
 	}
 
@@ -263,8 +263,12 @@ public class Contract {
 
 		for(Statement s : stms) {
 			if(s.getOperator().equals("FIELDUP")) {
+
 				Field leftExpr = (Field) s.getLeftExpr();
 				Field rightExpr = (Field) s.getRightExpr();
+				if(leftExpr.getId().equals("_")||rightExpr.getId().equals("_")) {
+					break;
+				}
 				int indexLeft = findVar(leftExpr.getId(),vars);
 				int indexRight = findVar(rightExpr.getId(),vars);
 
@@ -272,11 +276,19 @@ public class Contract {
 				boolean globalRight = false;
 				boolean partyLeft = false;
 				boolean partyRight = false;
+				boolean extLeft = false;
+				boolean extRight = false;
+
 				if(indexLeft==-1) {
 					indexLeft = findVar(leftExpr.getId(),globalVars);
 					if(indexLeft == -1) {
 						indexLeft = findDisputer(leftExpr.getId());
-						partyLeft =  true;
+						if(indexLeft==-1) {
+							extLeft = true;
+						}
+						else{
+							partyLeft =  true;
+						}
 					}
 					else {
 						globalLeft = true;
@@ -286,14 +298,48 @@ public class Contract {
 					indexRight = findVar(rightExpr.getId(),globalVars);
 					if(indexRight == -1) {
 						indexRight = findDisputer(rightExpr.getId());
-						partyRight =  true;
+						if(indexRight==-1) {
+							extRight = true;
+						}
+						else{
+							partyRight =  true;
+						}
 					}
 					else {
 						globalRight = true;
 					}
 				}
-
-				if(!partyLeft && partyRight && globalLeft) {
+				if(extLeft && globalRight) {
+					try 
+					{ 
+						globalVars.get(indexRight).setValue((float)Double.parseDouble(leftExpr.getId()));
+					}
+					catch(NumberFormatException e)
+					{
+						globalVars.get(indexRight).setValueStr(String.format(leftExpr.getId()));
+					}
+				}
+				else if(extLeft && partyRight) {
+					try 
+					{ 
+						globalDisputers.get(indexRight).setValue((float)Double.parseDouble(leftExpr.getId()));
+					}
+					catch(NumberFormatException e)
+					{
+						globalDisputers.get(indexRight).setValueStr(String.format(leftExpr.getId()));
+					}
+				}
+				else if(extLeft && !globalRight) {
+					try 
+					{ 
+						vars.get(indexRight).setValue((float)Double.parseDouble(leftExpr.getId()));
+					}
+					catch(NumberFormatException e)
+					{
+						vars.get(indexRight).setValueStr(String.format(leftExpr.getId()));
+					}
+				}
+				else if(!partyLeft && partyRight && globalLeft) {
 					Type t1 = tc.getCorrectType(globalVars.get(indexLeft),index);
 
 					if(!(t1 instanceof StringType)) {
@@ -397,7 +443,7 @@ public class Contract {
 				boolean globalRight = false;
 				boolean partyLeft = false;
 				boolean partyRight = false;
-			
+
 
 				if(indexLeft==-1) {
 					indexLeft = findAsset(leftExpr.getId(),globalAssets);
@@ -519,7 +565,7 @@ public class Contract {
 						String nameFract = s.getFractExpr();
 						int indexFract = findVar(nameFract,vars);
 						float valFract = vars.get(indexFract).getValue();
-					
+
 						globalAssets.get(indexRight).setValue(globalAssets.get(indexRight).getValue()+((float)valFract)*globalAssets.get(indexLeft).getValue());
 						globalAssets.get(indexLeft).setValue((float) ((float) globalAssets.get(indexLeft).getValue()*((float)(1-valFract))));
 					}
@@ -581,7 +627,31 @@ public class Contract {
 			boolean flag = false;
 			for(Pair<Expression,ArrayList<Statement>> pair : ifThenElse) {
 				if(pair.getKey()!=null ){
-					if(pair.getKey().getLeftComplexExpr()!=null) {
+					if(pair.getKey().getLeftComplexExpr()!=null && pair.getKey().getRightComplexExpr()!=null) {
+						boolean validLeft = true;
+						boolean validRight = true;
+						Entity leftBigL = pair.getKey().getLeftComplexExpr().getLeft();
+						Entity leftBigR = pair.getKey().getLeftComplexExpr().getRight();
+						Entity rightBigL = pair.getKey().getRightComplexExpr().getLeft();
+						Entity rightBigR = pair.getKey().getRightComplexExpr().getRight();
+
+						setValuesConditions(leftBigL,leftBigR);
+						setValuesConditions(rightBigL,rightBigR);
+
+						if(!pair.getKey().isValid(leftBigL,leftBigR,pair.getKey().getLeftComplexExpr().getOp())) {
+							validLeft = false;
+						}
+						if(!pair.getKey().isValid(rightBigL,rightBigR,pair.getKey().getRightComplexExpr().getOp())) {
+							validRight = false;
+						}
+						if(pair.getKey().getOp().equals("&&")) {
+							valid = validLeft && validRight;
+						}
+						else if(pair.getKey().getOp().equals("||")) {
+							valid = validLeft || validRight;
+						}
+					}
+					else if(pair.getKey().getLeftComplexExpr()!=null) {
 						setValuesConditions(pair.getKey().getLeftComplexExpr().getLeft(),pair.getKey().getLeftComplexExpr().getRight());
 						setValuesConditions(pair.getKey().getRightComplexExpr().getLeft(),pair.getKey().getRightComplexExpr().getRight());
 
@@ -591,7 +661,13 @@ public class Contract {
 							setValuesConditions(pair.getKey().getLeft(),pair.getKey().getRight());
 						}
 					}
-					if((pair.getKey().getLeftComplexExpr()==null && pair.getKey().getLeft().getId().equals("_"))  || pair.getKey().isValidExpr(pair.getKey()) ) {
+					if(pair.getKey().getLeftComplexExpr()!=null && pair.getKey().getRightComplexExpr()!=null && valid) {
+						if(!flag) {
+							valid = runStatements(valid,tc,pair.getValue());
+							flag = true;
+						}
+					}
+					else if((pair.getKey().getLeftComplexExpr()==null && pair.getKey().getLeft().getId().equals("_"))  || pair.getKey().isValidExpr(pair.getKey()) ) {
 						if(!flag) {
 
 							valid = runStatements(valid,tc,pair.getValue());
@@ -613,26 +689,6 @@ public class Contract {
 		return valid;
 	}
 
-	void printContract() {
-		System.out.println("contract "+id);
-		System.out.print("init state " );
-		initState.printState();
-		for(int i=0; i<disputers.size(); i++) {
-			disputers.get(i).printDisputer();
-		}
-		for(int i=0; i<vars.size(); i++) {
-			vars.get(i).printField();
-		}
-		for(int i=0; i<assets.size(); i++) {
-			assets.get(i).printAsset();
-		}
-		if(statements!=null) {
-			for(Statement s : statements) {
-				s.printStatement();
-			}
-		}
-		System.out.print("end state " );
-		endState.printState();
-	}
+
 
 }
