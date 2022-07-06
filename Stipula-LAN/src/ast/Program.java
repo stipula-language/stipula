@@ -202,7 +202,7 @@ public class Program {
 		for(Asset ac : cnt.getGlobalAssets()) {
 			for(Asset a : assets) {
 				if(a.getId().equals(ac.getId())) {
-					a.setValue((float) ac.getValue());
+					a.setCalcValue((float) ac.getValue());
 				}
 			}
 		}
@@ -251,7 +251,9 @@ public class Program {
 			timer = new ArrayList<Timer>();
 		}
 		timer.add(new Timer());
+		System.out.println("devo aspettare "+ seconds);
 		timer.get(index).schedule(new DelayEvent(event,ti), seconds*1000);
+		
 
 	}
 
@@ -264,6 +266,7 @@ public class Program {
 
 		public void run() {
 			while (checkEvent) {
+				@SuppressWarnings("resource")
 				Scanner in = new Scanner(System.in);
 				inputString = in.nextLine();
 				try {
@@ -702,7 +705,6 @@ public class Program {
 
 				System.out.println("Assets at the end of the execution:");
 				this.printAssets();
-				//System.out.println("Execution terminated.");
 				flag = false;
 				break;
 

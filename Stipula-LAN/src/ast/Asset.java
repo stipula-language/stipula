@@ -3,26 +3,30 @@ package ast;
 public class Asset extends Entity{
 
 	String name;
-	float value=0;
+	Resource value;
 	Type type = new AssetType();
 
 	public Asset(String n) {
 		name = n;
-		value = 0;
+		value = new Resource(0);
 	}
 
 	public Asset(String n, int v) {
 		name = n;
-		value = v;
+		value = new Resource(v);
 	}
 
+	public void setCalcValue(float d) {
+		value.add(d) ;
+		value.move(d) ;
+	}
+	
 	public void setValue(float d) {
-		value = d;
-
+		value.add(d) ;
 	}
 
 	public float getValue() {
-		return value;
+		return value.getAmount() ;
 	}
 
 	public Type getType() {
@@ -35,7 +39,7 @@ public class Asset extends Entity{
 
 	public void printAsset() {
 
-		System.out.println("Asset " + name + ": " + value);
+		System.out.println("Asset " + name + ": " + value.getAmount());
 
 	}
 

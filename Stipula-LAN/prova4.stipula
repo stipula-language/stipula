@@ -14,8 +14,8 @@ stipula Contract {
 	} ==> @Q0
 	
 	@Q0 Alice: fill(x)[u,v]{ 
+		 x -> uno 
 		(0.25*u) -○ wallet1
-		(x+1) -> uno
 		v -○ wallet2 ;
 		t_before >> @Q2 { wallet1 -○ wallet2 } ==> @Q3
 
@@ -24,7 +24,7 @@ stipula Contract {
 	@Q1 Bob: move(y)[]{ 
 		(y || true) -> due
 		wallet2 -○ wallet1;
-		now+t_after >> @Q3 { wallet2 -○ wallet1 } ==> @Q4
+		t_after >> @Q3 { wallet2 -○ wallet1 } ==> @Q4
 		
 	} ==> @Q2
 	

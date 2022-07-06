@@ -1,7 +1,6 @@
 package ast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -23,7 +22,7 @@ import parser.StipulaParser.TermContext;
 import parser.StipulaParser.ValueContext;
 import parser.StipulaParser.VardecContext;
 
-public class TypeChecker extends StipulaBaseVisitor {
+public class TypeChecker extends StipulaBaseVisitor<Object> {
 	int n_types = 0;
 	Map<Pair<String,Integer>,Type> types = null;
 	int n_scope = 0	;
@@ -108,10 +107,10 @@ public class TypeChecker extends StipulaBaseVisitor {
 		parties = visitAgreement(ctx.agreement());
 		for(DeclistContext n : ctx.declist()) {
 			if(n.type().ASSET()!=null) {
-				types.put(new Pair(n.strings().getText(),n_scope),new AssetType());
+				types.put(new Pair<String, Integer>(n.strings().getText(),n_scope),new AssetType());
 			}
 			else if(n.type().FIELD()!=null) {
-				types.put(new Pair(n.strings().getText(),n_scope),new GeneralType(n_types));
+				types.put(new Pair<String, Integer>(n.strings().getText(),n_scope),new GeneralType(n_types));
 				n_types++;
 			}
 		}
@@ -159,19 +158,19 @@ public class TypeChecker extends StipulaBaseVisitor {
 		n_scope++;
 		if(ctx.vardec()!=null) {
 			for(VardecContext n : ctx.vardec()) {
-				toRet.put(new Pair(n.strings().getText(),n_scope),new GeneralType(n_types));
+				toRet.put(new Pair<String, Integer>(n.strings().getText(),n_scope),new GeneralType(n_types));
 				n_types++;
-				tmpFuns.add(new Pair(n.strings().getText(),new GeneralType(n_types)));
+				tmpFuns.add(new Pair<String, Type>(n.strings().getText(),new GeneralType(n_types)));
 			}
 		}
 
 		if(ctx.assetdec()!=null) {
 			for(AssetdecContext n : ctx.assetdec()) {
-				toRet.put(new Pair(n.strings().getText(),n_scope),new AssetType());
-				tmpFuns.add(new Pair(n.strings().getText(),new AssetType()));
+				toRet.put(new Pair<String, Integer>(n.strings().getText(),n_scope),new AssetType());
+				tmpFuns.add(new Pair<String, Type>(n.strings().getText(),new AssetType()));
 			}
 		}
-		funParams.add(new Pair(ctx.id().getText(),tmpFuns));
+		funParams.add(new Pair<String, ArrayList<Pair<String, Type>>>(ctx.id().getText(),tmpFuns));
 		addElementsMap(toRet);
 		if(ctx.prec()!=null) {
 			Map<Pair<String,Integer>,Type> tmp = visitPrec(ctx.prec());
@@ -227,7 +226,7 @@ public class TypeChecker extends StipulaBaseVisitor {
 							toRet.put(s,tmp.get(s));
 						}
 						else {
-							Pair<String,Integer> tmpPair = new Pair(s.getKey(),0);
+							Pair<String,Integer> tmpPair = new Pair<String, Integer>(s.getKey(),0);
 							toRet.put(tmpPair,tmp.get(s));
 						}
 					}
@@ -692,36 +691,36 @@ public class TypeChecker extends StipulaBaseVisitor {
 			}
 		}
 		else if(ctx.strings()!=null && (ctx.strings().SINGLE_STRING()!=null || ctx.strings().DOUBLE_STRING()!=null)) {
-			toRet.put(new Pair(ctx.strings().getText(),n_scope),new StringType());
+			toRet.put(new Pair<String, Integer>(ctx.strings().getText(),n_scope),new StringType());
 		}
 		else if(ctx.strings()!=null) {
 			boolean flag = false;
 			for(Pair<String,Integer> pair : types.keySet()) {
 				if(pair.getKey().equals(ctx.strings().getText()) && pair.getValue() == n_scope) {
-					toRet.put(new Pair(ctx.strings().getText(),n_scope),types.get(pair));
+					toRet.put(new Pair<String, Integer>(ctx.strings().getText(),n_scope),types.get(pair));
 					flag = true;
 				}
 			}
 
 			if(!flag) {
-				toRet.put(new Pair(ctx.strings().getText(),n_scope),new GeneralType(n_types));
+				toRet.put(new Pair<String, Integer>(ctx.strings().getText(),n_scope),new GeneralType(n_types));
 				n_types++;
 			}
 		}
 		else if(ctx.number()!=null) {
-			toRet.put(new Pair(ctx.number().getText(),n_scope),new RealType());
+			toRet.put(new Pair<String, Integer>(ctx.number().getText(),n_scope),new RealType());
 			n_types++;
 		}
 		else if(ctx.TRUE()!=null ) {
 
-			toRet.put(new Pair(ctx.TRUE().getText(),n_scope),new BooleanType());
+			toRet.put(new Pair<String, Integer>(ctx.TRUE().getText(),n_scope),new BooleanType());
 		}
 		else if(ctx.FALSE()!=null) {
-			toRet.put(new Pair(ctx.FALSE().getText(),n_scope),new BooleanType());
+			toRet.put(new Pair<String, Integer>(ctx.FALSE().getText(),n_scope),new BooleanType());
 
 		}
 		else if(ctx.NOW()!=null) {
-			toRet.put(new Pair(ctx.NOW().getText(),n_scope),new TimeType());
+			toRet.put(new Pair<String, Integer>(ctx.NOW().getText(),n_scope),new TimeType());
 
 		}
 

@@ -4,7 +4,7 @@ public class Disputer extends Entity{
 
 	String name;
 	String userId ;
-	float valueAsset = 0;
+	Resource valueAsset = new Resource(0);
 	float value = 0;
 	String valueStr = "";
 
@@ -24,8 +24,9 @@ public class Disputer extends Entity{
 	}
 
 	public void setValueAsset(float v) {
-		valueAsset = v;
+		valueAsset.add(v);
 	}
+	
 
 	public void setValueStr(String s) {
 		valueStr = s ;
@@ -36,7 +37,7 @@ public class Disputer extends Entity{
 	}
 
 	public float getValueAsset() {
-		return valueAsset ;
+		return valueAsset.getAmount() ;
 	}
 
 	public String getValueStr() {
@@ -48,25 +49,16 @@ public class Disputer extends Entity{
 	}
 
 	public void printDisputer() {
-		if(value == 0 && valueAsset == 0 && valueStr.equals("")) {
+		if(value == 0 && valueAsset.getAmount() == 0 && valueStr.equals("")) {
 			System.out.println(name);
 		}
-		else if(value!=0  && valueAsset == 0 && valueStr.equals("")) {
+		else if(value!=0  && valueAsset.getAmount() == 0 && valueStr.equals("")) {
 			System.out.println(name +":");
 			System.out.print('\t');
 			System.out.print('\t');
 			System.out.println("value "+value);
 		}
-		else if(value!=0 && valueAsset!=0 && valueStr.equals("")) {
-			System.out.println(name +":");
-			System.out.print('\t');
-			System.out.print('\t');
-			System.out.println("value "+value);
-			System.out.print('\t');
-			System.out.print('\t');
-			System.out.println("asset value "+valueAsset);
-		}
-		else if(value!=0 && valueAsset!=0 && !valueStr.equals("")) {
+		else if(value!=0 && valueAsset.getAmount()!=0 && valueStr.equals("")) {
 			System.out.println(name +":");
 			System.out.print('\t');
 			System.out.print('\t');
@@ -74,11 +66,20 @@ public class Disputer extends Entity{
 			System.out.print('\t');
 			System.out.print('\t');
 			System.out.println("asset value "+valueAsset);
+		}
+		else if(value!=0 && valueAsset.getAmount()!=0 && !valueStr.equals("")) {
+			System.out.println(name +":");
+			System.out.print('\t');
+			System.out.print('\t');
+			System.out.println("value "+value);
+			System.out.print('\t');
+			System.out.print('\t');
+			System.out.println("asset value "+valueAsset);
 			System.out.print('\t');
 			System.out.print('\t');
 			System.out.println("string value "+valueStr);
 		}
-		else if(value==0 && valueAsset!=0 && !valueStr.equals("")) {
+		else if(value==0 && valueAsset.getAmount()!=0 && !valueStr.equals("")) {
 			System.out.println(name +":");
 			System.out.print('\t');
 			System.out.print('\t');
@@ -87,13 +88,13 @@ public class Disputer extends Entity{
 			System.out.print('\t');
 			System.out.println("string value "+valueStr);
 		}
-		else if(value==0 && valueAsset==0 && !valueStr.equals("")) {
+		else if(value==0 && valueAsset.getAmount()==0 && !valueStr.equals("")) {
 			System.out.println(name +":");
 			System.out.print('\t');
 			System.out.print('\t');
 			System.out.println("string value "+valueStr);
 		}
-		else if(value!=0 && valueAsset==0 && !valueStr.equals("")) {
+		else if(value!=0 && valueAsset.getAmount()==0 && !valueStr.equals("")) {
 			System.out.println(name +":");
 			System.out.print('\t');
 			System.out.print('\t');
@@ -102,7 +103,7 @@ public class Disputer extends Entity{
 			System.out.print('\t');
 			System.out.println("string value "+valueStr);
 		}
-		else if(value==0 && valueAsset!=0 && valueStr.equals("")) {
+		else if(value==0 && valueAsset.getAmount()!=0 && valueStr.equals("")) {
 			System.out.println(name +":");
 			System.out.print('\t');
 			System.out.print('\t');
