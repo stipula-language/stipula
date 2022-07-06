@@ -1,6 +1,6 @@
 package ast;
 
-public class RealType extends GeneralType{
+public class RealType extends Type{
 
 	public RealType() {
 		type = "Real";

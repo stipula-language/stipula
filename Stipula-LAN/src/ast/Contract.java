@@ -262,6 +262,7 @@ public class Contract {
 	public boolean runStatements(boolean valid, TypeInference tc, ArrayList<Statement> stms) {
 
 		for(Statement s : stms) {
+
 			if(s.getOperator().equals("FIELDUP")) {
 
 				Field leftExpr = (Field) s.getLeftExpr();
@@ -578,6 +579,14 @@ public class Contract {
 
 	public boolean runContract(TypeInference tc, int index) {
 		Map<Pair<String,Integer>,Type> typedVars = tc.getTypes();
+		for(Field f : globalVars) {
+			for(Pair<String,Integer> pair : typedVars.keySet()) {
+				if(pair.getKey().equals(f.getId()) && pair.getValue()==0) {
+					f.setType(typedVars.get(pair));
+				}
+			}
+		}
+
 		boolean valid = true;
 		if(prec!=null) {
 
@@ -679,7 +688,15 @@ public class Contract {
 
 			}
 		}
-
+		for(Field f : globalVars) {
+			for(Pair<String,Integer> pair : typedVars.keySet()) {
+				if(pair.getKey().equals(f.getId()) && pair.getValue()==0) {
+					if(!(typedVars.get(pair) instanceof GeneralType)) {
+						f.setType(typedVars.get(pair));
+					}
+				}
+			}
+		}
 		if(!valid) {
 			System.out.print("Preconditions do not hold (");
 			for(Expression c : prec) {

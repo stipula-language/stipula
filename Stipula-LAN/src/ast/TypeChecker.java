@@ -65,6 +65,24 @@ public class TypeChecker extends StipulaBaseVisitor {
 		return map;
 	}
 
+	public void addElementsMap(Map<Pair<String,Integer>,Type> toRet) {
+		for(Pair<String,Integer> s : toRet.keySet()) {
+			if(!isPresent(s,types)){
+				types.put(s,toRet.get(s));
+			}
+			else {
+				Type tmpType = getType(s,types);
+				if(tmpType == null || (!(tmpType instanceof RealType) && !(tmpType instanceof BooleanType) && !(tmpType instanceof AssetType) && !(tmpType instanceof TimeType))) {
+					for(Entry<Pair<String, Integer>, Type> entry : types.entrySet()) {
+						if(entry.getKey().getKey().equals(s.getKey())) {
+							entry.setValue(toRet.get(s));
+						}
+					}
+				}
+			}
+		}
+	}
+
 	public boolean isPresent(Pair<String,Integer> pair, Map<Pair<String,Integer>,Type> type){
 		boolean present = false;
 		for(Pair<String,Integer> s : type.keySet()) {
@@ -151,18 +169,31 @@ public class TypeChecker extends StipulaBaseVisitor {
 			for(AssetdecContext n : ctx.assetdec()) {
 				toRet.put(new Pair(n.strings().getText(),n_scope),new AssetType());
 				tmpFuns.add(new Pair(n.strings().getText(),new AssetType()));
-
 			}
 		}
 		funParams.add(new Pair(ctx.id().getText(),tmpFuns));
+		addElementsMap(toRet);
 		if(ctx.prec()!=null) {
 			Map<Pair<String,Integer>,Type> tmp = visitPrec(ctx.prec());
 			for(Pair<String,Integer> s : tmp.keySet()) {
+
 				if(!isPresent(s,toRet)){
 					toRet.put(s,tmp.get(s));
 				}
+				else {
+					Type tmpType = getType(s,toRet);
+
+					if(tmpType == null || (!(tmpType instanceof RealType) && !(tmpType instanceof BooleanType) && !(tmpType instanceof AssetType) && !(tmpType instanceof TimeType))) {
+						for(Entry<Pair<String, Integer>, Type> entry : toRet.entrySet()) {
+							if(entry.getKey().getKey().equals(s.getKey())) {
+								entry.setValue(tmp.get(s));
+							}
+						}
+					}
+				}
 			}
 		}
+		addElementsMap(toRet);
 
 		if(ctx.stat()!=null) {
 			for(StatContext sc : ctx.stat()) {
@@ -185,6 +216,7 @@ public class TypeChecker extends StipulaBaseVisitor {
 				}
 			}
 		}
+		addElementsMap(toRet);
 
 		if(ctx.events()!=null) {
 			for(EventsContext sc : ctx.events()) {
@@ -203,11 +235,7 @@ public class TypeChecker extends StipulaBaseVisitor {
 			}
 
 		}
-		/*
-		for(Pair<String,Integer> el : toRet.keySet()) {
-			System.out.println(el.getKey()+" "+toRet.get(el));
-		}
-		 */
+
 		return toRet ;
 	}
 
@@ -353,22 +381,94 @@ public class TypeChecker extends StipulaBaseVisitor {
 			Map<Pair<String,Integer>,Type> tmp = visitExpr(ctx.right);
 			for(Pair<String,Integer> s : tmp.keySet()) {
 				if(s.getKey().equals(ctx.right.getText()) && s.getValue()==n_scope) {
-					typeRight = tmp.get(s);
+					if(!(tmp.get(s) instanceof GeneralType)) {
+						typeRight = tmp.get(s) ;
+					}
 				}
-				toRet.put(s,tmp.get(s));
 			}
-		}
 
+
+		}
+		Type typeLeft = null;
 		Map<Pair<String,Integer>,Type> tmp = visitTerm(ctx.left);
 		for(Pair<String,Integer> s : tmp.keySet()) {
-			if(typeRight!=null) {
-				toRet.put(s,typeRight);
-			}
-			else{
-				toRet.put(s,tmp.get(s));
+			if(!(tmp.get(s) instanceof GeneralType)) {
+				typeLeft = tmp.get(s) ;
 			}
 		}
+		if(typeRight!=null && !(typeRight instanceof AssetType)) {
+			for(Pair<String,Integer> s : tmp.keySet()) {
+				toRet.put(s,typeRight);
+			}
+			tmp = visitExpr(ctx.right);
+			for(Pair<String,Integer> s : tmp.keySet()) {
+				toRet.put(s,typeRight);
+			}
+		}
+		else if(typeRight!=null && (typeRight instanceof AssetType)) {
+			for(Pair<String,Integer> s : tmp.keySet()) {
+				if(tmp.get(s) instanceof AssetType) {
+					toRet.put(s,typeRight);
+				}
+				else {
+					toRet.put(s,new RealType());
+				}
+			}
+			tmp = visitExpr(ctx.right);
+			for(Pair<String,Integer> s : tmp.keySet()) {
+				if(tmp.get(s) instanceof AssetType) {
+					toRet.put(s,typeRight);
+				}
+				else {
+					toRet.put(s,new RealType());
+				}
+			}
+		}
+		else if(typeLeft!=null && !(typeLeft instanceof AssetType)) {
 
+			for(Pair<String,Integer> s : tmp.keySet()) {
+				toRet.put(s,typeLeft);
+			}
+			if(ctx.right!=null) {
+				tmp = visitExpr(ctx.right);
+				for(Pair<String,Integer> s : tmp.keySet()) {
+					toRet.put(s,typeLeft);
+				}
+			}
+		}
+		else if(typeLeft!=null && (typeLeft instanceof AssetType)) {
+
+			for(Pair<String,Integer> s : tmp.keySet()) {
+				if(tmp.get(s) instanceof AssetType) {
+					toRet.put(s,typeLeft);
+				}
+				else {
+					toRet.put(s,new RealType());
+				}			}
+			if(ctx.right!=null) {
+				tmp = visitExpr(ctx.right);
+				for(Pair<String,Integer> s : tmp.keySet()) {
+					if(tmp.get(s) instanceof AssetType) {
+						toRet.put(s,typeLeft);
+					}
+					else {
+						toRet.put(s,new RealType());
+					}				
+				}
+			}
+		}
+		else {
+
+			for(Pair<String,Integer> s : tmp.keySet()) {
+				toRet.put(s,tmp.get(s));
+			}
+			if(ctx.right!=null) {
+				tmp = visitExpr(ctx.right);
+				for(Pair<String,Integer> s : tmp.keySet()) {
+					toRet.put(s,tmp.get(s));
+				}
+			}
+		}
 		return toRet;
 	} 
 
@@ -380,21 +480,94 @@ public class TypeChecker extends StipulaBaseVisitor {
 			Map<Pair<String,Integer>,Type> tmp = visitTerm(ctx.right);
 			for(Pair<String,Integer> s : tmp.keySet()) {
 				if(s.getKey().equals(ctx.right.getText()) && s.getValue()==n_scope) {
-					typeRight = tmp.get(s);
+					if(!(tmp.get(s) instanceof GeneralType)) {
+						typeRight = tmp.get(s) ;
+					}
 				}
-				toRet.put(s,tmp.get(s));
 			}
+
+
 		}
+		Type typeLeft = null;
 		Map<Pair<String,Integer>,Type> tmp = visitFactor(ctx.left);
 		for(Pair<String,Integer> s : tmp.keySet()) {
-			if(typeRight!=null) {
-				toRet.put(s,typeRight);
-			}
-			else{
-				toRet.put(s,tmp.get(s));
+			if(!(tmp.get(s) instanceof GeneralType)) {
+				typeLeft = tmp.get(s) ;
 			}
 		}
+		if(typeRight!=null && !(typeRight instanceof AssetType)) {
+			for(Pair<String,Integer> s : tmp.keySet()) {
+				toRet.put(s,typeRight);
+			}
+			tmp = visitTerm(ctx.right);
+			for(Pair<String,Integer> s : tmp.keySet()) {
+				toRet.put(s,typeRight);
+			}
+		}
+		else if(typeRight!=null && (typeRight instanceof AssetType)) {
+			for(Pair<String,Integer> s : tmp.keySet()) {
+				if(tmp.get(s) instanceof AssetType) {
+					toRet.put(s,typeRight);
+				}
+				else {
+					toRet.put(s,new RealType());
+				}
+			}
+			tmp = visitTerm(ctx.right);
+			for(Pair<String,Integer> s : tmp.keySet()) {
+				if(tmp.get(s) instanceof AssetType) {
+					toRet.put(s,typeRight);
+				}
+				else {
+					toRet.put(s,new RealType());
+				}
+			}
+		}
+		else if(typeLeft!=null && !(typeLeft instanceof AssetType)) {
 
+			for(Pair<String,Integer> s : tmp.keySet()) {
+				toRet.put(s,typeLeft);
+			}
+			if(ctx.right!=null) {
+				tmp = visitTerm(ctx.right);
+				for(Pair<String,Integer> s : tmp.keySet()) {
+					toRet.put(s,typeLeft);
+				}
+			}
+		}
+		else if(typeLeft!=null && (typeLeft instanceof AssetType)) {
+
+			for(Pair<String,Integer> s : tmp.keySet()) {
+				if(tmp.get(s) instanceof AssetType) {
+					toRet.put(s,typeLeft);
+				}
+				else {
+					toRet.put(s,new RealType());
+				}			}
+			if(ctx.right!=null) {
+				tmp = visitTerm(ctx.right);
+				for(Pair<String,Integer> s : tmp.keySet()) {
+					if(tmp.get(s) instanceof AssetType) {
+						toRet.put(s,typeLeft);
+					}
+					else {
+						toRet.put(s,new RealType());
+					}				
+				}
+			}
+		}
+		else {
+
+			for(Pair<String,Integer> s : tmp.keySet()) {
+				toRet.put(s,tmp.get(s));
+			}
+			if(ctx.right!=null) {
+				tmp = visitTerm(ctx.right);
+				for(Pair<String,Integer> s : tmp.keySet()) {
+					toRet.put(s,tmp.get(s));
+				}
+			}
+		}
 		return toRet;
 
 	} 
@@ -402,22 +575,97 @@ public class TypeChecker extends StipulaBaseVisitor {
 	public Map<Pair<String,Integer>,Type> visitFactor(FactorContext ctx){
 		Map<Pair<String,Integer>,Type> toRet = new LinkedHashMap<Pair<String,Integer>,Type>();
 		Type typeRight = null;
+
 		if(ctx.right!=null) {
 			Map<Pair<String,Integer>,Type> tmp = visitValue(ctx.right);
 			for(Pair<String,Integer> s : tmp.keySet()) {
 				if(s.getKey().equals(ctx.right.getText()) && s.getValue()==n_scope) {
-					typeRight = tmp.get(s);
+					if(!(tmp.get(s) instanceof GeneralType)) {
+						typeRight = tmp.get(s) ;
+					}
 				}
-				toRet.put(s,tmp.get(s));
 			}
+
+
 		}
+		Type typeLeft = null;
 		Map<Pair<String,Integer>,Type> tmp = visitValue(ctx.left);
 		for(Pair<String,Integer> s : tmp.keySet()) {
-			if(typeRight!=null) {
+			if(!(tmp.get(s) instanceof GeneralType)) {
+				typeLeft = tmp.get(s) ;
+			}
+		}
+		if(typeRight!=null && !(typeRight instanceof AssetType)) {
+			for(Pair<String,Integer> s : tmp.keySet()) {
 				toRet.put(s,typeRight);
 			}
-			else{
+			tmp = visitValue(ctx.right);
+			for(Pair<String,Integer> s : tmp.keySet()) {
+				toRet.put(s,typeRight);
+			}
+		}
+		else if(typeRight!=null && (typeRight instanceof AssetType)) {
+			for(Pair<String,Integer> s : tmp.keySet()) {
+				if(tmp.get(s) instanceof AssetType) {
+					toRet.put(s,typeRight);
+				}
+				else {
+					toRet.put(s,new RealType());
+				}
+			}
+			tmp = visitValue(ctx.right);
+			for(Pair<String,Integer> s : tmp.keySet()) {
+				if(tmp.get(s) instanceof AssetType) {
+					toRet.put(s,typeRight);
+				}
+				else {
+					toRet.put(s,new RealType());
+				}
+			}
+		}
+		else if(typeLeft!=null && !(typeLeft instanceof AssetType)) {
+
+			for(Pair<String,Integer> s : tmp.keySet()) {
+				toRet.put(s,typeLeft);
+			}
+			if(ctx.right!=null) {
+				tmp = visitValue(ctx.right);
+				for(Pair<String,Integer> s : tmp.keySet()) {
+					toRet.put(s,typeLeft);
+				}
+			}
+		}
+		else if(typeLeft!=null && (typeLeft instanceof AssetType)) {
+
+			for(Pair<String,Integer> s : tmp.keySet()) {
+				if(tmp.get(s) instanceof AssetType) {
+					toRet.put(s,typeLeft);
+				}
+				else {
+					toRet.put(s,new RealType());
+				}			}
+			if(ctx.right!=null) {
+				tmp = visitValue(ctx.right);
+				for(Pair<String,Integer> s : tmp.keySet()) {
+					if(tmp.get(s) instanceof AssetType) {
+						toRet.put(s,typeLeft);
+					}
+					else {
+						toRet.put(s,new RealType());
+					}				
+				}
+			}
+		}
+		else {
+
+			for(Pair<String,Integer> s : tmp.keySet()) {
 				toRet.put(s,tmp.get(s));
+			}
+			if(ctx.right!=null) {
+				tmp = visitValue(ctx.right);
+				for(Pair<String,Integer> s : tmp.keySet()) {
+					toRet.put(s,tmp.get(s));
+				}
 			}
 		}
 		return toRet;
@@ -454,6 +702,7 @@ public class TypeChecker extends StipulaBaseVisitor {
 					flag = true;
 				}
 			}
+
 			if(!flag) {
 				toRet.put(new Pair(ctx.strings().getText(),n_scope),new GeneralType(n_types));
 				n_types++;

@@ -155,7 +155,7 @@ public class Program {
 			}
 		}
 	}
-	
+
 	public void updateParties(Contract cnt) {
 		for(Disputer fc : cnt.getGlobalDisputers()) {
 			for(Disputer f : parties) {
@@ -232,7 +232,7 @@ public class Program {
 		}
 
 	}
-	
+
 	public boolean contained(Entity el, ArrayList<Disputer> A) {
 		boolean contains = false;
 		if(A!=null) {
@@ -270,6 +270,8 @@ public class Program {
 					Thread.sleep(5000);
 					continue;
 				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+					return;
 				}
 			}
 		}
@@ -334,6 +336,7 @@ public class Program {
 				howManyThreads--;
 				lock.notifyAll();
 			}
+			Thread.currentThread().interrupt();
 		}
 
 
@@ -508,14 +511,15 @@ public class Program {
 				}
 
 			case 3:
+				String s;
 				GetInputThread input = new GetInputThread();
 				Thread thread = new Thread(input);
 				thread.start();
 				while (input.getInput().equals("") && !running) {
-					Thread.sleep(1000);
+					Thread.sleep(1500);
 				}
 				checkEvent = false;
-				String s = input.getInput();
+				s = input.getInput();
 				thread.interrupt();
 
 				if(running) {
@@ -719,320 +723,6 @@ public class Program {
 		}
 		System.out.println("############");
 		System.out.println("Execution completed.");
-	}
-
-	public void run(TypeInference typeinferencer) throws InterruptedException {
-
-		Map<Pair<String, Integer>, Type> typedVars = typeinferencer.getTypes();
-		System.out.print("Initial state ");
-		System.out.println(this.getInitState());
-		runningState = this.getInitState();
-		boolean flag = true;
-		String state = this.getInitState();
-		System.out.println("");
-		System.out.println("Variables at the beginning of the execution");
-		updateFieldsTypes(typedVars);
-		if(this.getFields()!=null) {
-			System.out.println("Fields:");
-			this.printFields();
-
-		}
-		if(this.getAssets()!=null) {
-			System.out.println("Assets:");
-			this.printAssets();
-		}
-		if(this.getDisputers()!=null) {
-			System.out.println("Parties:");
-			for(Disputer a : this.getDisputers()) {
-				System.out.print("\t");
-				a.printDisputer();
-			}
-		}
-		System.out.println("############");
-		for(int i = 0; i<this.getContracts().size(); i++) {
-			this.getContract(i).updateTypes(typedVars);
-		}
-		if(this.getAgreement()!=null) {
-			System.out.println("Running the agreement.");
-			System.out.println("--------------------");
-			for(Disputer disp : this.getAgreement().getDisputers()) {
-				for(Disputer disp2 : this.getDisputers()) {
-					if(disp2.getId().equals(disp.getId())) {
-						disp2.setUserId(disp.getUserId());
-						System.out.println(disp2.getId()+ " " + disp2.getUserId());
-
-					}
-				}
-			}
-			for(Contract c : this.getContracts()) {
-				for(Disputer d : c.getDisputer()) {
-					for(Disputer d2 : this.getDisputers()) {
-						if(d2.getId().equals(d.getId())) {
-							d.setUserId(d2.getUserId());
-						}
-					}
-				}
-			}
-			System.out.println("--------------------");
-
-			ArrayList<ArrayList<Pair<Field,String>>> valuesAgree = this.getAgreement().askValues();
-			if(valuesAgree == null) {flag = false;}
-			else{flag = this.getAgreement().doAgree(valuesAgree);}
-			if(flag) {
-				this.updateFieldsAgreement(valuesAgree);
-				typeinferencer.addTypes(valuesAgree);
-				typedVars = typeinferencer.getTypes();
-				typeinferencer.print_map();
-			}
-		}
-		if(events!=null) {
-			for(int index = 0; index<events.size(); index++) {
-				int secs = events.get(index).evaluateEvent(this);
-				setTimer(index,secs,events.get(index),typeinferencer);
-			}
-		}
-		while(flag) {
-
-			System.out.println("############");
-			if(this.getFields()!=null) {
-				System.out.println("Initialized fields:");
-				for(Field f : this.getFields()) {
-					if(f.getType()!=null && ( f.getType() instanceof TimeType ||  f.getType() instanceof BooleanType || f.getType() instanceof RealType || f.getType() instanceof StringType)) {
-						System.out.print("\t");
-						f.printField();
-					}
-				}
-			}
-			boolean found = false;
-			boolean success = true;
-			System.out.println("############");
-			System.out.println("# Please, choose which contract should run: ");
-			for(Contract c : this.getContracts()) {
-				for(String stateInit : c.getInitState()){
-				if(stateInit.equals(state)) {
-					found = true;
-					for(int i=0; i<c.getDisputer().size(); i++) {
-						if(i==0) {
-							System.out.print("\t");
-						}
-						if(i==c.getDisputer().size()-1) {
-							System.out.print(c.getDisputer().get(i).getId()+".");
-						}
-						else {
-							System.out.print(c.getDisputer().get(i).getId()+",");
-						}
-					}
-					System.out.print(c.getId()+"(");
-					if(c.getVars()!=null){
-						for(int i=0; i<c.getVars().size(); i++) {
-							if(i!=c.getVars().size()-1) {
-								System.out.print(c.getVars().get(i).getType().getTypeName()+" "+c.getVars().get(i).getId()+",");
-							}
-							else {
-								System.out.print(c.getVars().get(i).getType().getTypeName()+" "+c.getVars().get(i).getId());
-							}
-						}
-					}
-					System.out.print(")[");
-					if(c.getAssets()!=null){
-						for(int i=0; i<c.getAssets().size(); i++) {
-							if(i!=c.getAssets().size()-1) {
-								System.out.print(c.getAssets().get(i).getType().getTypeName()+" "+c.getAssets().get(i).getId()+",");
-							}
-							else {
-								System.out.print(c.getAssets().get(i).getType().getTypeName()+" "+c.getAssets().get(i).getId());
-							}
-						}
-					}
-					System.out.println("]");
-				}
-			}
-			}
-			if(found) {
-				Scanner in = new Scanner(System.in);
-				String s = in.nextLine();
-				String[] toSplit = s.split("[.]");
-				String userID = toSplit[0];
-				String[] toSplit2 = toSplit[1].split("\\(");
-				String nameContract = toSplit2[0];
-				String[] toSplit3 = toSplit2[1].split("\\)");
-				String variables = toSplit3[0];
-				String assetsVar = toSplit3[1];
-				String[] varsItems = variables.split(",");
-				String[] assetsItems = assetsVar.replaceAll("[\\[\\]]", "").split(",");
-
-				Contract tmpContr = null;
-				for(int index=0; index< this.getContracts().size(); index++) {
-					Contract c = this.getContracts().get(index);
-					boolean rightId = false;
-					for(Disputer d : c.getDisputer()) {
-						if(d.getUserId().equals(userID)) {
-							rightId = true;
-						}
-					}
-					boolean rightInitState = false;
-					for(String initState : c.getInitState()) {
-						if(initState.equals(state)) {
-							rightInitState = true;
-						}
-					}
-					if(rightId && c.getId().equals(nameContract) && rightInitState) {
-						tmpContr = c;
-
-						boolean emptyVars = varsItems.length==1 && varsItems[0].length()==0 && tmpContr.getVars().size()==0;
-						boolean emptyAssets = assetsItems.length==1 && assetsItems[0].length()==0 && tmpContr.getAssets().size()==0;
-						boolean equalDimVars = varsItems.length==tmpContr.getVars().size() && varsItems[0].length()!=0 ;
-						boolean equalDimAssets = assetsItems.length==tmpContr.getAssets().size() && assetsItems[0].length()!=0 ;
-
-						boolean rightDimVars = emptyVars ||  equalDimVars;
-						boolean rightDimAssets = emptyAssets ||  equalDimAssets;
-
-						if(rightDimVars && rightDimAssets) {
-							boolean rightTypes = true;
-							for(int i=0; i<tmpContr.getVars().size(); i++) {
-								DateUtils d = new DateUtils();
-								if(d.isValidDate(varsItems[i]) && (!(tmpContr.getVars().get(i).getType() instanceof TimeType) || !(tmpContr.getVars().get(i).getType() instanceof GeneralType))) {
-									rightTypes = false;
-								}
-								else if((varsItems[i].equals("true") || varsItems[i].equals("false")) && !(tmpContr.getVars().get(i).getType() instanceof GeneralType) && !(tmpContr.getVars().get(i).getType() instanceof BooleanType)) {
-									rightTypes = false;
-								}
-								else if(!(tmpContr.getVars().get(i).getType() instanceof GeneralType) && !(tmpContr.getVars().get(i).getType() instanceof RealType) && !(tmpContr.getVars().get(i).getType() instanceof TimeType) && !(tmpContr.getVars().get(i).getType() instanceof StringType)) {
-									rightTypes 	= false;
-								}
-							}
-							if(rightTypes) {
-
-								if(assetsItems[0].length()!=0) {
-									for(int i=0; i<assetsItems.length; i++) {
-										tmpContr.getAssets().get(i).setValue((float) Double.parseDouble(assetsItems[i]));
-										typeinferencer.addType(tmpContr.getAssets().get(i).getId(), new AssetType(),index);
-
-									}
-								}
-
-								if(varsItems[0].length()!=0) {
-									for(int i=0; i<varsItems.length; i++) {
-										DateUtils d = new DateUtils();
-										if(d.isValidDate(varsItems[i]) && (!(tmpContr.getVars().get(i).getType() instanceof TimeType) || !(tmpContr.getVars().get(i).getType() instanceof GeneralType)) ) {
-											tmpContr.getVars().get(i).setValue(d.calculateSeconds(varsItems[i])); 
-											tmpContr.getVars().get(i).setType(new TimeType());
-											typeinferencer.addType(tmpContr.getVars().get(i).getId(), new TimeType(),index);
-										}
-										else if(Program.isNumeric(varsItems[i])) {
-
-											tmpContr.getVars().get(i).setValue((float) Double.parseDouble(varsItems[i]));
-											tmpContr.getVars().get(i).setType(new RealType());
-											typeinferencer.addType(tmpContr.getVars().get(i).getId(), new RealType(),index);
-										}
-										else if(varsItems[i].equals("true") || varsItems[i].equals("false")) {
-											tmpContr.getVars().get(i).setValueBool(Boolean.parseBoolean(varsItems[i]));
-											tmpContr.getVars().get(i).setType(new BooleanType());
-											typeinferencer.addType(tmpContr.getVars().get(i).getId(), new BooleanType(),index);
-
-										}
-										else {
-											tmpContr.getVars().get(i).setValueStr(varsItems[i]);
-											tmpContr.getVars().get(i).setType(new StringType());
-											typeinferencer.addType(tmpContr.getVars().get(i).getId(), new StringType(),index);
-
-										}
-									}
-								}
-
-								if(tmpContr.getVars()!=null) {
-									for(int j=0; j<tmpContr.getVars().size(); j++) {
-										tmpContr.getVars().get(j).printField();
-									}
-								}
-								if(tmpContr.getAssets()!=null) {
-									for(int j=0; j<tmpContr.getAssets().size(); j++) {
-										tmpContr.getAssets().get(j).printAsset();
-									}
-								}
-
-								System.out.println("Executing...");
-								typedVars = typeinferencer.getTypes();
-								success = tmpContr.runContract(typeinferencer,index);
-
-								this.updateFields(tmpContr);
-								this.updateAssets(tmpContr);
-								for(Field f : tmpContr.getVars()) {
-									typeinferencer.addType(f.getId(),f.getType(),index);
-								}
-								for(Field f : tmpContr.getGlobalVars()) {
-									typeinferencer.addType(f.getId(),f.getType(),0);
-								}
-								System.out.println("=====TYPES======");
-								typedVars = typeinferencer.getTypes();
-								typeinferencer.print_map();
-
-								System.out.println("================");
-
-								typedVars = typeinferencer.getTypes();
-								if(tmpContr.getVars()!=null) {
-									for(int j=0; j<tmpContr.getVars().size(); j++) {
-										tmpContr.getVars().get(j).printField();
-									}
-								}
-								if(tmpContr.getAssets()!=null) {
-									for(int j=0; j<tmpContr.getAssets().size(); j++) {
-										tmpContr.getAssets().get(j).printAsset();
-									}
-								}
-								System.out.println("Updated fields:");
-								this.printFields();
-								System.out.println("Updated assets:");
-								this.printAssets();
-
-								if(!success) {
-									flag = false;
-									System.out.println("############");
-									System.out.println("Execution terminated - something went wrong");
-								}
-
-							}
-							else {
-								success = false;
-								flag = false;
-								System.out.println("############");
-								System.out.println("Execution terminated - wrong function parameters");
-							}
-						}
-						else {
-							flag = false;
-							success = false;
-							found = false;
-							System.out.println("############");
-							System.out.println("Execution terminated - wrong function parameters");
-						}
-					}
-
-				}
-				if(tmpContr!=null && success) {
-					state = tmpContr.getEndState();
-					runningState = tmpContr.getEndState();
-					System.out.println("############");
-					System.out.println("Next state " + state);
-				}
-				else {
-					flag = false;
-				}
-			}
-
-			else {
-				flag = false;
-
-				System.out.println("Fields at the end of the execution:");
-				this.printFields();
-
-
-				System.out.println("Assets at the end of the execution:");
-				this.printAssets();
-
-				System.out.println("Execution terminated.");
-			}
-		}
 	}
 
 

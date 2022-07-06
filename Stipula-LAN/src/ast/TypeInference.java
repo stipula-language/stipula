@@ -135,22 +135,27 @@ public class TypeInference {
 				t2 = types.get(pair);
 			}
 		}
+
 		if(t1 instanceof GeneralType ) {
 			if (!(t2 instanceof GeneralType)) {
 				t1 = t2 ;
-
 			}
 		}
-		if(t2 instanceof GeneralType) {
+		else if(t2 instanceof GeneralType) {
 			if (!(t1 instanceof GeneralType)) {
 				t2 = t1;
+
 			}
 		}
 
-		if(!(t2 instanceof GeneralType) && !(t1 instanceof GeneralType) && t1.getTypeName().equals(t2.getTypeName())){
-			correct = false;
+		else if(!(t2 instanceof GeneralType) && !(t1 instanceof GeneralType) && !t1.getTypeName().equals(t2.getTypeName())){
+			if((t1 instanceof AssetType && t2 instanceof RealType) || (t2 instanceof AssetType && t1 instanceof RealType)) {
+				correct = true;
+			}
+			else {
+				correct = false;
+			}
 		}
-
 		return correct;
 	}
 
