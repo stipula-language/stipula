@@ -443,10 +443,21 @@ public class TypeChecker extends StipulaBaseVisitor {
 				toRet.put(s,tmp.get(s));
 			}
 		}
+		else if(ctx.strings()!=null && (ctx.strings().SINGLE_STRING()!=null || ctx.strings().DOUBLE_STRING()!=null)) {
+			toRet.put(new Pair(ctx.strings().getText(),n_scope),new StringType());
+		}
 		else if(ctx.strings()!=null) {
-
-			toRet.put(new Pair(ctx.strings().getText(),n_scope),new GeneralType(n_types));
-			n_types++;
+			boolean flag = false;
+			for(Pair<String,Integer> pair : types.keySet()) {
+				if(pair.getKey().equals(ctx.strings().getText()) && pair.getValue() == n_scope) {
+					toRet.put(new Pair(ctx.strings().getText(),n_scope),types.get(pair));
+					flag = true;
+				}
+			}
+			if(!flag) {
+				toRet.put(new Pair(ctx.strings().getText(),n_scope),new GeneralType(n_types));
+				n_types++;
+			}
 		}
 		else if(ctx.number()!=null) {
 			toRet.put(new Pair(ctx.number().getText(),n_scope),new RealType());

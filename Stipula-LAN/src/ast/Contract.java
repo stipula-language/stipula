@@ -11,8 +11,8 @@ public class Contract {
 	String id;
 	ArrayList<Field> vars = null;
 	ArrayList<Asset> assets = null;
-	ArrayList<State> initState = null;
-	State endState = null;
+	ArrayList<String> initState = null;
+	String endState = null;
 	ArrayList<Field> globalVars = null;
 	ArrayList<Asset> globalAssets = null;
 	ArrayList<Statement> statements = null;
@@ -23,7 +23,7 @@ public class Contract {
 	Event events = null;
 	int index ;
 
-	public Contract(String name, ArrayList<Field> f, ArrayList<Asset> a, ArrayList<Disputer> d, ArrayList<State> s1, State s2, int i){
+	public Contract(String name, ArrayList<Field> f, ArrayList<Asset> a, ArrayList<Disputer> d, ArrayList<String> s1, String s2, int i){
 		id = name;
 		vars = f;
 		assets = a;
@@ -93,11 +93,11 @@ public class Contract {
 		return id;
 	}
 
-	public ArrayList<State> getInitState() {
+	public ArrayList<String> getInitState() {
 		return initState;
 	}
 
-	public State getEndState() {
+	public String getEndState() {
 		return endState;
 	}
 
@@ -407,8 +407,9 @@ public class Contract {
 						else {
 							globalVars.get(indexRight).setValueStr(globalVars.get(indexRight).getValueStr()+vars.get(indexLeft).getValueStr());
 						}
-						globalVars.get(indexRight).setType(t1);
+						globalVars.get(indexRight).setType(t2);
 						vars.get(indexLeft).setType(t2);
+
 					}
 				}
 				else if(globalLeft && globalRight) {

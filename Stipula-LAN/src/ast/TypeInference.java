@@ -199,7 +199,7 @@ public class TypeInference {
 
 	public void addType(String str, Type t, int index) {
 		for(Pair<String,Integer> pair : types.keySet()) {
-			if((str.equals(pair.getKey()) && (pair.getValue()==index+1) && t!=null)) {
+			if((str.equals(pair.getKey()) && ((pair.getValue()==index+1)|| (pair.getValue()==0 && index==0)) && t!=null)) {
 				if(!(types.get(pair) instanceof TimeType)){
 					types.put(pair,t);
 				}

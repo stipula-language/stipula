@@ -11,14 +11,14 @@ public class Event  {
 	final int SECS = 60;
 	final int MINS = 60;
 
-	State init = null;
-	State end = null;
+	String init = null;
+	String end = null;
 	ArrayList<Pair<Expression,ArrayList<Statement>>> statements = null;
 	Expression expr = null;
 	Timer timer;
 	Contract contract;
 
-	public Event(State i, State f, ArrayList<Pair<Expression,ArrayList<Statement>>> stms, Expression e) {
+	public Event(String i, String f, ArrayList<Pair<Expression,ArrayList<Statement>>> stms, Expression e) {
 		init = i;
 		end = f;
 		statements = stms;
@@ -142,11 +142,11 @@ public class Event  {
 	}
 
 
-	public State getInitState() {
+	public String getInitState() {
 		return init;
 	}
 
-	public State getEndState() {
+	public String getEndState() {
 		return end;
 	}
 
@@ -159,7 +159,7 @@ public class Event  {
 	}
 
 	public String printEvent() {
-		String ret = expr.getTextExpression()+" >> @" +init.getId() +"{\n\t";
+		String ret = expr.getTextExpression()+" >> @" +init +"{\n\t";
 		for(Pair<Expression,ArrayList<Statement>> pair : statements) {
 			if(pair.getKey()!=null) {
 				ret = ret + pair.getKey().getTextExpression();
@@ -169,7 +169,7 @@ public class Event  {
 				ret = ret + "\n\t";
 			}
 		}
-		ret = ret + " } ==> @"+end.getId();
+		ret = ret + " } ==> @"+end;
 		return ret;
 	}
 }

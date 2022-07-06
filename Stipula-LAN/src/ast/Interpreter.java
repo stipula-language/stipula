@@ -45,8 +45,8 @@ public class Interpreter extends StipulaBaseVisitor {
 		ArrayList<Field> progFields = new ArrayList<Field>();
 		ArrayList<Asset> progAssets = new ArrayList<Asset>();
 		ArrayList<Disputer> progDisputers = new ArrayList<Disputer>();
-		ArrayList<State> progStates = new ArrayList<State>();
-		State tmpState = null;
+		ArrayList<String> progStates = new ArrayList<String>();
+		String tmpState = null;
 		for(DeclistContext n : ctx.declist()) {
 			if(n.type().ASSET()!=null) {
 				Asset tmpAsset = new Asset(n.strings().getText());
@@ -62,7 +62,7 @@ public class Interpreter extends StipulaBaseVisitor {
 				
 			}
 			else if(n.type().INIT()!=null) {
-				tmpState = new State(n.strings().getText());
+				tmpState = n.strings().getText();
 			}
 		}
 		if(progAssets.size()==0) {
@@ -210,11 +210,11 @@ public class Interpreter extends StipulaBaseVisitor {
 		}
 		else {assets = null;}
 
-		ArrayList<State> state1 = new ArrayList<State>();
-		State state2 = null;
+		ArrayList<String> state1 = new ArrayList<String>();
+		String state2 = null;
 		if(ctx.state()!=null) {
 			for(int i = 0; i<ctx.state().size(); i++) {
-				State tmp = new State(ctx.state().get(i).getText());
+				String tmp = ctx.state().get(i).getText();
 				if(i==ctx.state().size()-1) {state2 = tmp;}
 				else {				
 					state1.add(tmp);
@@ -264,8 +264,8 @@ public class Interpreter extends StipulaBaseVisitor {
 	@Override
 	public Event visitEvents(EventsContext ctx) {
 		if(ctx.EMPTY()==null) {
-			State init = new State(ctx.ID(0).toString());
-			State end = new State(ctx.ID(ctx.ID().size()-1).toString());
+			String init = ctx.ID(0).toString();
+			String end = ctx.ID(ctx.ID().size()-1).toString();
 			ArrayList<Pair<Expression,ArrayList<Statement>>> eventStat = new ArrayList<Pair<Expression,ArrayList<Statement>>>();
 
 			for(StatContext stm : ctx.stat()) {

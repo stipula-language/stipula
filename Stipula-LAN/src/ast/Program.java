@@ -14,7 +14,7 @@ import javafx.util.Pair;
 public class Program {
 
 	private String id ;
-	private State initState = null;
+	private String initState = null;
 	private ArrayList<Field> fields = null;
 	private ArrayList<Asset> assets = null;
 	private ArrayList<Disputer> parties = null;
@@ -22,7 +22,7 @@ public class Program {
 	private ArrayList<Contract> contracts = null;
 	private ArrayList<Event> events = null;
 	private ArrayList<Timer> timer;
-	private State runningState = null;
+	private String runningState = null;
 	private boolean running = false;
 	private ArrayList<Object> lock = new ArrayList<Object>();
 	private int howManyThreads = 0;
@@ -30,7 +30,7 @@ public class Program {
 	private int caseExec = 0;
 
 
-	public Program(String name, ArrayList<Field> f, ArrayList<Asset> a, ArrayList<Disputer> d, State s){
+	public Program(String name, ArrayList<Field> f, ArrayList<Asset> a, ArrayList<Disputer> d, String s){
 		id = name;
 		fields = f;
 		assets = a;
@@ -38,11 +38,11 @@ public class Program {
 		initState = s;
 	}
 
-	public State getInitState() {
+	public String getInitState() {
 		return initState;
 	}
 
-	public State getRunningState() {
+	public String getRunningState() {
 		return runningState;
 	}
 
@@ -255,7 +255,7 @@ public class Program {
 
 	}
 
-	void udpateRunningState(State s) {
+	void udpateRunningState(String s) {
 		runningState = s;
 	}
 
@@ -283,8 +283,8 @@ public class Program {
 	class DelayEvent extends TimerTask {
 
 		ArrayList<Pair<Expression,ArrayList<Statement>>> toExecute = null;
-		State initStateEvent = null;
-		State endStateEvent = null;
+		String initStateEvent = null;
+		String endStateEvent = null;
 		Event eventExec = null;
 		TypeInference typesInf = null;
 		public boolean runningEvent = false;
@@ -307,7 +307,7 @@ public class Program {
 			}
 			synchronized(lock){
 				System.out.println("Trying to run an event");
-				if(initStateEvent.getId().equals(getRunningState().getId())) {
+				if(initStateEvent.equals(getRunningState())) {
 					System.out.println("############");
 					System.out.println("An event is running..");
 					for(Pair<Expression,ArrayList<Statement>> pair : toExecute) {
@@ -322,7 +322,7 @@ public class Program {
 					System.out.println("Updated parties:");
 					printParties();
 					System.out.println("############");
-					System.out.println("Next state " + getRunningState().getId());
+					System.out.println("Next state " + getRunningState());
 					System.out.println("############");
 
 				}
@@ -345,10 +345,10 @@ public class Program {
 	public void runProgram(TypeInference typeinferencer) throws InterruptedException {
 		Map<Pair<String, Integer>, Type> typedVars = typeinferencer.getTypes();
 		System.out.print("Initial state ");
-		this.getInitState().printState();
+		System.out.println(this.getInitState());
 		runningState = this.getInitState();
 		boolean flag = true;
-		String state = this.getInitState().getId();
+		String state = this.getInitState();
 		System.out.println("");
 		System.out.println("Variables at the beginning of the execution");
 		updateFieldsTypes(typedVars);
@@ -417,7 +417,7 @@ public class Program {
 
 		while(flag) {
 			checkEvent = true;
-			state = getRunningState().getId();
+			state = getRunningState();
 			boolean success = true;
 			if(running) {caseExec = 10;}
 			switch(caseExec) {
@@ -444,8 +444,8 @@ public class Program {
 
 				for(Contract c : this.getContracts()) {
 					boolean rightInitState = false;
-					for(State initState : c.getInitState()) {
-						if(initState.getId().equals(state)) {
+					for(String initState : c.getInitState()) {
+						if(initState.equals(state)) {
 							rightInitState = true;
 						}
 					}
@@ -542,8 +542,8 @@ public class Program {
 						}
 					}
 					boolean rightInitState = false;
-					for(State initState : c.getInitState()) {
-						if(initState.getId().equals(state)) {
+					for(String initState : c.getInitState()) {
+						if(initState.equals(state)) {
 							rightInitState = true;
 						}
 					}
@@ -666,7 +666,7 @@ public class Program {
 				}
 				if(running) {caseExec = 10;}
 				if(!running && tmpContr!=null && success) {
-					state = tmpContr.getEndState().getId();
+					state = tmpContr.getEndState();
 					runningState = tmpContr.getEndState();
 					System.out.println("############");
 					System.out.println("Next state " + state);
@@ -725,10 +725,10 @@ public class Program {
 
 		Map<Pair<String, Integer>, Type> typedVars = typeinferencer.getTypes();
 		System.out.print("Initial state ");
-		this.getInitState().printState();
+		System.out.println(this.getInitState());
 		runningState = this.getInitState();
 		boolean flag = true;
-		String state = this.getInitState().getId();
+		String state = this.getInitState();
 		System.out.println("");
 		System.out.println("Variables at the beginning of the execution");
 		updateFieldsTypes(typedVars);
@@ -808,8 +808,8 @@ public class Program {
 			System.out.println("############");
 			System.out.println("# Please, choose which contract should run: ");
 			for(Contract c : this.getContracts()) {
-				for(State stateInit : c.getInitState()){
-				if(stateInit.getId().equals(state)) {
+				for(String stateInit : c.getInitState()){
+				if(stateInit.equals(state)) {
 					found = true;
 					for(int i=0; i<c.getDisputer().size(); i++) {
 						if(i==0) {
@@ -871,8 +871,8 @@ public class Program {
 						}
 					}
 					boolean rightInitState = false;
-					for(State initState : c.getInitState()) {
-						if(initState.getId().equals(state)) {
+					for(String initState : c.getInitState()) {
+						if(initState.equals(state)) {
 							rightInitState = true;
 						}
 					}
@@ -1010,7 +1010,7 @@ public class Program {
 
 				}
 				if(tmpContr!=null && success) {
-					state = tmpContr.getEndState().getId();
+					state = tmpContr.getEndState();
 					runningState = tmpContr.getEndState();
 					System.out.println("############");
 					System.out.println("Next state " + state);
