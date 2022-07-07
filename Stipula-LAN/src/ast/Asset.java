@@ -3,43 +3,68 @@ package ast;
 public class Asset extends Entity{
 
 	String name;
-	Resource value;
+	float value;
 	Type type = new AssetType();
+
+	public Asset() {
+		name = "";
+		value = 0;
+	}
 
 	public Asset(String n) {
 		name = n;
-		value = new Resource(0);
+		value = 0;
 	}
 
 	public Asset(String n, int v) {
 		name = n;
-		value = new Resource(v);
+		value = v;
+	}
+
+	public Asset(float v) {
+		name = "";
+		value = v;
 	}
 
 	public void setCalcValue(float d) {
-		value.add(d) ;
-		value.move(d) ;
+		value = d ;
 	}
-	
-	public void setValue(float d) {
-		value.add(d) ;
+
+	public void decValue(float val) {
+		if(val<=value) {
+			value = value-val;
+		}
+	}
+
+	public void move(float val, Asset d) {
+		if(val<=d.getValue()) {
+			d.decValue(val);
+		}
+		value = value + val ;
+	}
+
+	public void withdraw(Disputer d, float val) {
+		if(val<=value) {
+			value = value - val;
+		}
+		d.setValueAsset(val);
 	}
 
 	public float getValue() {
-		return value.getAmount() ;
+		return value ;
 	}
 
 	public Type getType() {
 		return type;
 	}
-	
+
 	public String getId() {
 		return name;
 	}
 
 	public void printAsset() {
 
-		System.out.println("Asset " + name + ": " + value.getAmount());
+		System.out.println("Asset " + name + ": " + value);
 
 	}
 

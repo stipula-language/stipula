@@ -324,7 +324,7 @@ public class Contract {
 				else if(extLeft && partyRight) {
 					try 
 					{ 
-						globalDisputers.get(indexRight).setValue((float)Double.parseDouble(leftExpr.getId()));
+						globalDisputers.get(indexRight).setValue(((float)Double.parseDouble(leftExpr.getId())));
 					}
 					catch(NumberFormatException e)
 					{
@@ -345,7 +345,7 @@ public class Contract {
 					Type t1 = tc.getCorrectType(globalVars.get(indexLeft),index);
 
 					if(!(t1 instanceof StringType)) {
-						globalDisputers.get(indexRight).setValue((float) (globalDisputers.get(indexRight).getValue()+(float) globalVars.get(indexLeft).getValue()));
+						globalDisputers.get(indexRight).setValue(((float) (globalDisputers.get(indexRight).getValue()+(float) globalVars.get(indexLeft).getValue())));
 					}
 					else {
 						globalDisputers.get(indexRight).setValueStr(globalDisputers.get(indexRight).getValueStr()+globalVars.get(indexLeft).getValueStr());
@@ -356,7 +356,7 @@ public class Contract {
 				else if(!partyLeft && partyRight && !globalLeft) {
 					Type t1 = tc.getCorrectType(vars.get(indexLeft),index);
 					if(!(t1 instanceof StringType)) {
-						globalDisputers.get(indexRight).setValue((float) (globalDisputers.get(indexRight).getValue()+(float) vars.get(indexLeft).getValue()));
+						globalDisputers.get(indexRight).setValue(((float) (globalDisputers.get(indexRight).getValue()+(float) vars.get(indexLeft).getValue())));
 					}
 					else {
 						globalDisputers.get(indexRight).setValueStr(globalDisputers.get(indexRight).getValueStr()+vars.get(indexLeft).getValueStr());
@@ -473,104 +473,113 @@ public class Contract {
 
 				if(partyLeft && partyRight) {
 					if(s.getFract()!=0) {
-						globalDisputers.get(indexRight).setValueAsset(((float)s.getFract())*globalDisputers.get(indexLeft).getValueAsset());
-						globalDisputers.get(indexLeft).setValueAsset(((float)(-s.getFract())*globalDisputers.get(indexLeft).getValue()));
+						//globalDisputers.get(indexRight).setValueAsset((((float)s.getFract())*globalDisputers.get(indexLeft).getValueAsset()));
+						//globalDisputers.get(indexLeft).setValueAsset(((float)(-s.getFract())*globalDisputers.get(indexLeft).getValueAsset()));
+						globalDisputers.get(indexLeft).moveAsset(globalDisputers.get(indexRight),((float)(s.getFract())*globalDisputers.get(indexLeft).getValueAsset()));
+
 					}
 					else {
 						String nameFract = s.getFractExpr();
 						int indexFract = findVar(nameFract,vars);
 						float valFract = vars.get(indexFract).getValue();
 
-						globalDisputers.get(indexRight).setValueAsset(((float)valFract)*globalDisputers.get(indexLeft).getValueAsset());
-						globalDisputers.get(indexLeft).setValueAsset(((float)(-valFract))*globalDisputers.get(indexLeft).getValue());
+						//globalDisputers.get(indexRight).setValueAsset(((float)valFract)*globalDisputers.get(indexLeft).getValueAsset());
+						//globalDisputers.get(indexLeft).setValueAsset(((float)(-valFract))*globalDisputers.get(indexLeft).getValueAsset());
+						globalDisputers.get(indexLeft).moveAsset(globalDisputers.get(indexRight),((float)(valFract)*globalDisputers.get(indexLeft).getValueAsset()));
+
 					}
 
 				}
 				else if(!partyLeft && partyRight && globalLeft) {
 					if(s.getFract()!=0) {
-						globalDisputers.get(indexRight).setValueAsset(((float)s.getFract())*globalAssets.get(indexLeft).getValue());
-						globalAssets.get(indexLeft).setValue(((float)(-s.getFract()))*globalAssets.get(indexLeft).getValue());
+						//globalDisputers.get(indexRight).setValueAsset(((float)s.getFract())*globalAssets.get(indexLeft).getValue());
+						//globalAssets.get(indexLeft).setValue(((float)(-s.getFract()))*globalAssets.get(indexLeft).getValue());
+						globalAssets.get(indexLeft).withdraw(globalDisputers.get(indexRight),((float)s.getFract())*globalAssets.get(indexLeft).getValue()); 
+
 					}
 					else {
 						String nameFract = s.getFractExpr();
 						int indexFract = findVar(nameFract,vars);
 						float valFract = vars.get(indexFract).getValue();
 
-						globalDisputers.get(indexRight).setValueAsset(((float)valFract)*globalAssets.get(indexLeft).getValue());
-						globalAssets.get(indexLeft).setValue((((float)(-valFract)))*globalAssets.get(indexLeft).getValue());
+						//globalDisputers.get(indexRight).setValueAsset(((float)valFract)*globalAssets.get(indexLeft).getValue());
+						//globalAssets.get(indexLeft).setValue((((float)(-valFract)))*globalAssets.get(indexLeft).getValue());
+						globalAssets.get(indexLeft).withdraw(globalDisputers.get(indexRight),((float)valFract)*globalAssets.get(indexLeft).getValue()); 
+
 					}
 
 				}
 				else if(!partyLeft && partyRight && !globalLeft) {
 					if(s.getFract()!=0) {
-						globalDisputers.get(indexRight).setValueAsset(((float)s.getFract())*assets.get(indexLeft).getValue());
-						assets.get(indexLeft).setValue(((float)(-s.getFract()))*assets.get(indexLeft).getValue());
+						//globalDisputers.get(indexRight).setValueAsset(((float)s.getFract())*assets.get(indexLeft).getValue());
+						//assets.get(indexLeft).setValue(((float)(-s.getFract()))*assets.get(indexLeft).getValue());
+						assets.get(indexLeft).withdraw(globalDisputers.get(indexRight),((float)s.getFract())*assets.get(indexLeft).getValue()); 
 					}
 					else {
 						String nameFract = s.getFractExpr();
 						int indexFract = findVar(nameFract,vars);
 						float valFract = vars.get(indexFract).getValue();
 
-						globalDisputers.get(indexRight).setValueAsset(((float)valFract)*assets.get(indexLeft).getValue());
-						assets.get(indexLeft).setValue(((float)(-valFract))*assets.get(indexLeft).getValue());
+						//globalDisputers.get(indexRight).setValueAsset(((float)valFract)*assets.get(indexLeft).getValue());
+						//assets.get(indexLeft).setValue(((float)(-valFract))*assets.get(indexLeft).getValue());
+						assets.get(indexLeft).withdraw(globalDisputers.get(indexRight),((float)valFract)*assets.get(indexLeft).getValue()); 
+
 					}
 				}
 				else if(!globalLeft && !globalRight) {
 					if(s.getFract()!=0) {
-						assets.get(indexRight).setValue(((float)s.getFract())*assets.get(indexLeft).getValue());
-						assets.get(indexLeft).setValue(((float)(-s.getFract()))*assets.get(indexLeft).getValue());
+						assets.get(indexRight).move(((float)s.getFract())*assets.get(indexLeft).getValue(),assets.get(indexLeft));
+						//assets.get(indexLeft).setValue(assets.get(indexLeft).getValue(),((float)(-s.getFract())));
 					}
 					else {
 						String nameFract = s.getFractExpr();
 						int indexFract = findVar(nameFract,vars);
 						float valFract = vars.get(indexFract).getValue();
 
-						assets.get(indexRight).setValue(((float)valFract)*assets.get(indexLeft).getValue());
-						assets.get(indexLeft).setValue(((float)(-valFract))*assets.get(indexLeft).getValue());
+						assets.get(indexRight).move(((float)valFract)*assets.get(indexLeft).getValue(),assets.get(indexLeft));
+						//assets.get(indexLeft).setValue(((float)(-valFract))*assets.get(indexLeft).getValue());
 					}
 				}
 				else if(globalLeft && !globalRight) {
 					if(s.getFract()!=0) {
-						assets.get(indexRight).setValue(((float)s.getFract())*globalAssets.get(indexLeft).getValue());
-						globalAssets.get(indexLeft).setValue(((float)(-s.getFract()))*globalAssets.get(indexLeft).getValue());
+						assets.get(indexRight).move(((float)s.getFract())*globalAssets.get(indexLeft).getValue(),globalAssets.get(indexLeft));
+						//globalAssets.get(indexLeft).setValue(((float)(-s.getFract()))*globalAssets.get(indexLeft).getValue());
 					}
 					else {
 						String nameFract = s.getFractExpr();
 						int indexFract = findVar(nameFract,vars);
 						float valFract = vars.get(indexFract).getValue();
 
-						assets.get(indexRight).setValue(((float)valFract)*globalAssets.get(indexLeft).getValue());
-						globalAssets.get(indexLeft).setValue(((float)(-valFract))*globalAssets.get(indexLeft).getValue());
+						assets.get(indexRight).move(((float)valFract)*globalAssets.get(indexLeft).getValue(),globalAssets.get(indexLeft));
+						//globalAssets.get(indexLeft).setValue(((float)(-valFract))*globalAssets.get(indexLeft).getValue());
 					}
 				}
 				else if(!globalLeft && globalRight) {
 					if(s.getFract()!=0) {
-						globalAssets.get(indexRight).setValue(((float)s.getFract())* assets.get(indexLeft).getValue());
-						assets.get(indexLeft).setValue((float) (((float)(-s.getFract())))*assets.get(indexLeft).getValue());
-
+						globalAssets.get(indexRight).move(((float)s.getFract())*assets.get(indexLeft).getValue(),assets.get(indexLeft));
+						//assets.get(indexLeft).setValue((float) (((float)(-s.getFract())))*assets.get(indexLeft).getValue());
 					}
 					else {
 						String nameFract = s.getFractExpr();
 						int indexFract = findVar(nameFract,vars);
 						float valFract = vars.get(indexFract).getValue();
-
-						globalAssets.get(indexRight).setValue(((float)valFract)*assets.get(indexLeft).getValue());
-						assets.get(indexLeft).setValue(((float)(-valFract))*assets.get(indexLeft).getValue());
+						globalAssets.get(indexRight).move(((float)valFract)*assets.get(indexLeft).getValue(),assets.get(indexLeft));
+						//assets.get(indexLeft).setValue(((float)(-valFract))*assets.get(indexLeft).getValue());
 					}
 				}
 				else if(globalLeft && globalRight) {
 					if(s.getFract()!=0) {
 
-						globalAssets.get(indexRight).setValue(((float)s.getFract())*globalAssets.get(indexLeft).getValue());
-						globalAssets.get(indexLeft).setValue((float)((-s.getFract()))*globalAssets.get(indexLeft).getValue());
+						globalAssets.get(indexRight).move(((float)s.getFract())*globalAssets.get(indexLeft).getValue(),globalAssets.get(indexLeft));
+						//globalAssets.get(indexLeft).setValue((float)((-s.getFract()))*globalAssets.get(indexLeft).getValue());
 					}
 					else {
 						String nameFract = s.getFractExpr();
 						int indexFract = findVar(nameFract,vars);
 						float valFract = vars.get(indexFract).getValue();
 
-						globalAssets.get(indexRight).setValue(((float)valFract)*globalAssets.get(indexLeft).getValue());
-						globalAssets.get(indexLeft).setValue(((float)(-valFract))*globalAssets.get(indexLeft).getValue());
+						globalAssets.get(indexRight).move(((float)valFract)*globalAssets.get(indexLeft).getValue(),globalAssets.get(indexLeft));
+						//globalAssets.get(indexLeft).setValue(((float)(-valFract))*globalAssets.get(indexLeft).getValue());
 					}
 				}
 			}

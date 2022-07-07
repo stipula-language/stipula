@@ -162,7 +162,7 @@ public class Program {
 				if(f.getId().equals(fc.getId())) {
 					f.setValue((float) fc.getValue());
 					f.setValueStr(fc.getValueStr());
-					f.setValueAsset((float) fc.getValueAsset());
+					f.setValueAssetCalc((float) fc.getValueAsset());
 				}
 			}
 		}
@@ -583,7 +583,7 @@ public class Program {
 
 								if(assetsItems[0].length()!=0) {
 									for(int i=0; i<assetsItems.length; i++) {
-										tmpContr.getAssets().get(i).setValue((float) Double.parseDouble(assetsItems[i]));
+										tmpContr.getAssets().get(i).move((float) Double.parseDouble(assetsItems[i]),new Asset((float) Double.parseDouble(assetsItems[i])));
 										typeinferencer.addType(tmpContr.getAssets().get(i).getId(), new AssetType(),index);
 
 									}

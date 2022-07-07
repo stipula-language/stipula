@@ -44,6 +44,7 @@ public class Test {
 
 			/* TYPE CHECKING */
 			TypeChecker code = new TypeChecker();
+			@SuppressWarnings("unchecked")
 			Map<Pair<String, Integer>, Type> types = (Map<Pair<String, Integer>, Type>) code.visit(t);
 			ArrayList<Pair<String,ArrayList<Pair<String,Type>>>> funParams = code.getFunParams();
 			ArrayList<String> nc = code.getNames();
