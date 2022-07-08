@@ -45,7 +45,7 @@ public class TypeChecker extends StipulaBaseVisitor<Object> {
 		}
 	}
 
-	public void print_map(	Map<Pair<String,Integer>,Type> map){
+	public void print_map(Map<Pair<String,Integer>,Type> map){
 		for(Pair<String,Integer> s: map.keySet()) {
 			System.out.println("var: " + s.getKey() +" type: " + map.get(s).getTypeName() + " scope: " + s.getValue());
 		}

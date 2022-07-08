@@ -163,6 +163,7 @@ public class Contract {
 	}
 
 	public void setValuesConditions(Entity left, Entity right) {
+
 		if(left!=null) {
 			int indexLeft = findAsset( left.getId(), assets) ;
 
@@ -188,6 +189,7 @@ public class Contract {
 					}
 					else {
 						indexLeft = findVar( left.getId(), globalVars) ;
+
 						if(indexLeft!=-1) {
 							if(!(globalVars.get(indexLeft).getType() instanceof TimeType) || globalVars.get(indexLeft).getValueStr()==null) {
 								left.setValue((float) globalVars.get(indexLeft).getValue());
@@ -209,54 +211,93 @@ public class Contract {
 					}
 				}
 			}
-			if(right!=null) {
-				int indexRight = findAsset( right.getId(), assets) ;
+		}
+		if(right!=null) {
+
+			int indexRight = findAsset( right.getId(), assets) ;
+			if(indexRight!=-1) {
+
+				right.setValue((float) assets.get(indexRight).getValue());
+			}
+			else {
+
+				indexRight = findAsset( right.getId(), globalAssets) ;
+
 				if(indexRight!=-1) {
-					right.setValue((float) assets.get(indexRight).getValue());
+					right.setValue((float) globalAssets.get(indexRight).getValue());
 				}
 				else {
-					indexRight = findAsset( right.getId(), globalAssets) ;
+
+					indexRight = findVar( right.getId(), vars) ;
+
 					if(indexRight!=-1) {
-						right.setValue((float) globalAssets.get(indexRight).getValue());
+						if(!(vars.get(indexRight).getType() instanceof TimeType) || vars.get(indexRight).getValueStr()==null) {
+							right.setValue((float) vars.get(indexRight).getValue());
+						}
+						else {
+							right.setValueStr(vars.get(indexRight).getValueStr());
+						}
 					}
 					else {
-						indexRight = findVar( right.getId(), vars) ;
+
+						indexRight = findVar( right.getId(), globalVars) ;
+
 						if(indexRight!=-1) {
-							if(!(vars.get(indexRight).getType() instanceof TimeType) || vars.get(indexRight).getValueStr()==null) {
-								right.setValue((float) vars.get(indexRight).getValue());
+							if(!(globalVars.get(indexRight).getType() instanceof TimeType) || globalVars.get(indexRight).getValueStr()==null) {
+								right.setValue((float) globalVars.get(indexRight).getValue());
 							}
 							else {
-								right.setValueStr(vars.get(indexRight).getValueStr());
+								right.setValueStr(globalVars.get(indexRight).getValueStr());
 							}
 						}
 						else {
 
-							indexRight = findVar( right.getId(), globalVars) ;
-							if(indexRight!=-1) {
-								if(!(globalVars.get(indexRight).getType() instanceof TimeType) || globalVars.get(indexRight).getValueStr()==null) {
-									right.setValue((float) globalVars.get(indexRight).getValue());
-								}
-								else {
-									right.setValueStr(globalVars.get(indexRight).getValueStr());
-								}
+							try 
+							{ 
+								right.setValue((float)Double.parseDouble(right.getId()));
 							}
-							else {
-								try 
-								{ 
-									right.setValue((float)Double.parseDouble(right.getId()));
-								}
-								catch(NumberFormatException e)
-								{
+							catch(NumberFormatException e)
+							{
 
-								}
 							}
 						}
 					}
 				}
 			}
 
+
 		}
 
+	}
+
+	public boolean isComplexExpr(Entity expr) {
+		if(expr.getId().contains("+")||expr.getId().contains("-")||expr.getId().contains("*")||expr.getId().contains("/")) {
+			return true;
+		}
+		return false;
+	}
+
+	public ArrayList<Field> divideComplexExpr(Entity expr){
+		ArrayList<Field> toRet = new ArrayList<Field>();
+		String[] split = null;
+		String exprId = expr.getId().replaceAll("[()]", "");
+		if(exprId.contains("+")) {
+			split = exprId.split("\\+");
+		}
+		else if(exprId.contains("-")) {
+			split = exprId.split("\\-");
+		}
+		else if(exprId.contains("*")) {
+			split = exprId.split("\\*");
+		}
+		else {
+			split = exprId.split("/");
+		}
+		for(int i=0; i<split.length; i++) {
+			Field toAdd = new Field(split[i]);
+			toRet.add(toAdd);
+		}
+		return toRet;
 	}
 
 	public boolean runStatements(boolean valid, TypeInference tc, ArrayList<Statement> stms) {
@@ -267,18 +308,32 @@ public class Contract {
 
 				Field leftExpr = (Field) s.getLeftExpr();
 				Field rightExpr = (Field) s.getRightExpr();
-				System.out.println(leftExpr.getId()+" "+rightExpr.getId());
+				Field leftExpr2 = null;
 				if(leftExpr.getId().equals("_")||rightExpr.getId().equals("_")) {
 					break;
 				}
-				int indexLeft = findVar(leftExpr.getId(),vars);
-				int indexRight = findVar(rightExpr.getId(),vars);
+				else if(isComplexExpr(leftExpr)) {
+					ArrayList<Field> entities = divideComplexExpr(leftExpr);
+					if(entities.size()==2) {
+						leftExpr = entities.get(0);
+						leftExpr2 = entities.get(1);
+					}
+				}
 
+				int indexLeft = findVar(leftExpr.getId(),vars);
+				int indexLeft2 = -1;
+				if(leftExpr2!=null) {
+					indexLeft2 = findVar(leftExpr2.getId(),vars);
+				}
+				int indexRight = findVar(rightExpr.getId(),vars);
 				boolean globalLeft = false;
+				boolean globalLeft2 = false;
 				boolean globalRight = false;
 				boolean partyLeft = false;
+				boolean partyLeft2 = false;
 				boolean partyRight = false;
 				boolean extLeft = false;
+				boolean extLeft2 = false;
 				boolean extRight = false;
 
 				if(indexLeft==-1) {
@@ -294,6 +349,25 @@ public class Contract {
 					}
 					else {
 						globalLeft = true;
+					}
+
+				}
+				if(leftExpr2!=null) {
+					if(indexLeft2==-1) {
+						indexLeft2 = findVar(leftExpr2.getId(),globalVars);
+						if(indexLeft2 == -1) {
+							indexLeft2 = findDisputer(leftExpr2.getId());
+							if(indexLeft2==-1) {
+								extLeft2 = true;
+							}
+							else{
+								partyLeft2 =  true;
+							}
+						}
+						else {
+							globalLeft2 = true;
+						}
+
 					}
 				}
 				if(indexRight==-1) {
@@ -311,130 +385,322 @@ public class Contract {
 						globalRight = true;
 					}
 				}
-				if(extLeft && globalRight) {
-					try 
-					{ 
-						globalVars.get(indexRight).setValue((float)Double.parseDouble(leftExpr.getId()));
+				if(leftExpr2==null) {
+					if(extLeft && globalRight) {
+						try 
+						{ 
+							globalVars.get(indexRight).setValue((float)Double.parseDouble(leftExpr.getId()));
+						}
+						catch(NumberFormatException e)
+						{
+							globalVars.get(indexRight).setValueStr(String.format(leftExpr.getId()));
+						}
 					}
-					catch(NumberFormatException e)
-					{
-						globalVars.get(indexRight).setValueStr(String.format(leftExpr.getId()));
+					else if(extLeft && partyRight) {
+						try 
+						{ 
+							globalDisputers.get(indexRight).setValue(((float)Double.parseDouble(leftExpr.getId())));
+						}
+						catch(NumberFormatException e)
+						{
+							globalDisputers.get(indexRight).setValueStr(String.format(leftExpr.getId()));
+						}
 					}
-				}
-				else if(extLeft && partyRight) {
-					try 
-					{ 
-						globalDisputers.get(indexRight).setValue(((float)Double.parseDouble(leftExpr.getId())));
+					else if(extLeft && !globalRight) {
+						try 
+						{ 
+							vars.get(indexRight).setValue((float)Double.parseDouble(leftExpr.getId()));
+						}
+						catch(NumberFormatException e)
+						{
+							vars.get(indexRight).setValueStr(String.format(leftExpr.getId()));
+						}
 					}
-					catch(NumberFormatException e)
-					{
-						globalDisputers.get(indexRight).setValueStr(String.format(leftExpr.getId()));
-					}
-				}
-				else if(extLeft && !globalRight) {
-					try 
-					{ 
-						vars.get(indexRight).setValue((float)Double.parseDouble(leftExpr.getId()));
-					}
-					catch(NumberFormatException e)
-					{
-						vars.get(indexRight).setValueStr(String.format(leftExpr.getId()));
-					}
-				}
-				else if(!partyLeft && partyRight && globalLeft) {
-					Type t1 = tc.getCorrectType(globalVars.get(indexLeft),index);
+					else if(!partyLeft && partyRight && globalLeft) {
+						Type t1 = tc.getCorrectType(globalVars.get(indexLeft),index);
 
-					if(!(t1 instanceof StringType)) {
-						globalDisputers.get(indexRight).setValue(((float) (globalDisputers.get(indexRight).getValue()+(float) globalVars.get(indexLeft).getValue())));
-					}
-					else {
-						globalDisputers.get(indexRight).setValueStr(globalDisputers.get(indexRight).getValueStr()+globalVars.get(indexLeft).getValueStr());
-					}
-					globalVars.get(indexRight).setType(t1);
-
-				}
-				else if(!partyLeft && partyRight && !globalLeft) {
-					Type t1 = tc.getCorrectType(vars.get(indexLeft),index);
-					if(!(t1 instanceof StringType)) {
-						globalDisputers.get(indexRight).setValue(((float) (globalDisputers.get(indexRight).getValue()+(float) vars.get(indexLeft).getValue())));
-					}
-					else {
-						globalDisputers.get(indexRight).setValueStr(globalDisputers.get(indexRight).getValueStr()+vars.get(indexLeft).getValueStr());
-					}
-					vars.get(indexRight).setType(t1);
-				}
-				else if(!globalLeft && !globalRight) {
-					valid = tc.isTypeCorrect(vars.get(indexRight),vars.get(indexLeft),index);
-
-
-					if(valid) {
-						Type t1 = tc.getCorrectType(vars.get(indexRight),index);
-						Type t2 = tc.getCorrectType(vars.get(indexLeft),index);
 						if(!(t1 instanceof StringType)) {
-							vars.get(indexRight).setValue((float) (vars.get(indexRight).getValue()+(float) vars.get(indexLeft).getValue()));
+							globalDisputers.get(indexRight).setValue(((float) (globalDisputers.get(indexRight).getValue()+(float) globalVars.get(indexLeft).getValue())));
 						}
 						else {
-							vars.get(indexRight).setValueStr(vars.get(indexRight).getValueStr()+vars.get(indexLeft).getValueStr());
-						}
-						vars.get(indexRight).setType(t1);
-						vars.get(indexLeft).setType(t2);
-
-					}
-				}
-				else if(globalLeft && !globalRight) {
-					valid = tc.isTypeCorrect(vars.get(indexRight),globalVars.get(indexLeft),index);
-
-					if(valid) {
-						Type t1 = tc.getCorrectType(vars.get(indexRight),index);
-						Type t2 = tc.getCorrectType(globalVars.get(indexLeft),index);
-						if(!(t1 instanceof StringType)) {
-							vars.get(indexRight).setValue((float) (vars.get(indexRight).getValue()+(float) globalVars.get(indexLeft).getValue()));
-						}
-						else {
-							vars.get(indexRight).setValueStr(vars.get(indexRight).getValueStr()+globalVars.get(indexLeft).getValueStr());
-						}
-						vars.get(indexRight).setType(t1);
-						globalVars.get(indexLeft).setType(t2);
-					}
-				}
-				else if(!globalLeft && globalRight) {
-					valid = tc.isTypeCorrect(globalVars.get(indexRight),vars.get(indexLeft),index);
-
-					if(valid) {
-						Type t1 = tc.getCorrectType(globalVars.get(indexRight),index);
-						Type t2 = tc.getCorrectType(vars.get(indexLeft),index);
-						if(!(t1 instanceof StringType)) {
-							globalVars.get(indexRight).setValue((float) (globalVars.get(indexRight).getValue()+(float) vars.get(indexLeft).getValue()));	
-						}
-						else {
-							globalVars.get(indexRight).setValueStr(globalVars.get(indexRight).getValueStr()+vars.get(indexLeft).getValueStr());
-						}
-						globalVars.get(indexRight).setType(t2);
-						vars.get(indexLeft).setType(t2);
-
-					}
-				}
-				else if(globalLeft && globalRight) {
-					valid = tc.isTypeCorrect(globalVars.get(indexRight),globalVars.get(indexLeft),index);
-
-					if(valid) {
-						Type t1 = tc.getCorrectType(globalVars.get(indexRight),index);
-						Type t2 = tc.getCorrectType(globalVars.get(indexLeft),index);
-						if(!(t1 instanceof StringType)) {
-							globalVars.get(indexRight).setValue((float) (globalVars.get(indexRight).getValue()+(float) globalVars.get(indexLeft).getValue()));
-						}
-						else {
-							globalVars.get(indexRight).setValueStr(globalVars.get(indexRight).getValueStr()+globalVars.get(indexLeft).getValueStr());
+							globalDisputers.get(indexRight).setValueStr(globalDisputers.get(indexRight).getValueStr()+globalVars.get(indexLeft).getValueStr());
 						}
 						globalVars.get(indexRight).setType(t1);
-						globalVars.get(indexLeft).setType(t2);
+
+					}
+					else if(!partyLeft && partyRight && !globalLeft) {
+						Type t1 = tc.getCorrectType(vars.get(indexLeft),index);
+						if(!(t1 instanceof StringType)) {
+							globalDisputers.get(indexRight).setValue(((float) (globalDisputers.get(indexRight).getValue()+(float) vars.get(indexLeft).getValue())));
+						}
+						else {
+							globalDisputers.get(indexRight).setValueStr(globalDisputers.get(indexRight).getValueStr()+vars.get(indexLeft).getValueStr());
+						}
+						vars.get(indexRight).setType(t1);
+					}
+					else if(!globalLeft && !globalRight) {
+						valid = tc.isTypeCorrect(vars.get(indexRight),vars.get(indexLeft),index);
+
+
+						if(valid) {
+							Type t1 = tc.getCorrectType(vars.get(indexRight),index);
+							Type t2 = tc.getCorrectType(vars.get(indexLeft),index);
+							if(!(t1 instanceof StringType)) {
+								vars.get(indexRight).setValue((float) (vars.get(indexRight).getValue()+(float) vars.get(indexLeft).getValue()));
+							}
+							else {
+								vars.get(indexRight).setValueStr(vars.get(indexRight).getValueStr()+vars.get(indexLeft).getValueStr());
+							}
+							vars.get(indexRight).setType(t1);
+							vars.get(indexLeft).setType(t2);
+
+						}
+					}
+					else if(globalLeft && !globalRight) {
+						valid = tc.isTypeCorrect(vars.get(indexRight),globalVars.get(indexLeft),index);
+
+						if(valid) {
+							Type t1 = tc.getCorrectType(vars.get(indexRight),index);
+							Type t2 = tc.getCorrectType(globalVars.get(indexLeft),index);
+							if(!(t1 instanceof StringType)) {
+								vars.get(indexRight).setValue((float) (vars.get(indexRight).getValue()+(float) globalVars.get(indexLeft).getValue()));
+							}
+							else {
+								vars.get(indexRight).setValueStr(vars.get(indexRight).getValueStr()+globalVars.get(indexLeft).getValueStr());
+							}
+							vars.get(indexRight).setType(t1);
+							globalVars.get(indexLeft).setType(t2);
+						}
+					}
+					else if(!globalLeft && globalRight) {
+						valid = tc.isTypeCorrect(globalVars.get(indexRight),vars.get(indexLeft),index);
+
+						if(valid) {
+							Type t1 = tc.getCorrectType(globalVars.get(indexRight),index);
+							Type t2 = tc.getCorrectType(vars.get(indexLeft),index);
+							if(!(t1 instanceof StringType)) {
+								globalVars.get(indexRight).setValue((float) (globalVars.get(indexRight).getValue()+(float) vars.get(indexLeft).getValue()));	
+							}
+							else {
+								globalVars.get(indexRight).setValueStr(globalVars.get(indexRight).getValueStr()+vars.get(indexLeft).getValueStr());
+							}
+							globalVars.get(indexRight).setType(t2);
+							vars.get(indexLeft).setType(t2);
+
+						}
+					}
+					else if(globalLeft && globalRight) {
+						valid = tc.isTypeCorrect(globalVars.get(indexRight),globalVars.get(indexLeft),index);
+
+						if(valid) {
+							Type t1 = tc.getCorrectType(globalVars.get(indexRight),index);
+							Type t2 = tc.getCorrectType(globalVars.get(indexLeft),index);
+							if(!(t1 instanceof StringType)) {
+								globalVars.get(indexRight).setValue((float) (globalVars.get(indexRight).getValue()+(float) globalVars.get(indexLeft).getValue()));
+							}
+							else {
+								globalVars.get(indexRight).setValueStr(globalVars.get(indexRight).getValueStr()+globalVars.get(indexLeft).getValueStr());
+							}
+							globalVars.get(indexRight).setType(t1);
+							globalVars.get(indexLeft).setType(t2);
+						}
+					}
+					if(!valid) {
+						System.out.println("Typing error.");
 					}
 				}
-				if(!valid) {
-					System.out.println("Typing error.");
-				}
+				else if(leftExpr2!=null) {
+					Entity result = new Entity();
+					if(extLeft2) {
+						if(extLeft) {
+							try 
+							{ 
+								result.setValue((float)Double.parseDouble(leftExpr.getId())+(float)Double.parseDouble(leftExpr2.getId()));
+							}
+							catch(NumberFormatException e)
+							{
+								result.setValueStr(String.format(leftExpr.getId())+String.format(leftExpr2.getId()));
+							}
+						}
+						else if(globalLeft) {
+							try 
+							{ 
+								result.setValue(globalVars.get(indexLeft).getValue()+(float)Double.parseDouble(leftExpr2.getId()));
+							}
+							catch(NumberFormatException e)
+							{
+								result.setValueStr(globalVars.get(indexLeft).getValueStr()+String.format(leftExpr2.getId()));
+							}
+						}
+						else {
+							try 
+							{ 
+								result.setValue(vars.get(indexLeft).getValue()+(float)Double.parseDouble(leftExpr2.getId()));
+							}
+							catch(NumberFormatException e)
+							{
+								result.setValueStr(vars.get(indexLeft).getValueStr()+String.format(leftExpr2.getId()));
+							}
+						}
+					}
+					else if(globalLeft2) {
+						if(extLeft) {
+							try 
+							{ 
+								result.setValue((float)Double.parseDouble(leftExpr.getId())+globalVars.get(indexLeft2).getValue());
+							}
+							catch(NumberFormatException e)
+							{
+								result.setValueStr(String.format(leftExpr.getId())+globalVars.get(indexLeft2).getValueStr());
+							}
+						}
+						else if(globalLeft) {
+							valid = tc.isTypeCorrect(globalVars.get(indexLeft),globalVars.get(indexLeft2),index);
 
+							if(valid) {
+								Type t1 = tc.getCorrectType(globalVars.get(indexLeft),index);
+								Type t2 = tc.getCorrectType(globalVars.get(indexLeft2),index);
+								if(!(t1 instanceof StringType)) {
+									result.setValue((float) (globalVars.get(indexLeft).getValue()+(float) globalVars.get(indexLeft2).getValue()));
+								}
+								else {
+									result.setValueStr(globalVars.get(indexLeft).getValueStr()+globalVars.get(indexLeft2).getValueStr());
+								}
+								globalVars.get(indexLeft).setType(t1);
+								globalVars.get(indexLeft2).setType(t2);
+							}
+						}
+						else {
+							valid = tc.isTypeCorrect(vars.get(indexLeft),globalVars.get(indexLeft2),index);
+
+							if(valid) {
+								Type t1 = tc.getCorrectType(vars.get(indexLeft),index);
+								Type t2 = tc.getCorrectType(globalVars.get(indexLeft2),index);
+								if(!(t1 instanceof StringType)) {
+									result.setValue((float) (vars.get(indexLeft).getValue()+(float) globalVars.get(indexLeft2).getValue()));
+								}
+								else {
+									result.setValueStr(vars.get(indexLeft).getValueStr()+globalVars.get(indexLeft2).getValueStr());
+								}
+								vars.get(indexLeft).setType(t1);
+								globalVars.get(indexLeft2).setType(t2);
+							}
+						}
+					}
+					else {
+						if(extLeft) {
+							try 
+							{ 
+								result.setValue((float)Double.parseDouble(leftExpr.getId())+vars.get(indexLeft2).getValue());
+							}
+							catch(NumberFormatException e)
+							{
+								result.setValueStr(String.format(leftExpr.getId())+vars.get(indexLeft2).getValueStr());
+							}
+						}
+						else if(globalLeft) {
+							valid = tc.isTypeCorrect(globalVars.get(indexLeft),vars.get(indexLeft2),index);
+
+							if(valid) {
+								Type t1 = tc.getCorrectType(globalVars.get(indexLeft),index);
+								Type t2 = tc.getCorrectType(vars.get(indexLeft2),index);
+								if(!(t1 instanceof StringType)) {
+									result.setValue((float) (globalVars.get(indexLeft).getValue()+(float) vars.get(indexLeft2).getValue()));
+								}
+								else {
+									result.setValueStr(globalVars.get(indexLeft).getValueStr()+vars.get(indexLeft2).getValueStr());
+								}
+								globalVars.get(indexLeft).setType(t1);
+								vars.get(indexLeft2).setType(t2);
+							}
+						}
+						else {
+							valid = tc.isTypeCorrect(vars.get(indexLeft),vars.get(indexLeft2),index);
+
+							if(valid) {
+								Type t1 = tc.getCorrectType(vars.get(indexLeft),index);
+								Type t2 = tc.getCorrectType(vars.get(indexLeft2),index);
+								if(!(t1 instanceof StringType)) {
+									result.setValue((float) (vars.get(indexLeft).getValue()+(float) vars.get(indexLeft2).getValue()));
+								}
+								else {
+									result.setValueStr(vars.get(indexLeft).getValueStr()+vars.get(indexLeft2).getValueStr());
+								}
+								vars.get(indexLeft).setType(t1);
+								vars.get(indexLeft2).setType(t2);
+							}
+						}
+					}
+
+					if(globalRight) {
+						Type t1 = tc.getCorrectType(globalVars.get(indexRight),index);
+						Type t2 = null;
+						if(globalLeft) {
+							t2 = tc.getCorrectType(globalVars.get(indexLeft),index);
+						}
+						else if(!globalLeft && globalLeft2) {
+							t2 = tc.getCorrectType(globalVars.get(indexLeft2),index);
+						}
+						else if(!globalLeft && !globalLeft2 && !extLeft) {
+							t2 = tc.getCorrectType(vars.get(indexLeft),index);
+						}
+						else if(!globalLeft && !globalLeft2 && !extLeft2) {
+							t2 = tc.getCorrectType(vars.get(indexLeft2),index);
+						}					
+						if(!(t2 instanceof StringType)) {
+							if((indexRight==indexLeft && globalLeft) || (globalLeft2 && indexRight==indexLeft2)) {
+								globalVars.get(indexRight).setValue((float) ((float) result.getValue()));	
+							}
+							else{
+								globalVars.get(indexRight).setValue((float) (globalVars.get(indexRight).getValue()+(float) result.getValue()));	
+							}
+						}
+						else {
+							if((indexRight==indexLeft && globalLeft) || (globalLeft2 && indexRight==indexLeft2)) {
+								globalVars.get(indexRight).setValueStr(result.getValueStr());
+							}
+							else {
+								globalVars.get(indexRight).setValueStr(globalVars.get(indexRight).getValueStr()+result.getValueStr());
+							}
+						}
+						globalVars.get(indexRight).setType(t2);
+					}
+					else if(!globalRight) {
+						Type t1 = tc.getCorrectType(vars.get(indexRight),index);
+						Type t2 = null;
+						if(globalLeft) {
+							t2 = tc.getCorrectType(globalVars.get(indexLeft),index);
+						}
+						else if(!globalLeft && globalLeft2) {
+							t2 = tc.getCorrectType(globalVars.get(indexLeft2),index);
+						}
+						else if(!globalLeft && !globalLeft2 && !extLeft) {
+							t2 = tc.getCorrectType(vars.get(indexLeft),index);
+						}
+						else if(!globalLeft && !globalLeft2 && !extLeft2) {
+							t2 = tc.getCorrectType(vars.get(indexLeft2),index);
+						}
+						if(!(t2 instanceof StringType)) {
+							if((indexRight==indexLeft && !globalLeft) || (!globalLeft2 && indexRight==indexLeft2)) {
+								vars.get(indexRight).setValue((float) ((float) result.getValue()));	
+							}
+							else {
+								vars.get(indexRight).setValue((float) (vars.get(indexRight).getValue()+(float) result.getValue()));	
+							}
+						}
+						else {
+							if((indexRight==indexLeft && !globalLeft) || (!globalLeft2 && indexRight==indexLeft2)) {
+								vars.get(indexRight).setValueStr(result.getValueStr());
+							}
+							else {
+								vars.get(indexRight).setValueStr(vars.get(indexRight).getValueStr()+result.getValueStr());
+							}
+						}
+						vars.get(indexRight).setType(t2);
+					}
+				}
 			}
+
 			else if(s.getOperator().equals("ASSETUP")) {
 
 				Asset leftExpr = (Asset) s.getLeftExpr();

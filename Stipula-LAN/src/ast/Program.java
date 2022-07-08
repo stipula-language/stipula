@@ -251,7 +251,6 @@ public class Program {
 			timer = new ArrayList<Timer>();
 		}
 		timer.add(new Timer());
-		System.out.println("devo aspettare "+ seconds);
 		timer.get(index).schedule(new DelayEvent(event,ti), seconds*1000);
 		
 

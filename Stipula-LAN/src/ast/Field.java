@@ -8,6 +8,11 @@ public class Field extends Entity{
 	boolean valueBool ;
 	Type type = null;
 
+	public Field() {
+		name = "";
+		value = 0;
+	}
+	
 	public Field(String n) {
 		name = n;
 		value = 0;

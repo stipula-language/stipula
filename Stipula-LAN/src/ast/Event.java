@@ -37,10 +37,7 @@ public class Event  {
 		int seconds = 0;
 		DateUtils d = new DateUtils();
 
-		if(expr.getTextExpression().equals("now")) {
-			seconds = 0; 
-		}
-		else if(expr.getOp()==null){
+		if(expr.getOp()==null){
 			Entity left = expr.getLeft();
 			int indexVar = contract.findVar(left.getId(), program.getFields()) ;
 			program.getFields().get(indexVar).setType(new TimeType());
@@ -56,7 +53,6 @@ public class Event  {
 		else if(expr.getLeftComplexExpr()!=null){
 			Entity left = expr.getLeftComplexExpr().getLeft();
 			Entity right = null;
-			
 			
 			if(expr.getRightComplexExpr()!=null) {
 				right = expr.getRightComplexExpr().getLeft();
@@ -75,6 +71,8 @@ public class Event  {
 				right.setValue(program.getFields().get(indexVarRight).getValue());
 
 				program.getFields().get(indexVarRight).setType(new TimeType());
+				
+
 				contract.setValuesConditions(null,right);
 			}
 			else if(right.getId().equals("now")) {
@@ -104,10 +102,15 @@ public class Event  {
 					seconds = (int) (left.getValue()*SECS*MINS+d.calculateSeconds(right.getValueStr()));
 				}
 				else {
+
 					seconds = (int) (left.getValue()+right.getValue()*SECS*MINS);
 				}
 			}
 
+		}
+
+		else if(expr.getTextExpression().equals("now")) {
+			seconds = 0; 
 		}
 
 		return seconds;

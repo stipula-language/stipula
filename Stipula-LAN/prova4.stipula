@@ -10,14 +10,14 @@ stipula Contract {
 	init Q0 
 	
 	agreement (Alice, Bob, Dave)(t_before){
-		Alice, Bob, Dave : t_before, t_after
+		Alice, Bob, Dave : t_before, t_after, uno
 	} ==> @Q0
 	
 	@Q0 Alice: fill(x)[u,v]{ 
-		 x -> uno 
+		 (x+uno) -> uno 
 		(0.25*u) -○ Alice
 		v -○ Bob ;
-		t_before >> @Q2 { wallet1 -○ wallet2 } ==> @Q3
+		now+t_before >> @Q2 { wallet1 -○ wallet2 } ==> @Q3
 
 	} ==> @Q2
 	
