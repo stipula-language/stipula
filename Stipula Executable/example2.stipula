@@ -1,0 +1,56 @@
+stipula Bet {
+asset wallet1 
+asset wallet2
+field val1 
+field val2  
+field source  
+field alea 
+field amount  
+field t_before 
+field t_after
+init Init
+
+agreement (Better1 , Better2 , DataProvider)(source, alea, amount, t_before, t_after){
+		DataProvider , Better1 , Better2 : source, alea, t_after
+		Better1 , Better2 : amount , t_before 
+} ==> @Init
+
+@Init Better1 : place_bet(x)[h] (h == amount){
+	h -○ wallet1
+	x -> val1;
+	t_before >> @First { wallet1 -○ Better1 } ==> @Fail
+} ==> @First
+
+@First Better2 : place_bet(x)[h] (h == amount){
+	h -○ wallet2
+	x -> val2
+	alea -> DataProvider;
+	t_after >> @Run { 
+		wallet1 -○ Better1 
+		wallet2 -○ Better2
+	} ==> @Fail
+} ==> @Run
+
+@Run DataProvider : data(x,y,z)[](x==source && x==alea){
+	if (z==val1 && z==val2){
+		wallet1 -○ Better1 
+		wallet2 -○ Better2
+		_
+	}
+	else if (z==val1 && z!=val2){
+		wallet2 -○ Better1 
+		wallet1 -○ Better1
+		_
+	}
+	else if (z!=val1 && z==val2){
+		wallet1 -○ Better2 
+		wallet2 -○ Better2
+		_
+	}
+	else{
+		wallet2 -○ DataProvider
+		wallet1 -○ DataProvider
+	};
+	_
+} ==> @End
+}
