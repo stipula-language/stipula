@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javafx.util.Pair;
+import lib.Pair;
 
 public class TypeInference {
 	Map<Pair<String,Integer>,Type> types = null;

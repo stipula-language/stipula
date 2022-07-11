@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Stack;
 
-import javafx.util.Pair;
+import lib.Pair;
 import parser.StipulaBaseListener;
 import parser.StipulaBaseVisitor;
 import parser.StipulaParser;

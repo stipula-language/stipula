@@ -3,7 +3,7 @@ package ast;
 import java.util.ArrayList;
 import java.util.Map;
 
-import javafx.util.Pair;
+import lib.Pair;
 
 public class Contract {
 

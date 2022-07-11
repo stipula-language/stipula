@@ -22,7 +22,7 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import ast.*;
-import javafx.util.Pair;
+import lib.Pair;
 import parser.*;
 
 

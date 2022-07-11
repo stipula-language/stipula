@@ -6,7 +6,7 @@ import java.util.Scanner;
 import java.lang.Object;
 import java.nio.charset.Charset;
 
-import javafx.util.Pair;
+import lib.Pair;
 
 public class Agreement {
 	public static final int LEN = 5;  

@@ -8,7 +8,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import ast.Event.DelayEvent;
-import javafx.util.Pair;
+import lib.Pair;
 
 
 public class Program {

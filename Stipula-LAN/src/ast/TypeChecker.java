@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javafx.util.Pair;
+import lib.Pair;
 import parser.StipulaBaseVisitor;
 import parser.StipulaParser.AgreementContext;
 import parser.StipulaParser.AssetdecContext;
