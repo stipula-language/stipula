@@ -10,21 +10,7 @@ import lib.Pair;
 import parser.StipulaBaseListener;
 import parser.StipulaBaseVisitor;
 import parser.StipulaParser;
-import parser.StipulaParser.AgreementContext;
-import parser.StipulaParser.AssetdecContext;
-import parser.StipulaParser.AssignContext;
-import parser.StipulaParser.DeclistContext;
-import parser.StipulaParser.DisputerContext;
-import parser.StipulaParser.EventsContext;
-import parser.StipulaParser.ExprContext;
-import parser.StipulaParser.FunContext;
-import parser.StipulaParser.IfelseContext;
-import parser.StipulaParser.PrecContext;
-import parser.StipulaParser.ProgContext;
-import parser.StipulaParser.StatContext;
-import parser.StipulaParser.StateContext;
-import parser.StipulaParser.ValueContext;
-import parser.StipulaParser.VardecContext;
+import parser.StipulaParser.*;
 
 public class Interpreter extends StipulaBaseVisitor {
 	Program program = null;
@@ -41,35 +27,27 @@ public class Interpreter extends StipulaBaseVisitor {
 			agr = visitAgreement(ctx.agreement());
 		}
 
-		String progId = ctx.id().getText();
+		String progId = ctx.contract_id.getText();
 		ArrayList<Field> progFields = new ArrayList<Field>();
 		ArrayList<Asset> progAssets = new ArrayList<Asset>();
-		ArrayList<Disputer> progDisputers = new ArrayList<Disputer>();
+		ArrayList<Party> progParties = new ArrayList<Party>();
 		ArrayList<String> progStates = new ArrayList<String>();
 		String tmpState = null;
-		for(DeclistContext n : ctx.declist()) {
-			if(n.type().ASSET()!=null) {
-				Asset tmpAsset = new Asset(n.strings().getText());
-				progAssets.add(tmpAsset);
-			}
-			else if(n.type().FIELD()!=null) {
-				Field tmpField = new Field(n.strings().getText());
-				progFields.add(tmpField);
-			}
-			else if(n.type().PARTY()!=null) {
-				Disputer tmpDisp = new Disputer(n.strings().getText());
-				progDisputers.add(tmpDisp);
-				
-			}
-			else if(n.type().INIT()!=null) {
-				tmpState = n.strings().getText();
-			}
+		if(ctx.assetdecl()!=null) {
+			progAssets = visitAssetdecl(ctx.assetdecl());
 		}
+		if(ctx.fielddecl()!=null) {
+			progFields = visitFielddecl(ctx.fielddecl());
+		}
+
+		
+		tmpState = ctx.init_state.getText();
+
 		if(progAssets.size()==0) {
 			progAssets = null;
 		}
-		if(progDisputers.size()==0) {
-			progDisputers = null;
+		if(progParties.size()==0) {
+			progParties = null;
 		}
 		if(progFields.size()==0) {
 			progFields = null;
@@ -77,43 +55,62 @@ public class Interpreter extends StipulaBaseVisitor {
 		if(progStates.size()==0) {
 			progStates = null;
 		}
-		program = new Program(progId, progFields, progAssets, progDisputers, tmpState);
+		program = new Program(progId, progFields, progAssets, progParties, tmpState);
 		if(ctx.agreement()!=null) {
 			program.addAgreement(agr);
-			for(Disputer disp : agr.getDisputers()){
+			for(Party disp : agr.getParties()){
 				boolean flag = false;
-				if(program.getDisputers()!=null) {
-					for(Disputer disp2 : program.getDisputers()) {
+				if(program.getParties()!=null) {
+					for(Party disp2 : program.getParties()) {
 						if(disp2.getId().equals(disp.getId())) {
 							flag = true;
 						}
 					}
 					if(!flag) {
-						program.addDisputer(disp);
+						program.addParty(disp);
 					}
 				}
 
 			}
-			if(program.getDisputers()==null) {
-				program.addDisputers(agr.getDisputers());
+			if(program.getParties()==null) {
+				program.addParties(agr.getParties());
 			}
 		}
 		for(FunContext f : ctx.fun()) {
 			Contract cnt = visitFun(f);
-			cnt.setGlobalDisputers(program.getDisputers());
+			cnt.setGlobalParties(program.getParties());
 			program.addContract(cnt);
-			
+
 		}
 		return program ;
 	}
 
 
+	@Override
+	public ArrayList<Asset> visitAssetdecl(AssetdeclContext ctx) {
+		ArrayList<Asset> retAssets = new ArrayList<Asset>();
+		for(int i=0; i<ctx.idAsset.size(); i++) {
+			Asset tmpAsset = new Asset(ctx.idAsset.get(i).getText());
+			retAssets.add(tmpAsset);
+		}
+		return retAssets;
+	}
+
+	@Override
+	public ArrayList<Field> visitFielddecl(FielddeclContext ctx) {
+		ArrayList<Field> retFields = new ArrayList<Field>();
+		for(int i=0; i<ctx.idField.size(); i++) {
+			Field tmpField = new Field(ctx.idField.get(i).getText());
+			retFields.add(tmpField);
+		}
+		return retFields;
+	}
 
 	@Override
 	public Agreement visitAgreement(AgreementContext ctx) {
-		ArrayList<Disputer> disp = new ArrayList<Disputer>();
-		for(DisputerContext n : ctx.disputer()) {
-			Disputer tmp = new Disputer(n.getText());
+		ArrayList<Party> disp = new ArrayList<Party>();
+		for(PartyContext n : ctx.party()) {
+			Party tmp = new Party(n.getText());
 			disp.add(tmp);			
 		}
 		ArrayList<Field> fields = new ArrayList<Field>();
@@ -121,12 +118,12 @@ public class Interpreter extends StipulaBaseVisitor {
 			Field tmp = new Field(n.getText());
 			fields.add(tmp);
 		}
-		ArrayList<Pair<Disputer,ArrayList<Field>>> vals = new ArrayList<Pair<Disputer,ArrayList<Field>>>();
+		ArrayList<Pair<Party,ArrayList<Field>>> vals = new ArrayList<Pair<Party,ArrayList<Field>>>();
 		for(AssignContext ac : ctx.assign()) {
 			vals.addAll(visitAssign(ac));
 		}
-		ArrayList<Pair<Disputer,ArrayList<Field>>> valsToRet = new ArrayList<Pair<Disputer,ArrayList<Field>>>();
-		Pair<Disputer,ArrayList<Field>> tmp = null;
+		ArrayList<Pair<Party,ArrayList<Field>>> valsToRet = new ArrayList<Pair<Party,ArrayList<Field>>>();
+		Pair<Party,ArrayList<Field>> tmp = null;
 		boolean found = false;
 		ArrayList<String> tmpDisp = new ArrayList<String>();
 		ArrayList<Field> tmpArray = new ArrayList<Field>();
@@ -164,18 +161,18 @@ public class Interpreter extends StipulaBaseVisitor {
 	}
 
 	@Override
-	public ArrayList<Pair<Disputer,ArrayList<Field>>> visitAssign(AssignContext ctx) {
-		ArrayList<Pair<Disputer,ArrayList<Field>>> toRet = new ArrayList<Pair<Disputer,ArrayList<Field>>> ();
-		Pair<Disputer,ArrayList<Field>> pair = null;
+	public ArrayList<Pair<Party,ArrayList<Field>>> visitAssign(AssignContext ctx) {
+		ArrayList<Pair<Party,ArrayList<Field>>> toRet = new ArrayList<Pair<Party,ArrayList<Field>>> ();
+		Pair<Party,ArrayList<Field>> pair = null;
 		ArrayList<Field> fields = new ArrayList<Field>();
 		for(VardecContext d : ctx.vardec()) {
 			Field tmp = new Field(d.getText());
 			fields.add(tmp);
 		}
 
-		for(DisputerContext d : ctx.disputer()) {
+		for(PartyContext d : ctx.party()) {
 
-			Disputer nd = new Disputer(d.getText());
+			Party nd = new Party(d.getText());
 			pair = new Pair(nd,fields);
 			toRet.add(pair);
 		}
@@ -186,9 +183,9 @@ public class Interpreter extends StipulaBaseVisitor {
 	@Override
 	public Contract visitFun(FunContext ctx) {
 		index++;
-		ArrayList<Disputer> disp = new ArrayList<Disputer>();
-		for(DisputerContext n : ctx.disputer()) {
-			Disputer tmp = new Disputer(n.getText());
+		ArrayList<Party> disp = new ArrayList<Party>();
+		for(PartyContext n : ctx.party()) {
+			Party tmp = new Party(n.getText());
 			disp.add(tmp);
 		}
 
@@ -222,10 +219,10 @@ public class Interpreter extends StipulaBaseVisitor {
 			}
 		}
 
-		Contract newContract = new Contract(ctx.id().getText(), fields, assets, disp, state1, state2, index);
+		Contract newContract = new Contract(ctx.funId.getText(), fields, assets, disp, state1, state2, index);
 		newContract.addFields(program.getFields());
 		newContract.addAssets(program.getAssets());
-		
+
 		if(ctx.prec()!=null) { 
 			Expression conds = visitPrec(ctx.prec()); 
 			newContract.addPrecondition(conds);
@@ -294,7 +291,7 @@ public class Interpreter extends StipulaBaseVisitor {
 				if(ctx.left.expr()!=null) {
 
 					Expression expr = visitExpr(ctx.left.expr());
-					
+
 					double fract = 0;
 					Entity fractExpr = null;
 					if(expr.getRight() != null) {
@@ -576,9 +573,13 @@ public class Interpreter extends StipulaBaseVisitor {
 
 			ret = new Expression(new Entity(""),null);
 		}
-		else if (ctx.strings()!=null) {
+		else if (ctx.RAWSTRING()!=null) {
 
-			ret = new Expression(new Entity(ctx.strings().getText()),null);
+			ret = new Expression(new Entity(ctx.RAWSTRING().getText()),null);
+		}
+		else if (ctx.ID()!=null) {
+
+			ret = new Expression(new Entity(ctx.ID().getText()),null);
 		}
 		else if(ctx.number()!=null) {
 

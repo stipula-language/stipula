@@ -7,7 +7,7 @@ import lib.Pair;
 
 public class Contract {
 
-	ArrayList<Disputer> disputers = null;
+	ArrayList<Party> disputers = null;
 	String id;
 	ArrayList<Field> vars = null;
 	ArrayList<Asset> assets = null;
@@ -18,12 +18,12 @@ public class Contract {
 	ArrayList<Statement> statements = null;
 	ArrayList<Expression> prec = null;
 	ArrayList<Pair<Expression,ArrayList<Statement>>> ifThenElse = null;
-	ArrayList<Disputer> globalDisputers = null;
+	ArrayList<Party> globalParties = null;
 
 	Event events = null;
 	int index ;
 
-	public Contract(String name, ArrayList<Field> f, ArrayList<Asset> a, ArrayList<Disputer> d, ArrayList<String> s1, String s2, int i){
+	public Contract(String name, ArrayList<Field> f, ArrayList<Asset> a, ArrayList<Party> d, ArrayList<String> s1, String s2, int i){
 		id = name;
 		vars = f;
 		assets = a;
@@ -59,14 +59,14 @@ public class Contract {
 		statements.add(stm);
 	}
 
-	public ArrayList<Disputer> getDisputer(){
+	public ArrayList<Party> getParty(){
 		return disputers;
 	}
-	public ArrayList<Disputer> getGlobalDisputers(){
-		return globalDisputers;
+	public ArrayList<Party> getGlobalParties(){
+		return globalParties;
 	}
-	public void setGlobalDisputers( ArrayList<Disputer> gD) {
-		globalDisputers = gD;
+	public void setGlobalParties( ArrayList<Party> gD) {
+		globalParties = gD;
 	}
 	public ArrayList<Field> getVars(){
 		return vars;
@@ -131,10 +131,10 @@ public class Contract {
 		return indexRet;
 	}
 
-	public int findDisputer(String expr) {
+	public int findParty(String expr) {
 		int index = -1;
-		for(int i = 0; i<globalDisputers.size(); i++) {
-			if(globalDisputers.get(i).getId().equals(expr)) {
+		for(int i = 0; i<globalParties.size(); i++) {
+			if(globalParties.get(i).getId().equals(expr)) {
 				index = i;
 			}
 		}
@@ -339,7 +339,7 @@ public class Contract {
 				if(indexLeft==-1) {
 					indexLeft = findVar(leftExpr.getId(),globalVars);
 					if(indexLeft == -1) {
-						indexLeft = findDisputer(leftExpr.getId());
+						indexLeft = findParty(leftExpr.getId());
 						if(indexLeft==-1) {
 							extLeft = true;
 						}
@@ -356,7 +356,7 @@ public class Contract {
 					if(indexLeft2==-1) {
 						indexLeft2 = findVar(leftExpr2.getId(),globalVars);
 						if(indexLeft2 == -1) {
-							indexLeft2 = findDisputer(leftExpr2.getId());
+							indexLeft2 = findParty(leftExpr2.getId());
 							if(indexLeft2==-1) {
 								extLeft2 = true;
 							}
@@ -373,7 +373,7 @@ public class Contract {
 				if(indexRight==-1) {
 					indexRight = findVar(rightExpr.getId(),globalVars);
 					if(indexRight == -1) {
-						indexRight = findDisputer(rightExpr.getId());
+						indexRight = findParty(rightExpr.getId());
 						if(indexRight==-1) {
 							extRight = true;
 						}
@@ -399,11 +399,11 @@ public class Contract {
 					else if(extLeft && partyRight) {
 						try 
 						{ 
-							globalDisputers.get(indexRight).setValue(((float)Double.parseDouble(leftExpr.getId())));
+							globalParties.get(indexRight).setValue(((float)Double.parseDouble(leftExpr.getId())));
 						}
 						catch(NumberFormatException e)
 						{
-							globalDisputers.get(indexRight).setValueStr(String.format(leftExpr.getId()));
+							globalParties.get(indexRight).setValueStr(String.format(leftExpr.getId()));
 						}
 					}
 					else if(extLeft && !globalRight) {
@@ -420,10 +420,10 @@ public class Contract {
 						Type t1 = tc.getCorrectType(globalVars.get(indexLeft),index);
 
 						if(!(t1 instanceof StringType)) {
-							globalDisputers.get(indexRight).setValue(((float) (globalDisputers.get(indexRight).getValue()+(float) globalVars.get(indexLeft).getValue())));
+							globalParties.get(indexRight).setValue(((float) (globalParties.get(indexRight).getValue()+(float) globalVars.get(indexLeft).getValue())));
 						}
 						else {
-							globalDisputers.get(indexRight).setValueStr(globalDisputers.get(indexRight).getValueStr()+globalVars.get(indexLeft).getValueStr());
+							globalParties.get(indexRight).setValueStr(globalParties.get(indexRight).getValueStr()+globalVars.get(indexLeft).getValueStr());
 						}
 						globalVars.get(indexRight).setType(t1);
 
@@ -431,10 +431,10 @@ public class Contract {
 					else if(!partyLeft && partyRight && !globalLeft) {
 						Type t1 = tc.getCorrectType(vars.get(indexLeft),index);
 						if(!(t1 instanceof StringType)) {
-							globalDisputers.get(indexRight).setValue(((float) (globalDisputers.get(indexRight).getValue()+(float) vars.get(indexLeft).getValue())));
+							globalParties.get(indexRight).setValue(((float) (globalParties.get(indexRight).getValue()+(float) vars.get(indexLeft).getValue())));
 						}
 						else {
-							globalDisputers.get(indexRight).setValueStr(globalDisputers.get(indexRight).getValueStr()+vars.get(indexLeft).getValueStr());
+							globalParties.get(indexRight).setValueStr(globalParties.get(indexRight).getValueStr()+vars.get(indexLeft).getValueStr());
 						}
 						vars.get(indexRight).setType(t1);
 					}
@@ -717,7 +717,7 @@ public class Contract {
 				if(indexLeft==-1) {
 					indexLeft = findAsset(leftExpr.getId(),globalAssets);
 					if(indexLeft == -1) {
-						indexLeft = findDisputer(leftExpr.getId());
+						indexLeft = findParty(leftExpr.getId());
 						partyLeft =  true;
 					}
 					else {
@@ -728,7 +728,7 @@ public class Contract {
 					indexRight = findAsset(rightExpr.getId(),globalAssets);
 
 					if(indexRight == -1) {
-						indexRight = findDisputer(rightExpr.getId());
+						indexRight = findParty(rightExpr.getId());
 
 						partyRight =  true;
 					}
@@ -740,7 +740,7 @@ public class Contract {
 				if(partyLeft && partyRight) {
 					if(s.getFract()!=0) {
 						
-						globalDisputers.get(indexLeft).moveAsset(globalDisputers.get(indexRight),((float)(s.getFract())*globalDisputers.get(indexLeft).getValueAsset()));
+						globalParties.get(indexLeft).moveAsset(globalParties.get(indexRight),((float)(s.getFract())*globalParties.get(indexLeft).getValueAsset()));
 
 					}
 					else {
@@ -748,34 +748,34 @@ public class Contract {
 						int indexFract = findVar(nameFract,vars);
 						float valFract = vars.get(indexFract).getValue();
 
-						globalDisputers.get(indexLeft).moveAsset(globalDisputers.get(indexRight),((float)(valFract)*globalDisputers.get(indexLeft).getValueAsset()));
+						globalParties.get(indexLeft).moveAsset(globalParties.get(indexRight),((float)(valFract)*globalParties.get(indexLeft).getValueAsset()));
 
 					}
 
 				}
 				else if(!partyLeft && partyRight && globalLeft) {
 					if(s.getFract()!=0) {
-						globalAssets.get(indexLeft).withdraw(globalDisputers.get(indexRight),((float)s.getFract())*globalAssets.get(indexLeft).getValue()); 
+						globalAssets.get(indexLeft).withdraw(globalParties.get(indexRight),((float)s.getFract())*globalAssets.get(indexLeft).getValue()); 
 
 					}
 					else {
 						String nameFract = s.getFractExpr();
 						int indexFract = findVar(nameFract,vars);
 						float valFract = vars.get(indexFract).getValue();
-						globalAssets.get(indexLeft).withdraw(globalDisputers.get(indexRight),((float)valFract)*globalAssets.get(indexLeft).getValue()); 
+						globalAssets.get(indexLeft).withdraw(globalParties.get(indexRight),((float)valFract)*globalAssets.get(indexLeft).getValue()); 
 
 					}
 
 				}
 				else if(!partyLeft && partyRight && !globalLeft) {
 					if(s.getFract()!=0) {
-						assets.get(indexLeft).withdraw(globalDisputers.get(indexRight),((float)s.getFract())*assets.get(indexLeft).getValue()); 
+						assets.get(indexLeft).withdraw(globalParties.get(indexRight),((float)s.getFract())*assets.get(indexLeft).getValue()); 
 					}
 					else {
 						String nameFract = s.getFractExpr();
 						int indexFract = findVar(nameFract,vars);
 						float valFract = vars.get(indexFract).getValue();
-						assets.get(indexLeft).withdraw(globalDisputers.get(indexRight),((float)valFract)*assets.get(indexLeft).getValue()); 
+						assets.get(indexLeft).withdraw(globalParties.get(indexRight),((float)valFract)*assets.get(indexLeft).getValue()); 
 
 					}
 				}

@@ -24,6 +24,12 @@ public interface StipulaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAgreement(@NotNull StipulaParser.AgreementContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link StipulaParser#dec}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDec(@NotNull StipulaParser.DecContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link StipulaParser#real}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -36,23 +42,11 @@ public interface StipulaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitType(@NotNull StipulaParser.TypeContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link StipulaParser#disputer}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDisputer(@NotNull StipulaParser.DisputerContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link StipulaParser#prog}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitProg(@NotNull StipulaParser.ProgContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link StipulaParser#declist}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDeclist(@NotNull StipulaParser.DeclistContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link StipulaParser#ifelse}.
 	 * @param ctx the parse tree
@@ -78,17 +72,23 @@ public interface StipulaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAssetdec(@NotNull StipulaParser.AssetdecContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link StipulaParser#fielddecl}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFielddecl(@NotNull StipulaParser.FielddeclContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link StipulaParser#prec}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitPrec(@NotNull StipulaParser.PrecContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link StipulaParser#strings}.
+	 * Visit a parse tree produced by {@link StipulaParser#assetdecl}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStrings(@NotNull StipulaParser.StringsContext ctx);
+	T visitAssetdecl(@NotNull StipulaParser.AssetdeclContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link StipulaParser#expr}.
 	 * @param ctx the parse tree
@@ -101,12 +101,6 @@ public interface StipulaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitTerm(@NotNull StipulaParser.TermContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link StipulaParser#id}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitId(@NotNull StipulaParser.IdContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link StipulaParser#state}.
 	 * @param ctx the parse tree
@@ -137,6 +131,12 @@ public interface StipulaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitFun(@NotNull StipulaParser.FunContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link StipulaParser#party}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParty(@NotNull StipulaParser.PartyContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link StipulaParser#events}.
 	 * @param ctx the parse tree

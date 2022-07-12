@@ -39,17 +39,17 @@ public class Asset extends Entity{
 			value = value - val;
 		}
 		else {
-			throw new IllegalArgumentException("Trying to withdraw more assets than owned.");
+			throw new IllegalArgumentException("Cannot withdraw more assets than owned.");
 		}
 		d.increase(val);
 	}
 
-	public void withdraw(Disputer d, float val) {
+	public void withdraw(Party d, float val) {
 		if(val<=value){
 			value = value - val;
 		}
 		else {
-			throw new IllegalArgumentException("Trying to withdraw more assets than owned.");
+			throw new IllegalArgumentException("Cannot withdraw more assets than owned.");
 		}
 		d.setValueAsset(val);
 	}

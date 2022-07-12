@@ -42,6 +42,18 @@ public class StipulaBaseListener implements StipulaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterDec(@NotNull StipulaParser.DecContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDec(@NotNull StipulaParser.DecContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterReal(@NotNull StipulaParser.RealContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -66,18 +78,6 @@ public class StipulaBaseListener implements StipulaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDisputer(@NotNull StipulaParser.DisputerContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDisputer(@NotNull StipulaParser.DisputerContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterProg(@NotNull StipulaParser.ProgContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -85,18 +85,6 @@ public class StipulaBaseListener implements StipulaListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitProg(@NotNull StipulaParser.ProgContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDeclist(@NotNull StipulaParser.DeclistContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDeclist(@NotNull StipulaParser.DeclistContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -150,6 +138,18 @@ public class StipulaBaseListener implements StipulaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterFielddecl(@NotNull StipulaParser.FielddeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFielddecl(@NotNull StipulaParser.FielddeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterPrec(@NotNull StipulaParser.PrecContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -162,13 +162,13 @@ public class StipulaBaseListener implements StipulaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStrings(@NotNull StipulaParser.StringsContext ctx) { }
+	@Override public void enterAssetdecl(@NotNull StipulaParser.AssetdeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStrings(@NotNull StipulaParser.StringsContext ctx) { }
+	@Override public void exitAssetdecl(@NotNull StipulaParser.AssetdeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -193,18 +193,6 @@ public class StipulaBaseListener implements StipulaListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitTerm(@NotNull StipulaParser.TermContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterId(@NotNull StipulaParser.IdContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitId(@NotNull StipulaParser.IdContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -265,6 +253,18 @@ public class StipulaBaseListener implements StipulaListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitFun(@NotNull StipulaParser.FunContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterParty(@NotNull StipulaParser.PartyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParty(@NotNull StipulaParser.PartyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

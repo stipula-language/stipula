@@ -1,13 +1,6 @@
 stipula Bet {
-asset wallet1 
-asset wallet2
-field val1 
-field val2  
-field source  
-field alea 
-field amount  
-field t_before 
-field t_after
+asset wallet1, wallet2
+field val1, val2, source, alea, amount, t_before, t_after 
 init Init
 
 agreement (Better1 , Better2 , DataProvider)(source, alea, amount, t_before, t_after){

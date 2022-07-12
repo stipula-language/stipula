@@ -7,20 +7,7 @@ import java.util.Map.Entry;
 
 import lib.Pair;
 import parser.StipulaBaseVisitor;
-import parser.StipulaParser.AgreementContext;
-import parser.StipulaParser.AssetdecContext;
-import parser.StipulaParser.DeclistContext;
-import parser.StipulaParser.DisputerContext;
-import parser.StipulaParser.EventsContext;
-import parser.StipulaParser.ExprContext;
-import parser.StipulaParser.FactorContext;
-import parser.StipulaParser.FunContext;
-import parser.StipulaParser.PrecContext;
-import parser.StipulaParser.ProgContext;
-import parser.StipulaParser.StatContext;
-import parser.StipulaParser.TermContext;
-import parser.StipulaParser.ValueContext;
-import parser.StipulaParser.VardecContext;
+import parser.StipulaParser.*;
 
 public class TypeChecker extends StipulaBaseVisitor<Object> {
 	int n_types = 0;
@@ -105,7 +92,21 @@ public class TypeChecker extends StipulaBaseVisitor<Object> {
 	public Map<Pair<String,Integer>,Type> visitProg(ProgContext ctx) {
 		types = new LinkedHashMap<Pair<String,Integer>,Type>();
 		parties = visitAgreement(ctx.agreement());
-		for(DeclistContext n : ctx.declist()) {
+		if(ctx.assetdecl()!=null) {
+			Map<Pair<String,Integer>,Type> tmpAssets = new LinkedHashMap<Pair<String,Integer>,Type>();
+			tmpAssets = visitAssetdecl(ctx.assetdecl());
+			for(Pair<String,Integer> el : tmpAssets.keySet()) {
+				types.put(el,tmpAssets.get(el));
+			}
+		}
+		if(ctx.fielddecl()!=null) {
+			Map<Pair<String,Integer>,Type> tmpFields = new LinkedHashMap<Pair<String,Integer>,Type>();
+			tmpFields = visitFielddecl(ctx.fielddecl());
+			for(Pair<String,Integer> el : tmpFields.keySet()) {
+				types.put(el,tmpFields.get(el));
+			}
+		}
+		/*for(DeclistContext n : ctx.declist()) {
 			if(n.type().ASSET()!=null) {
 				types.put(new Pair<String, Integer>(n.strings().getText(),n_scope),new AssetType());
 			}
@@ -122,7 +123,7 @@ public class TypeChecker extends StipulaBaseVisitor<Object> {
 			else if(n.type().STRING()!=null) {
 				types.put(new Pair<String, Integer>(n.strings().getText(),n_scope),new StringType());
 			}
-		}
+		}*/
 		for(FunContext f : ctx.fun()) {
 			Map<Pair<String,Integer>,Type> tmp = visitFun(f);
 			for(Pair<String,Integer> s : tmp.keySet()) {
@@ -144,19 +145,36 @@ public class TypeChecker extends StipulaBaseVisitor<Object> {
 				contractNames = new ArrayList<String>();
 			}
 			String name = "";
-			for(DisputerContext dc : f.disputer()) {
-				name = name+dc.strings().getText();
+			for(PartyContext dc : f.party()) {
+				name = name+dc.ID().getText();
 			}
-			name = name+"."+f.id().getText();
+			name = name+"."+f.ID().getText();
 			contractNames.add(name);
 		}
 		return types;
 	}
 
+	public Map<Pair<String,Integer>,Type> visitAssetdecl(AssetdeclContext ctx){
+		Map<Pair<String,Integer>,Type> retAssets = new LinkedHashMap<Pair<String,Integer>,Type>();
+		for(int i=0; i<ctx.idAsset.size(); i++) {
+			retAssets.put(new Pair<String, Integer>(ctx.idAsset.get(i).getText(),n_scope),new AssetType());
+		}
+		return retAssets;
+	}
+
+	public Map<Pair<String,Integer>,Type> visitFielddecl(FielddeclContext ctx){
+		Map<Pair<String,Integer>,Type> retAssets = new LinkedHashMap<Pair<String,Integer>,Type>();
+		for(int i=0; i<ctx.idField.size(); i++) {
+			retAssets.put(new Pair<String, Integer>(ctx.idField.get(i).getText(),n_scope),new GeneralType(n_types));
+			n_types++;
+		}
+		return retAssets;
+	}
+
 	public ArrayList<String> visitAgreement(AgreementContext ctx) {
 		ArrayList<String> toRet = new ArrayList<String>();
-		for(DisputerContext d : ctx.disputer()) {
-			toRet.add(d.strings().getText());
+		for(PartyContext d : ctx.party()) {
+			toRet.add(d.ID().getText());
 		}
 		return toRet;
 	}
@@ -167,19 +185,19 @@ public class TypeChecker extends StipulaBaseVisitor<Object> {
 		n_scope++;
 		if(ctx.vardec()!=null) {
 			for(VardecContext n : ctx.vardec()) {
-				toRet.put(new Pair<String, Integer>(n.strings().getText(),n_scope),new GeneralType(n_types));
+				toRet.put(new Pair<String, Integer>(n.ID().getText(),n_scope),new GeneralType(n_types));
 				n_types++;
-				tmpFuns.add(new Pair<String, Type>(n.strings().getText(),new GeneralType(n_types)));
+				tmpFuns.add(new Pair<String, Type>(n.ID().getText(),new GeneralType(n_types)));
 			}
 		}
 
 		if(ctx.assetdec()!=null) {
 			for(AssetdecContext n : ctx.assetdec()) {
-				toRet.put(new Pair<String, Integer>(n.strings().getText(),n_scope),new AssetType());
-				tmpFuns.add(new Pair<String, Type>(n.strings().getText(),new AssetType()));
+				toRet.put(new Pair<String, Integer>(n.ID().getText(),n_scope),new AssetType());
+				tmpFuns.add(new Pair<String, Type>(n.ID().getText(),new AssetType()));
 			}
 		}
-		funParams.add(new Pair<String, ArrayList<Pair<String, Type>>>(ctx.id().getText(),tmpFuns));
+		funParams.add(new Pair<String, ArrayList<Pair<String, Type>>>(ctx.ID().getText(),tmpFuns));
 		addElementsMap(toRet);
 		if(ctx.prec()!=null) {
 			Map<Pair<String,Integer>,Type> tmp = visitPrec(ctx.prec());
@@ -259,21 +277,20 @@ public class TypeChecker extends StipulaBaseVisitor<Object> {
 					n_types++;
 				}
 			} 
-			Map<Pair<String,Integer>,Type> tmp1 = visitValue(ctx.right);
-			for(Pair<String,Integer> s : tmp1.keySet()) {
-				if(!parties.contains(s.getKey())){
-					toRet.put(s,new GeneralType(n_types));
+			Pair<String,Integer> rightVal = new Pair<String,Integer>(ctx.right.getText(),n_scope);
+			//Map<Pair<String,Integer>,Type> tmp1 = visitValue(ctx.right);
+			//for(Pair<String,Integer> s : tmp1.keySet()) {
+			if(!parties.contains(rightVal.getKey())){
+				toRet.put(rightVal,new GeneralType(n_types));
+				n_types++;
+			}
+			//} 
+			if(ctx.COMMA()!=null) {
+				Pair<String,Integer> rightValPlus = new Pair<String,Integer>(ctx.right.getText(),n_scope);
+				if(!parties.contains(rightValPlus.getKey())){
+					toRet.put(rightValPlus,new GeneralType(n_types));
 					n_types++;
 				}
-			} 
-			if(ctx.COMMA()!=null) {
-				Map<Pair<String,Integer>,Type> tmp2 = visitValue(ctx.rightPlus);
-				for(Pair<String,Integer> s : tmp2.keySet()) {
-					if(!parties.contains(s.getKey())){
-						toRet.put(s,new GeneralType(n_types));
-						n_types++;
-					}
-				} 
 			}
 		}
 		else if(ctx.FIELDUP()!=null) {
@@ -312,61 +329,51 @@ public class TypeChecker extends StipulaBaseVisitor<Object> {
 				}
 			}
 
-			Map<Pair<String,Integer>,Type> tmp1 = visitValue(ctx.right);
+			Pair<String,Integer> rightVal = new Pair<String,Integer>(ctx.right.getText(),n_scope);
 
 			Type typeRight = null;
-			for(Pair<String,Integer> s : tmp1.keySet()) {
 
-				if(tmp.get(s) instanceof RealType) {
-					typeRight = new RealType();
-				}
-				else if(tmp.get(s) instanceof BooleanType) {
-					typeRight = new BooleanType();
-				}
 
-			} 
-
-			if(typeRight==null) {
-				for(Pair<String,Integer> s : tmp1.keySet()) {
-					if(getType(s,types) instanceof RealType) {
-						typeRight = new RealType();
-					}
-					else if(getType(s,types) instanceof BooleanType) {
-						typeRight = new BooleanType();
-					}
-				} 
+			if(getType(rightVal,types) instanceof RealType) {
+				typeRight = new RealType();
 			}
+			else if(getType(rightVal,types) instanceof BooleanType) {
+				typeRight = new BooleanType();
+			}
+
+
 
 			if(typeLeft != null && typeRight!=null && !typeLeft.equals(typeRight)) {
 				System.out.println("Expressions not of the same type (" +typeLeft.getTypeName()+" and "+typeRight.getTypeName() +")");
 				System.exit(0);
 			}
 
-			for(Pair<String,Integer> s : tmp1.keySet()) {
-				if(typeLeft!=null) {
-					toRet.put(s,typeLeft);
-				}
-				else{
-					toRet.put(s,tmp1.get(s));
-				}
+			if(typeLeft!=null) {
+				toRet.put(rightVal,typeLeft);
+			}
+			else{
+				toRet.put(rightVal,new GeneralType(n_types));
+				n_types++;
+			}
 
-			} 
+
 
 			if(ctx.COMMA()!=null) {
-				Map<Pair<String,Integer>,Type> tmp2 = visitValue(ctx.rightPlus);
-				for(Pair<String,Integer> s : tmp2.keySet()) {
-					if(typeLeft!=null) {
-						toRet.put(s,typeLeft);
+				Pair<String,Integer> rightValPlus = new Pair<String,Integer>(ctx.rightPlus.getText(),n_scope);
+
+				if(typeLeft!=null) {
+					toRet.put(rightValPlus,typeLeft);
+				}
+				else{
+					if(!isPresent(rightValPlus,toRet)){
+						toRet.put(rightVal,new GeneralType(n_types));
+						n_types++;						
 					}
-					else{
-						if(!isPresent(s,toRet)){
-							toRet.put(s,tmp2.get(s));
-						}
-						else {
-							toRet.put(s,tmp2.get(s));
-						}
+					else {
+						toRet.put(rightVal,new GeneralType(n_types));
+						n_types++;						
 					}
-				} 
+				}
 			}
 
 		}
@@ -699,20 +706,20 @@ public class TypeChecker extends StipulaBaseVisitor<Object> {
 				toRet.put(s,tmp.get(s));
 			}
 		}
-		else if(ctx.strings()!=null && (ctx.strings().SINGLE_STRING()!=null || ctx.strings().DOUBLE_STRING()!=null)) {
-			toRet.put(new Pair<String, Integer>(ctx.strings().getText(),n_scope),new StringType());
+		else if(ctx.RAWSTRING()!=null ) {
+			toRet.put(new Pair<String, Integer>(ctx.RAWSTRING().getText(),n_scope),new StringType());
 		}
-		else if(ctx.strings()!=null) {
+		else if(ctx.ID()!=null) {
 			boolean flag = false;
 			for(Pair<String,Integer> pair : types.keySet()) {
-				if(pair.getKey().equals(ctx.strings().getText()) && pair.getValue() == n_scope) {
-					toRet.put(new Pair<String, Integer>(ctx.strings().getText(),n_scope),types.get(pair));
+				if(pair.getKey().equals(ctx.ID().getText()) && pair.getValue() == n_scope) {
+					toRet.put(new Pair<String, Integer>(ctx.ID().getText(),n_scope),types.get(pair));
 					flag = true;
 				}
 			}
 
 			if(!flag) {
-				toRet.put(new Pair<String, Integer>(ctx.strings().getText(),n_scope),new GeneralType(n_types));
+				toRet.put(new Pair<String, Integer>(ctx.ID().getText(),n_scope),new GeneralType(n_types));
 				n_types++;
 			}
 		}

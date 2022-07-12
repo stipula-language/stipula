@@ -11,28 +11,28 @@ import lib.Pair;
 public class Agreement {
 	public static final int LEN = 5;  
 
-	ArrayList<Disputer> disputers = null;
+	ArrayList<Party> disputers = null;
 	ArrayList<Field> vars = null;
-	ArrayList<Pair<Disputer,ArrayList<Field>>> vals = null;
+	ArrayList<Pair<Party,ArrayList<Field>>> vals = null;
 
-	public Agreement(ArrayList<Disputer> d, ArrayList<Field> v) {
+	public Agreement(ArrayList<Party> d, ArrayList<Field> v) {
 		disputers = d;
 		vars = v;
-		for(Disputer disp : disputers) {
+		for(Party disp : disputers) {
 			disp.setUserId(generateUserId(LEN).toString());
 		}
 
 	}
 
-	public Agreement(ArrayList<Disputer> d, ArrayList<Field> v, ArrayList<Pair<Disputer,ArrayList<Field>>> l) {
+	public Agreement(ArrayList<Party> d, ArrayList<Field> v, ArrayList<Pair<Party,ArrayList<Field>>> l) {
 		disputers = d;
 		vars = v;
 		vals = l;
-		for(Disputer disp : disputers) {
+		for(Party disp : disputers) {
 			disp.setUserId(generateUserId(LEN).toString());
 		}
-		for(Pair<Disputer,ArrayList<Field>> pair : vals) {
-			for(Disputer disp : disputers) {
+		for(Pair<Party,ArrayList<Field>> pair : vals) {
+			for(Party disp : disputers) {
 				if(disp.getId().equals(pair.getKey().getId())) {
 					pair.getKey().setUserId(disp.getUserId());
 				}
@@ -42,7 +42,7 @@ public class Agreement {
 
 	}
 
-	public ArrayList<Disputer> getDisputers(){
+	public ArrayList<Party> getParties(){
 		return disputers;
 	}
 
@@ -61,7 +61,7 @@ public class Agreement {
 		Scanner input = new Scanner(System.in);
 		ArrayList<ArrayList<Pair<Field,String>>>  values = new ArrayList<ArrayList<Pair<Field,String>>>();
 		ArrayList<Pair<Field,String>> str = new ArrayList<Pair<Field,String>>();
-		for(Pair<Disputer,ArrayList<Field>> pair : vals) {
+		for(Pair<Party,ArrayList<Field>> pair : vals) {
 			str = new ArrayList<Pair<Field,String>>();
 			System.out.println();
 			System.out.println("# Please, " + pair.getKey().getId() + " insert your id: ");
@@ -79,6 +79,22 @@ public class Agreement {
 			else {
 				values = null;
 				break;
+			}
+		}
+		for(Party disp : disputers) {
+			boolean flag = false;
+			for(Pair<Party,ArrayList<Field>> pair : vals) {
+				if(pair.getKey().getId().equals(disp.getId())) {
+					flag = true;
+				}
+			}
+			if(!flag) {
+				System.out.println("# Please, " + disp.getId() + " insert your id: ");
+				String read1 = input.nextLine();
+				if(!read1.equals(disp.getUserId())) {
+					values = null;
+					break;
+				}
 			}
 		}
 
@@ -105,8 +121,8 @@ public class Agreement {
 
 
 	public void printAgreement() {
-		for(Disputer d : disputers) {
-			d.printDisputer();
+		for(Party d : disputers) {
+			d.printParty();
 		}
 		for(Field f : vars) {
 			f.printField();

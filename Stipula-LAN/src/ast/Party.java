@@ -1,6 +1,6 @@
 package ast;
 
-public class Disputer extends Entity{
+public class Party extends Entity{
 
 	String name;
 	String userId ;
@@ -8,7 +8,7 @@ public class Disputer extends Entity{
 	float value = 0;
 	String valueStr = "";
 
-	public Disputer(String n) {
+	public Party(String n) {
 		name = n;
 	}
 
@@ -31,7 +31,7 @@ public class Disputer extends Entity{
 		valueAsset.setCalcValue(v);
 	}
 	
-	public void moveAsset(Disputer d, float val) {
+	public void moveAsset(Party d, float val) {
 		valueAsset.withdraw(d,val);
 	}
 
@@ -59,7 +59,7 @@ public class Disputer extends Entity{
 		return valueAsset;
 	}
 
-	public void printDisputer() {
+	public void printParty() {
 		if(value == 0 && valueAsset.getValue() == 0 && valueStr.equals("")) {
 			System.out.println(name);
 		}

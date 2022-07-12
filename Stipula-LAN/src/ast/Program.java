@@ -17,7 +17,7 @@ public class Program {
 	private String initState = null;
 	private ArrayList<Field> fields = null;
 	private ArrayList<Asset> assets = null;
-	private ArrayList<Disputer> parties = null;
+	private ArrayList<Party> parties = null;
 	private Agreement agreement;
 	private ArrayList<Contract> contracts = null;
 	private ArrayList<Event> events = null;
@@ -30,7 +30,7 @@ public class Program {
 	private int caseExec = 0;
 
 
-	public Program(String name, ArrayList<Field> f, ArrayList<Asset> a, ArrayList<Disputer> d, String s){
+	public Program(String name, ArrayList<Field> f, ArrayList<Asset> a, ArrayList<Party> d, String s){
 		id = name;
 		fields = f;
 		assets = a;
@@ -76,7 +76,7 @@ public class Program {
 	}
 
 
-	public ArrayList<Disputer> getDisputers(){
+	public ArrayList<Party> getParties(){
 		return parties;
 	}
 
@@ -92,21 +92,21 @@ public class Program {
 		return null;
 	}
 
-	public void addDisputers(ArrayList<Disputer> disp) {
+	public void addParties(ArrayList<Party> disp) {
 		if(parties==null) {
-			parties = new ArrayList<Disputer>();
+			parties = new ArrayList<Party>();
 			parties = disp;
 		}
 		else {
-			for(Disputer d : disp) {
+			for(Party d : disp) {
 				parties.add(d);
 			}
 		}
 	}
 
-	public void addDisputer(Disputer disp) {
+	public void addParty(Party disp) {
 		if(parties==null) {
-			parties = new ArrayList<Disputer>();
+			parties = new ArrayList<Party>();
 		}
 		parties.add(disp);
 
@@ -157,8 +157,8 @@ public class Program {
 	}
 
 	public void updateParties(Contract cnt) {
-		for(Disputer fc : cnt.getGlobalDisputers()) {
-			for(Disputer f : parties) {
+		for(Party fc : cnt.getGlobalParties()) {
+			for(Party f : parties) {
 				if(f.getId().equals(fc.getId())) {
 					f.setValue((float) fc.getValue());
 					f.setValueStr(fc.getValueStr());
@@ -226,17 +226,17 @@ public class Program {
 
 
 	public void printParties() {
-		for(Disputer d : parties) {
+		for(Party d : parties) {
 			System.out.print("\t");
-			d.printDisputer();
+			d.printParty();
 		}
 
 	}
 
-	public boolean contained(Entity el, ArrayList<Disputer> A) {
+	public boolean contained(Entity el, ArrayList<Party> A) {
 		boolean contains = false;
 		if(A!=null) {
-			for(Disputer n : A) {
+			for(Party n : A) {
 				if(n.getId().equals(el.getId())) {
 					contains = true;
 				}
@@ -366,11 +366,11 @@ public class Program {
 			System.out.println("Assets:");
 			this.printAssets();
 		}
-		if(this.getDisputers()!=null) {
+		if(this.getParties()!=null) {
 			System.out.println("Parties:");
-			for(Disputer a : this.getDisputers()) {
+			for(Party a : this.getParties()) {
 				System.out.print("\t");
-				a.printDisputer();
+				a.printParty();
 			}
 		}
 		System.out.println("############");
@@ -380,8 +380,8 @@ public class Program {
 		if(this.getAgreement()!=null) {
 			System.out.println("Running the agreement.");
 			System.out.println("--------------------");
-			for(Disputer disp : this.getAgreement().getDisputers()) {
-				for(Disputer disp2 : this.getDisputers()) {
+			for(Party disp : this.getAgreement().getParties()) {
+				for(Party disp2 : this.getParties()) {
 					if(disp2.getId().equals(disp.getId())) {
 						disp2.setUserId(disp.getUserId());
 						System.out.println(disp2.getId()+ " " + disp2.getUserId());
@@ -390,8 +390,8 @@ public class Program {
 				}
 			}
 			for(Contract c : this.getContracts()) {
-				for(Disputer d : c.getDisputer()) {
-					for(Disputer d2 : this.getDisputers()) {
+				for(Party d : c.getParty()) {
+					for(Party d2 : this.getParties()) {
 						if(d2.getId().equals(d.getId())) {
 							d.setUserId(d2.getUserId());
 						}
@@ -457,15 +457,15 @@ public class Program {
 
 					if(rightInitState) {
 						found = true;
-						for(int i=0; i<c.getDisputer().size(); i++) {
+						for(int i=0; i<c.getParty().size(); i++) {
 							if(i==0) {
 								System.out.print("\t");
 							}
-							if(i==c.getDisputer().size()-1) {
-								System.out.print(c.getDisputer().get(i).getId()+".");
+							if(i==c.getParty().size()-1) {
+								System.out.print(c.getParty().get(i).getId()+".");
 							}
 							else {
-								System.out.print(c.getDisputer().get(i).getId()+",");
+								System.out.print(c.getParty().get(i).getId()+",");
 							}
 						}
 						System.out.print(c.getId()+"(");
@@ -542,7 +542,7 @@ public class Program {
 				for(int index=0; index< this.getContracts().size(); index++) {
 					Contract c = this.getContracts().get(index);
 					boolean rightId = false;
-					for(Disputer d : c.getDisputer()) {
+					for(Party d : c.getParty()) {
 						if(d.getUserId().equals(userID)) {
 							rightId = true;
 						}

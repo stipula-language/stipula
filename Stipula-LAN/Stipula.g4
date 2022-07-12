@@ -1,4 +1,4 @@
-grammar Stipula;
+grammar Stipula ;
 
 @lexer::members {
    //there is a much better way to do this, check the ANTLR guide
@@ -11,33 +11,35 @@ grammar Stipula;
  * PARSER RULES
  *------------------------------------------------------------------*/
  
-prog :  STIPULA id CLPAR (declist)* (agreement)? (fun)+ CRPAR ; 
+prog :  STIPULA contract_id = ID CLPAR (assetdecl)? (fielddecl)? INIT init_state = ID agreement (fun)+ CRPAR ; 
 
-id : ID ;
+agreement : (AGREEMENT LPAR party (COMMA party)* RPAR LPAR vardec (COMMA vardec)* RPAR CLPAR (assign)+ CRPAR IMPL AT state);
 
-agreement : (AGREEMENT LPAR disputer (COMMA disputer)* RPAR LPAR vardec (COMMA vardec)* RPAR CLPAR (assign)+ CRPAR IMPL AT state);
+assetdecl :  ASSET idAsset+=ID (',' idAsset+=ID)* ;
 
-fun	:  ((AT state)* disputer (COMMA disputer)* COLON id LPAR (vardec ( COMMA vardec)* )? RPAR SLPAR (assetdec ( COMMA assetdec)* )? SRPAR (LPAR prec RPAR)? CLPAR (stat)+ SEMIC (events)+ CRPAR IMPL AT state )   ;
+fielddecl : FIELD idField+=ID (',' idField+=ID)* ;
+
+fun	:  ((AT state)* party (COMMA party)* COLON funId=ID LPAR (vardec ( COMMA vardec)* )? RPAR SLPAR (assetdec ( COMMA assetdec)* )? SRPAR (LPAR prec RPAR)? CLPAR (stat)+ SEMIC (events)+ CRPAR IMPL AT state )   ;
 		
-assign : (disputer (COMMA disputer)* COLON vardec (COMMA vardec)*);
+assign : (party (COMMA party)* COLON vardec (COMMA vardec)*);
 
-declist : type strings  ;
+dec : (ASSET | FIELD) ID  ;
 
-type :  ASSET | FIELD | INTEGER | DOUBLE | BOOLEAN | PARTY | INIT | STRING;
+type :  INTEGER | DOUBLE | BOOLEAN | STRING ;
 
-state : strings;
+state : ID;
 
-disputer : strings;
+party : ID;
 
-vardec  : strings ;
+vardec  : ID ;
 
-assetdec  : strings ;
+assetdec  : ID ;
 
 varasm     : vardec ASM expr ;
  
 stat 	:      EMPTY
-			|  ( left=value operator=ASSETUP right=value (COMMA rightPlus=value)? ) 
-			|  ( left=value operator=FIELDUP right=value (COMMA rightPlus=value)?) 
+			|   left=value operator=ASSETUP right=ID (COMMA rightPlus=ID)?  
+			|   left=value operator=FIELDUP right=(ID | EMPTY) 
 		 	| ifelse
 			
 			;
@@ -61,27 +63,17 @@ factor : left=value (operator = (EQ | LE | GE | LEQ | GEQ | NEQ ) right=value)?
       ;       
       
 value  :  number    
+	  | ID
 	  | NOW
       | LPAR expr RPAR                      
-      | strings
+      | RAWSTRING
       | EMPTY
       | (TRUE | FALSE)				
       ;      
 
-strings :  SINGLE_STRING | DOUBLE_STRING | ID ;
-
-
-real
- : number DOT number
- ; 
+real : number DOT number ; 
       
-/*string
-    : ID ;*/
-
-number
- : INT
- | REAL
- ;
+number : INT | REAL ;
 
    
 /*------------------------------------------------------------------
@@ -130,27 +122,15 @@ AGREEMENT : 'agreement';
 INTEGER : 'int' ;
 DOUBLE : 'real' ;
 BOOLEAN : 'bool' ;
+STRING : 'string' ;
 PARTY : 'party' ;
-STRING : 'string';
 INIT : 'init' ;
 
-SINGLE_STRING
-    : '\'' ~('\'')+ '\''
-    ;
+RAWSTRING : '\'' ~('\'')+ '\'' | '"' ~('"')+ '"' ;
 
-DOUBLE_STRING
-    : '"' ~('"')+ '"'
-    ;
+INT : '0' | [1-9] [0-9]* ;
 
-
-INT
- : '0'
- | [1-9] [0-9]*
- ;
-
-REAL
- : [0-9]* '.' [0-9]+
- ;
+REAL : [0-9]* '.' [0-9]+ ;
 
 WS
  : [ \t\r\n] -> skip
@@ -158,7 +138,7 @@ WS
 
 //IDs
 fragment CHAR  : 'a'..'z' |'A'..'Z' ;
-ID              : CHAR (CHAR | INT | EMPTY)* ;
+ID : CHAR (CHAR | INT | EMPTY)* ;
 
 OTHER
  : .
