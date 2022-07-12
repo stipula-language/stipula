@@ -23,7 +23,7 @@ assign : (disputer (COMMA disputer)* COLON vardec (COMMA vardec)*);
 
 declist : type strings  ;
 
-type :  ASSET | FIELD | INTEGER | DOUBLE | BOOLEAN | PARTY | INIT;
+type :  ASSET | FIELD | INTEGER | DOUBLE | BOOLEAN | PARTY | INIT | STRING;
 
 state : strings;
 
@@ -131,6 +131,7 @@ INTEGER : 'int' ;
 DOUBLE : 'real' ;
 BOOLEAN : 'bool' ;
 PARTY : 'party' ;
+STRING : 'string';
 INIT : 'init' ;
 
 SINGLE_STRING

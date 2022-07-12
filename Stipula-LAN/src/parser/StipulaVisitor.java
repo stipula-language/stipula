@@ -1,6 +1,5 @@
-package parser;
-
 // Generated from Stipula.g4 by ANTLR 4.4
+package parser;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 

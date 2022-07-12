@@ -113,6 +113,15 @@ public class TypeChecker extends StipulaBaseVisitor<Object> {
 				types.put(new Pair<String, Integer>(n.strings().getText(),n_scope),new GeneralType(n_types));
 				n_types++;
 			}
+			else if(n.type().INTEGER()!=null || n.type().DOUBLE()!=null) {
+				types.put(new Pair<String, Integer>(n.strings().getText(),n_scope),new RealType());
+			}
+			else if(n.type().BOOLEAN()!=null) {
+				types.put(new Pair<String, Integer>(n.strings().getText(),n_scope),new BooleanType());
+			}
+			else if(n.type().STRING()!=null) {
+				types.put(new Pair<String, Integer>(n.strings().getText(),n_scope),new StringType());
+			}
 		}
 		for(FunContext f : ctx.fun()) {
 			Map<Pair<String,Integer>,Type> tmp = visitFun(f);

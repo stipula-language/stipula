@@ -2,7 +2,6 @@ stipula BikeRental {
 asset wallet
 field cost 
 field rentingTime 
-field code
 party Lender
 party Borrower
 party Authority

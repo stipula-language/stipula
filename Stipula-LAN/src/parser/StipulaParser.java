@@ -1,6 +1,6 @@
+// Generated from Stipula.g4 by ANTLR 4.4
 package parser;
 
-// Generated from Stipula.g4 by ANTLR 4.4
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -23,17 +23,17 @@ public class StipulaParser extends Parser {
 		LPAR=18, RPAR=19, SLPAR=20, SRPAR=21, CLPAR=22, CRPAR=23, LEQ=24, GEQ=25, 
 		LE=26, GE=27, OR=28, AND=29, NOT=30, EMPTY=31, NOW=32, TRIGGER=33, IF=34, 
 		ELSEIF=35, ELSE=36, STIPULA=37, ASSET=38, FIELD=39, AGREEMENT=40, INTEGER=41, 
-		DOUBLE=42, BOOLEAN=43, PARTY=44, INIT=45, SINGLE_STRING=46, DOUBLE_STRING=47, 
-		INT=48, REAL=49, WS=50, ID=51, OTHER=52, LINECOMENTS=53, BLOCKCOMENTS=54, 
-		ERR=55;
+		DOUBLE=42, BOOLEAN=43, PARTY=44, STRING=45, INIT=46, SINGLE_STRING=47, 
+		DOUBLE_STRING=48, INT=49, REAL=50, WS=51, ID=52, OTHER=53, LINECOMENTS=54, 
+		BLOCKCOMENTS=55, ERR=56;
 	public static final String[] tokenNames = {
 		"<INVALID>", "';'", "':'", "','", "'.'", "'=='", "'!='", "'==>'", "'='", 
 		"'-o'", "'->'", "'+'", "'-'", "'*'", "'/'", "'@'", "'true'", "'false'", 
 		"'('", "')'", "'['", "']'", "'{'", "'}'", "'<='", "'>='", "'<'", "'>'", 
 		"'||'", "'&&'", "'!'", "'_'", "'now'", "'>>'", "'if'", "'else if'", "'else'", 
 		"'stipula'", "'asset'", "'field'", "'agreement'", "'int'", "'real'", "'bool'", 
-		"'party'", "'init'", "SINGLE_STRING", "DOUBLE_STRING", "INT", "REAL", 
-		"WS", "ID", "OTHER", "LINECOMENTS", "BLOCKCOMENTS", "ERR"
+		"'party'", "'string'", "'init'", "SINGLE_STRING", "DOUBLE_STRING", "INT", 
+		"REAL", "WS", "ID", "OTHER", "LINECOMENTS", "BLOCKCOMENTS", "ERR"
 	};
 	public static final int
 		RULE_prog = 0, RULE_id = 1, RULE_agreement = 2, RULE_fun = 3, RULE_assign = 4, 
@@ -120,7 +120,7 @@ public class StipulaParser extends Parser {
 			setState(52);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << ASSET) | (1L << FIELD) | (1L << INTEGER) | (1L << DOUBLE) | (1L << BOOLEAN) | (1L << PARTY) | (1L << INIT))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << ASSET) | (1L << FIELD) | (1L << INTEGER) | (1L << DOUBLE) | (1L << BOOLEAN) | (1L << PARTY) | (1L << STRING) | (1L << INIT))) != 0)) {
 				{
 				{
 				setState(49); declist();
@@ -709,6 +709,7 @@ public class StipulaParser extends Parser {
 		public TerminalNode FIELD() { return getToken(StipulaParser.FIELD, 0); }
 		public TerminalNode INIT() { return getToken(StipulaParser.INIT, 0); }
 		public TerminalNode ASSET() { return getToken(StipulaParser.ASSET, 0); }
+		public TerminalNode STRING() { return getToken(StipulaParser.STRING, 0); }
 		public TerminalNode BOOLEAN() { return getToken(StipulaParser.BOOLEAN, 0); }
 		public TerminalNode DOUBLE() { return getToken(StipulaParser.DOUBLE, 0); }
 		public TerminalNode PARTY() { return getToken(StipulaParser.PARTY, 0); }
@@ -740,7 +741,7 @@ public class StipulaParser extends Parser {
 			{
 			setState(183);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << ASSET) | (1L << FIELD) | (1L << INTEGER) | (1L << DOUBLE) | (1L << BOOLEAN) | (1L << PARTY) | (1L << INIT))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << ASSET) | (1L << FIELD) | (1L << INTEGER) | (1L << DOUBLE) | (1L << BOOLEAN) | (1L << PARTY) | (1L << STRING) | (1L << INIT))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -1849,7 +1850,7 @@ public class StipulaParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\39\u013e\4\2\t\2\4"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3:\u013e\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\3\2\3\2\3"+
@@ -1874,9 +1875,9 @@ public class StipulaParser extends Parser {
 		"\22\u011f\n\22\3\23\3\23\3\23\5\23\u0124\n\23\3\24\3\24\3\24\5\24\u0129"+
 		"\n\24\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\5\25\u0134\n\25\3\26"+
 		"\3\26\3\27\3\27\3\27\3\27\3\30\3\30\3\30\2\2\31\2\4\6\b\n\f\16\20\22\24"+
-		"\26\30\32\34\36 \"$&(*,.\2\t\4\2()+/\4\2\r\16\36\36\4\2\17\20\37\37\4"+
-		"\2\7\b\32\35\3\2\22\23\4\2\60\61\65\65\3\2\62\63\u014c\2\60\3\2\2\2\4"+
-		"C\3\2\2\2\6E\3\2\2\2\bi\3\2\2\2\n\u00a5\3\2\2\2\f\u00b6\3\2\2\2\16\u00b9"+
+		"\26\30\32\34\36 \"$&(*,.\2\t\4\2()+\60\4\2\r\16\36\36\4\2\17\20\37\37"+
+		"\4\2\7\b\32\35\3\2\22\23\4\2\61\62\66\66\3\2\63\64\u014c\2\60\3\2\2\2"+
+		"\4C\3\2\2\2\6E\3\2\2\2\bi\3\2\2\2\n\u00a5\3\2\2\2\f\u00b6\3\2\2\2\16\u00b9"+
 		"\3\2\2\2\20\u00bb\3\2\2\2\22\u00bd\3\2\2\2\24\u00bf\3\2\2\2\26\u00c1\3"+
 		"\2\2\2\30\u00c3\3\2\2\2\32\u00d7\3\2\2\2\34\u00d9\3\2\2\2\36\u0114\3\2"+
 		"\2\2 \u0116\3\2\2\2\"\u0119\3\2\2\2$\u0120\3\2\2\2&\u0125\3\2\2\2(\u0133"+
@@ -1884,7 +1885,7 @@ public class StipulaParser extends Parser {
 		"\62\5\4\3\2\62\66\7\30\2\2\63\65\5\f\7\2\64\63\3\2\2\2\658\3\2\2\2\66"+
 		"\64\3\2\2\2\66\67\3\2\2\2\67:\3\2\2\28\66\3\2\2\29;\5\6\4\2:9\3\2\2\2"+
 		":;\3\2\2\2;=\3\2\2\2<>\5\b\5\2=<\3\2\2\2>?\3\2\2\2?=\3\2\2\2?@\3\2\2\2"+
-		"@A\3\2\2\2AB\7\31\2\2B\3\3\2\2\2CD\7\65\2\2D\5\3\2\2\2EF\7*\2\2FG\7\24"+
+		"@A\3\2\2\2AB\7\31\2\2B\3\3\2\2\2CD\7\66\2\2D\5\3\2\2\2EF\7*\2\2FG\7\24"+
 		"\2\2GL\5\22\n\2HI\7\5\2\2IK\5\22\n\2JH\3\2\2\2KN\3\2\2\2LJ\3\2\2\2LM\3"+
 		"\2\2\2MO\3\2\2\2NL\3\2\2\2OP\7\25\2\2PQ\7\24\2\2QV\5\24\13\2RS\7\5\2\2"+
 		"SU\5\24\13\2TR\3\2\2\2UX\3\2\2\2VT\3\2\2\2VW\3\2\2\2WY\3\2\2\2XV\3\2\2"+
@@ -1938,10 +1939,10 @@ public class StipulaParser extends Parser {
 		"\3\2\2\2\u00fe\u0100\3\2\2\2\u00ff\u00fd\3\2\2\2\u0100\u0101\7\31\2\2"+
 		"\u0101\u0103\3\2\2\2\u0102\u00f7\3\2\2\2\u0102\u0103\3\2\2\2\u0103\35"+
 		"\3\2\2\2\u0104\u0115\7!\2\2\u0105\u0106\5\"\22\2\u0106\u0107\7#\2\2\u0107"+
-		"\u0108\7\21\2\2\u0108\u0109\7\65\2\2\u0109\u010b\7\30\2\2\u010a\u010c"+
+		"\u0108\7\21\2\2\u0108\u0109\7\66\2\2\u0109\u010b\7\30\2\2\u010a\u010c"+
 		"\5\32\16\2\u010b\u010a\3\2\2\2\u010c\u010d\3\2\2\2\u010d\u010b\3\2\2\2"+
 		"\u010d\u010e\3\2\2\2\u010e\u010f\3\2\2\2\u010f\u0110\7\31\2\2\u0110\u0111"+
-		"\7\t\2\2\u0111\u0112\7\21\2\2\u0112\u0113\7\65\2\2\u0113\u0115\3\2\2\2"+
+		"\7\t\2\2\u0111\u0112\7\21\2\2\u0112\u0113\7\66\2\2\u0113\u0115\3\2\2\2"+
 		"\u0114\u0104\3\2\2\2\u0114\u0105\3\2\2\2\u0115\37\3\2\2\2\u0116\u0117"+
 		"\5\"\22\2\u0117!\3\2\2\2\u0118\u011a\7\16\2\2\u0119\u0118\3\2\2\2\u0119"+
 		"\u011a\3\2\2\2\u011a\u011b\3\2\2\2\u011b\u011e\5$\23\2\u011c\u011d\t\3"+
