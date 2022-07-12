@@ -23,14 +23,13 @@ There are two possibilities:
 
 #### How to install the source code
 
-* How to run the program
-* Step-by-step bullets
+* 
 
 #### How to run the jar
 
 * After downloading the zip, go to the correct folder (./Stipula Executable)
-* Run the following code to test the BikeRental contract
+* To run the prototype type the following code
 ```
-java -jar stipula_lan.jar bike_rental.stipula
+java -jar stipula_lan.jar name_of_the_example.stipula
 ```
  
