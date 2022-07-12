@@ -23,7 +23,15 @@ There are two possibilities:
 
 #### How to install the source code
 
-* 
+##### Requirements:
+* Java > 8
+* ANTLR > 4.4
+
+##### Instructions:
+* Download the zip
+* Import the grammar file (Stipula.g4) in the IDE
+* Compile with ANTLR and generate the Parser, Visitor, Listener
+* Import the rest of the project (package src)
 
 #### How to run the jar
 
