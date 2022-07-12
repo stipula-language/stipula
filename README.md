@@ -21,13 +21,16 @@ There are two possibilities:
 * It is possible to download and run the jar of the prototype
 
 
-#### Install the source code
+#### How to install the source code
 
 * How to run the program
 * Step-by-step bullets
 
-#### Run the jar
+#### How to run the jar
 
-* How to run the program
-* Step-by-step bullets
+* After downloading the zip, go to the correct folder (./Stipula Executable)
+* Run the following code to test the BikeRental contract
+```
+java -jar stipula_lan.jar bike_rental.stipula
+```
  
