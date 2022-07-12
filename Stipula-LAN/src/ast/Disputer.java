@@ -24,7 +24,7 @@ public class Disputer extends Entity{
 	}
 
 	public void setValueAsset(float v) {
-		valueAsset.move(v,new Asset(v));
+		valueAsset.increase(v);
 	}
 	
 	public void setValueAssetCalc(float v) {

@@ -33,8 +33,8 @@ public class Event  {
 		return contract;
 	}
 
-	public int evaluateEvent(Program program) {
-		int seconds = 0;
+	public long evaluateEvent(Program program) {
+		long seconds = 0;
 		DateUtils d = new DateUtils();
 
 		if(expr.getOp()==null){

@@ -1,7 +1,7 @@
 package lib;
 
 import java.io.Serializable;
-import javafx.beans.NamedArg;
+//import javafx.beans.NamedArg;
 
  /**
   * <p>A convenience class to represent name-value pairs.</p>

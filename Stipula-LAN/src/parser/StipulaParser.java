@@ -1,6 +1,6 @@
-// Generated from Stipula.g4 by ANTLR 4.4
 package parser;
 
+// Generated from Stipula.g4 by ANTLR 4.4
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -28,7 +28,7 @@ public class StipulaParser extends Parser {
 		ERR=55;
 	public static final String[] tokenNames = {
 		"<INVALID>", "';'", "':'", "','", "'.'", "'=='", "'!='", "'==>'", "'='", 
-		"'-○'", "'->'", "'+'", "'-'", "'*'", "'/'", "'@'", "'true'", "'false'", 
+		"'-o'", "'->'", "'+'", "'-'", "'*'", "'/'", "'@'", "'true'", "'false'", 
 		"'('", "')'", "'['", "']'", "'{'", "'}'", "'<='", "'>='", "'<'", "'>'", 
 		"'||'", "'&&'", "'!'", "'_'", "'now'", "'>>'", "'if'", "'else if'", "'else'", 
 		"'stipula'", "'asset'", "'field'", "'agreement'", "'int'", "'real'", "'bool'", 

@@ -30,22 +30,26 @@ public class Asset extends Entity{
 		value = d ;
 	}
 
-	public void decValue(float val) {
-		if(val<=value) {
-			value = value-val;
-		}
+	public void increase(float val) {
+		value = value + val;
 	}
 
 	public void move(float val, Asset d) {
-		if(val<=d.getValue()) {
-			d.decValue(val);
+		if(val<=value){
+			value = value - val;
 		}
-		value = value + val ;
+		else {
+			throw new IllegalArgumentException("Trying to withdraw more assets than owned.");
+		}
+		d.increase(val);
 	}
 
 	public void withdraw(Disputer d, float val) {
-		if(val<=value) {
+		if(val<=value){
 			value = value - val;
+		}
+		else {
+			throw new IllegalArgumentException("Trying to withdraw more assets than owned.");
 		}
 		d.setValueAsset(val);
 	}

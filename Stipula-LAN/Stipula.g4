@@ -95,7 +95,7 @@ EQ     	: '==' ;
 NEQ     : '!=' ;
 IMPL   	: '==>' ;
 ASM    	: '=' ;
-ASSETUP :  '-○' ;
+ASSETUP :  '-o' ;
 FIELDUP : '->' ;
 PLUS   	: '+' ;
 MINUS  	: '-' ;

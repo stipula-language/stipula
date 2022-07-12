@@ -245,7 +245,7 @@ public class Program {
 		return contains;
 	}
 
-	public void setTimer(int index, int seconds, Event event, TypeInference ti) {
+	public void setTimer(int index, long seconds, Event event, TypeInference ti) {
 
 		if(timer==null) {
 			timer = new ArrayList<Timer>();
@@ -412,7 +412,7 @@ public class Program {
 		}
 		if(events!=null) {
 			for(int index = 0; index<events.size(); index++) {
-				int secs = events.get(index).evaluateEvent(this);
+				long secs = events.get(index).evaluateEvent(this);
 				setTimer(index,secs,events.get(index),typeinferencer);
 				lock.add(new Object());				
 				howManyThreads++;
@@ -582,7 +582,8 @@ public class Program {
 
 								if(assetsItems[0].length()!=0) {
 									for(int i=0; i<assetsItems.length; i++) {
-										tmpContr.getAssets().get(i).move((float) Double.parseDouble(assetsItems[i]),new Asset((float) Double.parseDouble(assetsItems[i])));
+										Asset newAsset = new Asset((float) Double.parseDouble(assetsItems[i]));
+										newAsset.move((float) Double.parseDouble(assetsItems[i]),tmpContr.getAssets().get(i));
 										typeinferencer.addType(tmpContr.getAssets().get(i).getId(), new AssetType(),index);
 
 									}
