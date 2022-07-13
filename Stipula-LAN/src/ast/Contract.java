@@ -309,8 +309,9 @@ public class Contract {
 				Field leftExpr = (Field) s.getLeftExpr();
 				Field rightExpr = (Field) s.getRightExpr();
 				Field leftExpr2 = null;
-				if(leftExpr.getId().equals("_")||rightExpr.getId().equals("_")) {
-					break;
+				boolean everyParty = false;
+				if(rightExpr.getId().equals("_")) {
+					everyParty = true;
 				}
 				else if(isComplexExpr(leftExpr)) {
 					ArrayList<Field> entities = divideComplexExpr(leftExpr);
@@ -382,7 +383,9 @@ public class Contract {
 						}
 					}
 					else {
-						globalRight = true;
+						if(!everyParty) {
+							globalRight = true;
+						}
 					}
 				}
 				if(leftExpr2==null) {
@@ -407,13 +410,29 @@ public class Contract {
 						}
 					}
 					else if(extLeft && !globalRight) {
+
 						try 
 						{ 
+
 							vars.get(indexRight).setValue((float)Double.parseDouble(leftExpr.getId()));
 						}
 						catch(NumberFormatException e)
 						{
 							vars.get(indexRight).setValueStr(String.format(leftExpr.getId()));
+						}
+					}
+					else if(extLeft && everyParty) {
+						try 
+						{ 
+							for(Party p : globalParties) {
+								p.setValue(((float)Double.parseDouble(leftExpr.getId())));
+							}
+						}
+						catch(NumberFormatException e)
+						{
+							for(Party p : globalParties) {
+								p.setValueStr(String.format(leftExpr.getId()));
+							}
 						}
 					}
 					else if(!partyLeft && partyRight && globalLeft) {
@@ -428,6 +447,19 @@ public class Contract {
 						globalVars.get(indexRight).setType(t1);
 
 					}
+					else if(!partyLeft && everyParty && globalLeft) {
+						for(Party p : globalParties) {
+							Type t1 = tc.getCorrectType(globalVars.get(indexLeft),index);
+							if(!(t1 instanceof StringType)) {
+								p.setValue(((float) (p.getValue()+(float) globalVars.get(indexLeft).getValue())));
+							}
+							else {
+								p.setValueStr(p.getValueStr()+globalVars.get(indexLeft).getValueStr());
+							}
+							globalVars.get(indexRight).setType(t1);
+						}
+
+					}
 					else if(!partyLeft && partyRight && !globalLeft) {
 						Type t1 = tc.getCorrectType(vars.get(indexLeft),index);
 						if(!(t1 instanceof StringType)) {
@@ -437,6 +469,19 @@ public class Contract {
 							globalParties.get(indexRight).setValueStr(globalParties.get(indexRight).getValueStr()+vars.get(indexLeft).getValueStr());
 						}
 						vars.get(indexRight).setType(t1);
+					}
+					else if(!partyLeft && !globalLeft && everyParty) {
+
+						for(Party p : globalParties) {
+							Type t1 = tc.getCorrectType(vars.get(indexLeft),index);
+							if(!(t1 instanceof StringType)) {
+								p.setValue(((float) (p.getValue()+(float) vars.get(indexLeft).getValue())));
+							}
+							else {
+								p.setValueStr(p.getValueStr()+vars.get(indexLeft).getValueStr());
+							}
+							vars.get(indexLeft).setType(t1);
+						}
 					}
 					else if(!globalLeft && !globalRight) {
 						valid = tc.isTypeCorrect(vars.get(indexRight),vars.get(indexLeft),index);
@@ -739,7 +784,7 @@ public class Contract {
 
 				if(partyLeft && partyRight) {
 					if(s.getFract()!=0) {
-						
+
 						globalParties.get(indexLeft).moveAsset(globalParties.get(indexRight),((float)(s.getFract())*globalParties.get(indexLeft).getValueAsset()));
 
 					}

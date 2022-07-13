@@ -6,4 +6,8 @@ public class Type {
 	public String getTypeName() {
 		return type;
 	}
+	
+	public int getNumberType(){
+		return -1;
+	}
 }

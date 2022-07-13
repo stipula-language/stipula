@@ -3,59 +3,59 @@ package ast;
 public class Asset extends Entity{
 
 	String name;
-	float value;
+	float rawvalue;
 	Type type = new AssetType();
 
 	public Asset() {
 		name = "";
-		value = 0;
+		rawvalue = 0;
 	}
 
 	public Asset(String n) {
 		name = n;
-		value = 0;
+		rawvalue = 0;
 	}
 
 	public Asset(String n, int v) {
 		name = n;
-		value = v;
+		rawvalue = v;
 	}
 
 	public Asset(float v) {
 		name = "";
-		value = v;
+		rawvalue = v;
 	}
 
 	public void setCalcValue(float d) {
-		value = d ;
+		rawvalue = d ;
 	}
 
 	public void increase(float val) {
-		value = value + val;
+		rawvalue = rawvalue + val;
 	}
 
 	public void move(float val, Asset d) {
-		if(val<=value){
-			value = value - val;
+		if(val<=rawvalue){
+			rawvalue = rawvalue - val;
+			d.increase(val);
 		}
 		else {
-			throw new IllegalArgumentException("Cannot withdraw more assets than owned.");
+			throw new AssetException("Erroneous withdraw") ;
 		}
-		d.increase(val);
 	}
 
 	public void withdraw(Party d, float val) {
-		if(val<=value){
-			value = value - val;
+		if(val<=rawvalue){
+			rawvalue = rawvalue - val;
+			d.setValueAsset(val);
 		}
 		else {
-			throw new IllegalArgumentException("Cannot withdraw more assets than owned.");
+			throw new AssetException("Erroneous withdraw") ;
 		}
-		d.setValueAsset(val);
 	}
 
 	public float getValue() {
-		return value ;
+		return rawvalue ;
 	}
 
 	public Type getType() {
@@ -68,7 +68,7 @@ public class Asset extends Entity{
 
 	public void printAsset() {
 
-		System.out.println("Asset " + name + ": " + value);
+		System.out.println("Asset " + name + ": " + rawvalue);
 
 	}
 

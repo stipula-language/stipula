@@ -24,7 +24,7 @@ public class TypeChecker extends StipulaBaseVisitor<Object> {
 
 	public void print_map(){
 		for(Pair<String,Integer> s: types.keySet()) {
-			System.out.print("var: " + s.getKey() +" type: " + types.get(s).getTypeName() );
+			System.out.print("var: " + s.getKey() +" type: " + types.get(s).getTypeName() +" ");
 			if(s.getValue()>0) {
 				int toPrint = Integer.valueOf(s.getValue())-1;
 				System.out.println("function#" + toPrint);
@@ -53,14 +53,16 @@ public class TypeChecker extends StipulaBaseVisitor<Object> {
 
 	public void addElementsMap(Map<Pair<String,Integer>,Type> toRet) {
 		for(Pair<String,Integer> s : toRet.keySet()) {
+
 			if(!isPresent(s,types)){
-				types.put(s,toRet.get(s));
+				types.put(new Pair<String,Integer>(s.getKey(),s.getValue()),toRet.get(s));
 			}
 			else {
 				Type tmpType = getType(s,types);
+
 				if(tmpType == null || (!(tmpType instanceof RealType) && !(tmpType instanceof BooleanType) && !(tmpType instanceof AssetType) && !(tmpType instanceof TimeType))) {
 					for(Entry<Pair<String, Integer>, Type> entry : types.entrySet()) {
-						if(entry.getKey().getKey().equals(s.getKey())) {
+						if(entry.getKey().getKey().equals(s.getKey()) && (entry.getKey().getValue().equals(s.getValue())|| entry.getKey().getValue()==0)) {
 							entry.setValue(toRet.get(s));
 						}
 					}
@@ -106,35 +108,19 @@ public class TypeChecker extends StipulaBaseVisitor<Object> {
 				types.put(el,tmpFields.get(el));
 			}
 		}
-		/*for(DeclistContext n : ctx.declist()) {
-			if(n.type().ASSET()!=null) {
-				types.put(new Pair<String, Integer>(n.strings().getText(),n_scope),new AssetType());
-			}
-			else if(n.type().FIELD()!=null) {
-				types.put(new Pair<String, Integer>(n.strings().getText(),n_scope),new GeneralType(n_types));
-				n_types++;
-			}
-			else if(n.type().INTEGER()!=null || n.type().DOUBLE()!=null) {
-				types.put(new Pair<String, Integer>(n.strings().getText(),n_scope),new RealType());
-			}
-			else if(n.type().BOOLEAN()!=null) {
-				types.put(new Pair<String, Integer>(n.strings().getText(),n_scope),new BooleanType());
-			}
-			else if(n.type().STRING()!=null) {
-				types.put(new Pair<String, Integer>(n.strings().getText(),n_scope),new StringType());
-			}
-		}*/
+		
 		for(FunContext f : ctx.fun()) {
 			Map<Pair<String,Integer>,Type> tmp = visitFun(f);
+			
 			for(Pair<String,Integer> s : tmp.keySet()) {
 				if(!isPresent(s,types)){
-					types.put(s,tmp.get(s));
+					types.put(new Pair<String,Integer>(s.getKey(),s.getValue()),tmp.get(s));
 				}
 				else {
 					Type tmpType = getType(s,types);
 					if(tmpType == null || (!(tmpType instanceof RealType) && !(tmpType instanceof BooleanType) && !(tmpType instanceof AssetType) && !(tmpType instanceof TimeType))) {
 						for(Entry<Pair<String, Integer>, Type> entry : types.entrySet()) {
-							if(entry.getKey().getKey().equals(s.getKey())) {
+							if(entry.getKey().getKey().equals(s.getKey()) && (entry.getKey().getValue().equals(s.getValue())|| entry.getKey().getValue()==0)) {
 								entry.setValue(tmp.get(s));
 							}
 						}
@@ -198,7 +184,9 @@ public class TypeChecker extends StipulaBaseVisitor<Object> {
 			}
 		}
 		funParams.add(new Pair<String, ArrayList<Pair<String, Type>>>(ctx.ID().getText(),tmpFuns));
+		
 		addElementsMap(toRet);
+		
 		if(ctx.prec()!=null) {
 			Map<Pair<String,Integer>,Type> tmp = visitPrec(ctx.prec());
 			for(Pair<String,Integer> s : tmp.keySet()) {
