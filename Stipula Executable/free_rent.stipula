@@ -16,7 +16,8 @@ agreement (Lender, Borrower)(t_start, t_limit) {
 } ==> @Proposal
 
 @Proposal Borrower : boxUse()[] { 
-	token -> Borrower ;
+	numBox -> Borrower
+	token -o Borrower ;
 	now + t_limit >> @Using {
 		"Time_Limit_Reached" -> Borrower
 		token -o Lender 
