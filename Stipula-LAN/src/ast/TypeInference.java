@@ -57,7 +57,7 @@ public class TypeInference {
 			System.out.println("Fields:");
 			print_global(fields);
 		}
-		System.out.println("Contracts:");
+		System.out.println("Functions:");
 		print_functions(functions);
 	}
 

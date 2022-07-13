@@ -11,3 +11,6 @@
 /GeneralType.class
 /Type.class
 /AssetException.class
+/Event$DelayEvent.class
+/Event.class
+/Function.class

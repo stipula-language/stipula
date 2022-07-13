@@ -445,7 +445,7 @@ public class Program {
 
 			case 1: 
 				System.out.println("############");
-				System.out.println("# Please, choose which contract should run: ");
+				System.out.println("# Please, choose which function should run: ");
 
 				for(Contract c : this.getContracts()) {
 					boolean rightInitState = false;
@@ -495,14 +495,14 @@ public class Program {
 				}
 				if(running) {caseExec = 10;}
 				else if(!found && howManyThreads==0) {
-					System.out.println("### No more contracts to run!");
+					System.out.println("### No more functions to run!");
 					System.out.println("############");
 
 					caseExec = 4;
 					break;
 				}
 				else if(!found && howManyThreads!=0) {
-					System.out.println("### No more contracts to run, but still some events! Waiting..");
+					System.out.println("### No more functions to run, but still some events! Waiting..");
 					System.out.println("############");
 					caseExec = 5; 
 					break;
