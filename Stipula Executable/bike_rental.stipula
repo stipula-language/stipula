@@ -1,11 +1,6 @@
 stipula BikeRental {
 asset wallet
-field cost 
-field rentingTime 
-field code
-party Lender
-party Borrower
-party Authority
+field cost, rentingTime, code
 init Inactive
 
 agreement (Lender,Borrower,Authority)(rentingTime,cost){ 
@@ -17,8 +12,8 @@ agreement (Lender,Borrower,Authority)(rentingTime,cost){
 	_
 } ==> @Payment
 
-@Inactive Borrower : pay()[h] (h == cost) {
-	h -○ wallet
+@Payment Borrower : pay()[h] (h == cost) {
+	h -o wallet 
 	code -> Borrower;
 	now+rentingTime >> 
 		@Using {
@@ -32,7 +27,7 @@ agreement (Lender,Borrower,Authority)(rentingTime,cost){
 } ==> @Return
 
 @Return Lender : rentalOk()[] { 
-	wallet -○ Lender;
+	wallet -o Lender;
 	_
 } ==> @End
 
@@ -44,8 +39,8 @@ agreement (Lender,Borrower,Authority)(rentingTime,cost){
 @Dispute Authority : verdict(x,y)[] (y>=0 && y<=1) {
 	x -> Lender
 	x -> Borrower 
-	(y*wallet) -○ wallet, Lender
-	wallet -○ Borrower;
+	(y*wallet) -o wallet, Lender
+	wallet -o Borrower;
 	_
 } ==> @End
 }
