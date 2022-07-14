@@ -63,3 +63,4 @@ Authority gxhZZ
 ```
 	ef6h4.offer(10)[]
 ```
+* Then the prototype executes the body of the chosen function and the execution continues
