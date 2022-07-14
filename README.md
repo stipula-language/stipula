@@ -58,7 +58,8 @@ Authority gxhZZ
 # Please, choose which function should run: 
 	Lender.offer(Type3 x)[]
 ```
-* The user must call the desired function by inserting the corresponding party's code and the values for the formal parameters (see below)
+* The user must call the desired function by inserting the corresponding party's code and the values for the formal parameters
+* For instance, if the lender wants to call the function offer with x=10:
 ```
 	ef6h4.offer(10)[]
 ```
