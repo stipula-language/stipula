@@ -53,4 +53,12 @@ Authority gxhZZ
 --------------------
 ```
 * The prototype asks the user to insert these codes and the values for some variables
-* 
+* Then it shows which functions can start, for instance:
+```
+# Please, choose which function should run: 
+	Lender.offer(Type3 x)[]
+```
+* The user must call the desired function by inserting the corresponding party's code and the values for the formal parameters (see below)
+```
+	ef6h4.offer(10)[]
+```
