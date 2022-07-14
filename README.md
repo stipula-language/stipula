@@ -41,3 +41,16 @@ There are two possibilities:
 java -jar stipula_lan.jar name_of_the_example.stipula
 ```
  
+### Executing
+
+* When the prototype starts, it displays the type inference 
+* Then the agreement starts and displays a unique code for each party of the contract (see example below)
+```
+--------------------
+Lender ef6h4
+Borrower MHWBs
+Authority gxhZZ
+--------------------
+```
+* The prototype asks the user to insert these codes and the values for some variables
+* 
