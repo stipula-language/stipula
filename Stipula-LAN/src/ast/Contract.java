@@ -442,7 +442,12 @@ public class Contract {
 							globalParties.get(indexRight).setValue(((float) (globalParties.get(indexRight).getValue()+(float) globalVars.get(indexLeft).getValue())));
 						}
 						else {
-							globalParties.get(indexRight).setValueStr(globalParties.get(indexRight).getValueStr()+globalVars.get(indexLeft).getValueStr());
+							if(globalParties.get(indexRight).getValueStr()==null) {
+								globalParties.get(indexRight).setValueStr(globalVars.get(indexLeft).getValueStr());
+							}
+							else {
+								globalParties.get(indexRight).setValueStr(globalParties.get(indexRight).getValueStr()+globalVars.get(indexLeft).getValueStr());
+							}
 						}
 						globalVars.get(indexRight).setType(t1);
 
@@ -454,7 +459,12 @@ public class Contract {
 								p.setValue(((float) (p.getValue()+(float) globalVars.get(indexLeft).getValue())));
 							}
 							else {
-								p.setValueStr(p.getValueStr()+globalVars.get(indexLeft).getValueStr());
+								if(p.getValueStr()==null) {
+									p.setValueStr(globalVars.get(indexLeft).getValueStr());
+								}
+								else {
+									p.setValueStr(p.getValueStr()+globalVars.get(indexLeft).getValueStr());
+								}
 							}
 							globalVars.get(indexRight).setType(t1);
 						}
@@ -466,7 +476,12 @@ public class Contract {
 							globalParties.get(indexRight).setValue(((float) (globalParties.get(indexRight).getValue()+(float) vars.get(indexLeft).getValue())));
 						}
 						else {
-							globalParties.get(indexRight).setValueStr(globalParties.get(indexRight).getValueStr()+vars.get(indexLeft).getValueStr());
+							if(globalParties.get(indexRight).getValueStr()==null) {
+								globalParties.get(indexRight).setValueStr(vars.get(indexLeft).getValueStr());
+							}
+							else {
+								globalParties.get(indexRight).setValueStr(globalParties.get(indexRight).getValueStr()+vars.get(indexLeft).getValueStr());
+							}
 						}
 						vars.get(indexRight).setType(t1);
 					}
@@ -478,7 +493,12 @@ public class Contract {
 								p.setValue(((float) (p.getValue()+(float) vars.get(indexLeft).getValue())));
 							}
 							else {
-								p.setValueStr(p.getValueStr()+vars.get(indexLeft).getValueStr());
+								if(p.getValueStr()==null) {
+									p.setValueStr(vars.get(indexLeft).getValueStr());
+								}
+								else {
+									p.setValueStr(p.getValueStr()+vars.get(indexLeft).getValueStr());
+								}
 							}
 							vars.get(indexLeft).setType(t1);
 						}
@@ -490,11 +510,17 @@ public class Contract {
 						if(valid) {
 							Type t1 = tc.getCorrectType(vars.get(indexRight),index);
 							Type t2 = tc.getCorrectType(vars.get(indexLeft),index);
-							if(!(t1 instanceof StringType)) {
+							if(!(t2 instanceof StringType)) {
 								vars.get(indexRight).setValue((float) (vars.get(indexRight).getValue()+(float) vars.get(indexLeft).getValue()));
 							}
 							else {
-								vars.get(indexRight).setValueStr(vars.get(indexRight).getValueStr()+vars.get(indexLeft).getValueStr());
+								if(vars.get(indexRight).getValueStr()==null) {
+									vars.get(indexRight).setValueStr(vars.get(indexLeft).getValueStr());
+
+								}
+								else {
+									vars.get(indexRight).setValueStr(vars.get(indexRight).getValueStr()+vars.get(indexLeft).getValueStr());
+								}
 							}
 							vars.get(indexRight).setType(t1);
 							vars.get(indexLeft).setType(t2);
@@ -507,11 +533,16 @@ public class Contract {
 						if(valid) {
 							Type t1 = tc.getCorrectType(vars.get(indexRight),index);
 							Type t2 = tc.getCorrectType(globalVars.get(indexLeft),index);
-							if(!(t1 instanceof StringType)) {
+							if(!(t2 instanceof StringType)) {
 								vars.get(indexRight).setValue((float) (vars.get(indexRight).getValue()+(float) globalVars.get(indexLeft).getValue()));
 							}
 							else {
-								vars.get(indexRight).setValueStr(vars.get(indexRight).getValueStr()+globalVars.get(indexLeft).getValueStr());
+								if(vars.get(indexRight).getValueStr()==null) {
+									vars.get(indexRight).setValueStr(globalVars.get(indexLeft).getValueStr());
+								}
+								else {
+									vars.get(indexRight).setValueStr(vars.get(indexRight).getValueStr()+globalVars.get(indexLeft).getValueStr());
+								}
 							}
 							vars.get(indexRight).setType(t1);
 							globalVars.get(indexLeft).setType(t2);
@@ -523,11 +554,18 @@ public class Contract {
 						if(valid) {
 							Type t1 = tc.getCorrectType(globalVars.get(indexRight),index);
 							Type t2 = tc.getCorrectType(vars.get(indexLeft),index);
-							if(!(t1 instanceof StringType)) {
+
+							if(!(t2 instanceof StringType)) {
 								globalVars.get(indexRight).setValue((float) (globalVars.get(indexRight).getValue()+(float) vars.get(indexLeft).getValue()));	
 							}
 							else {
-								globalVars.get(indexRight).setValueStr(globalVars.get(indexRight).getValueStr()+vars.get(indexLeft).getValueStr());
+								if(globalVars.get(indexRight).getValueStr()==null) {
+									globalVars.get(indexRight).setValueStr(vars.get(indexLeft).getValueStr());
+
+								}
+								else {
+									globalVars.get(indexRight).setValueStr(globalVars.get(indexRight).getValueStr()+vars.get(indexLeft).getValueStr());
+								}
 							}
 							globalVars.get(indexRight).setType(t2);
 							vars.get(indexLeft).setType(t2);
@@ -540,11 +578,17 @@ public class Contract {
 						if(valid) {
 							Type t1 = tc.getCorrectType(globalVars.get(indexRight),index);
 							Type t2 = tc.getCorrectType(globalVars.get(indexLeft),index);
-							if(!(t1 instanceof StringType)) {
+							if(!(t2 instanceof StringType)) {
 								globalVars.get(indexRight).setValue((float) (globalVars.get(indexRight).getValue()+(float) globalVars.get(indexLeft).getValue()));
 							}
 							else {
-								globalVars.get(indexRight).setValueStr(globalVars.get(indexRight).getValueStr()+globalVars.get(indexLeft).getValueStr());
+								if(globalVars.get(indexRight).getValueStr()==null) {
+									globalVars.get(indexRight).setValueStr(globalVars.get(indexLeft).getValueStr());
+
+								}
+								else {
+									globalVars.get(indexRight).setValueStr(globalVars.get(indexRight).getValueStr()+globalVars.get(indexLeft).getValueStr());
+								}
 							}
 							globalVars.get(indexRight).setType(t1);
 							globalVars.get(indexLeft).setType(t2);

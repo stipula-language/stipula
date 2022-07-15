@@ -150,7 +150,12 @@ public class Program {
 		for(Field fc : cnt.getGlobalVars()) {
 			for(Field f : fields) {
 				if(f.getId().equals(fc.getId())) {
-					f.setValue((float) fc.getValue());
+					if(fc.getValueStr()!=null ) {
+						f.setValueStr(fc.getValueStr());
+					}
+					else{
+						f.setValue((float) fc.getValue());
+					}
 				}
 			}
 		}
