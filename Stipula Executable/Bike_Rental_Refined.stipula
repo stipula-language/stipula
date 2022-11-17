@@ -32,7 +32,7 @@ agreement (Lender,Borrower,Authority)(rentingTime,cost,deposit){
 
 @Return Lender : rental_Ok()[] { 
 	cost -o wallet, Lender;
-  deposit -o wallet, Borrower
+        deposit -o wallet, Borrower
 	_
 } ==> @End
 
