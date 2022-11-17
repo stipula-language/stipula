@@ -1,4 +1,8 @@
-stipula BikeRentalRefined {
+/* This contract corresponds to the real bike rental contract available
+   in http://www.thebicyclecellar.com/wp-content/uploads/2013/10/Bike-Rental-Contract-BW.pdf
+*/
+
+stipula Bike_Rental_Refined {
 asset wallet
 field cost, rentingTime, code, deposit
 init Inactive
