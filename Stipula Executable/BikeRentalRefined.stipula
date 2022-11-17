@@ -1,0 +1,52 @@
+stipula BikeRentalRefined {
+asset wallet
+field cost, rentingTime, code, deposit
+init Inactive
+
+agreement (Lender,Borrower,Authority)(rentingTime,cost,deposit){ 
+	Lender , Borrower: rentingTime , cost, deposit
+} ==> @Inactive
+
+@Inactive Lender : offer(x)[] { 
+	x -> code;
+	_
+} ==> @Payment
+
+@Payment Borrower : pay()[h] (h == cost+deposit) {
+	h -o wallet 
+	code -> Borrower;
+	now+rentingTime >> 
+		@Using {
+		EndReached -> Borrower
+		} ==> @Return 
+} ==> @Using
+
+@Using Borrower : end()[] { 
+	now -> Lender;
+	_
+} ==> @Return
+
+@Return Lender : rental_Ok()[] { 
+	cost -o wallet, Lender;
+  deposit -o wallet, Borrower
+	_
+} ==> @End
+
+@Return Lender : rental_Late_or_Damage()[] { 
+	wallet -o Lender;
+	_
+} ==> @End
+
+
+@Using@Return@End Lender, Borrower : dispute(x)[] { 
+	x -> _;
+	_
+} ==> @Dispute
+
+@Dispute Authority : verdict(x,y)[] (y>=0 && y<=1) {
+	x -> Lender
+	x -> Borrower 
+	(y*wallet) -o wallet, Lender
+	wallet -o Borrower;
+	_
+} ==> @End
