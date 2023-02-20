@@ -17,6 +17,9 @@ public class Party extends Entity{
 	}
 	
 	public String getUserId() {
+		if(userId==null) {
+			return "";
+		}
 		return userId;
 	}
 	public void setValue(float v) {

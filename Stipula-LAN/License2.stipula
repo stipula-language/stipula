@@ -1,0 +1,71 @@
+stipula License2 {
+asset license, wallet
+field license_fee, breach_fee, t_removal 
+init Inactive
+
+
+agreement (Licensor, Licensee) (license_fee, breach_fee, t_removal) {
+    Licensor, Licensee : license_fee, breach_fee, t_removal 
+} ==> @Inactive
+
+@Inactive Licensor : proposal(n)[t] {
+    t -o license
+    n -> Licensee;
+    _
+} ==> @Proposed
+
+@Proposed Licensee : acceptance(x)[w] (w == license_fee + breach_fee) {
+    x -> Licensor
+    license_fee -o w, Licensor
+    breach_fee -o w, wallet
+    license -o Licensee;
+    _
+} ==> @Active
+
+@Active Licensor : commission2comment(x)[] {
+    x -> Licensee;
+    _
+} ==> @Publishing
+
+@Publishing Licensee : comment_approval(x)[] {
+    x -> comment;
+    _
+} ==> @Wait_Approval
+
+
+
+
+@Publishing Licensor: unauthorized_comment()[] {
+    "Unauthorized_Comment" -> Licensee;
+    now + t_removal >> @Claimed_Breach {
+        "Time_expired" -> Licensee
+        wallet -o wallet, Licensor
+        } ==> @End
+} ==> @Claimed_Breach
+
+
+@Claimed_Breach Licensee: declare_removal(x)[] {
+    x -> Licensor;
+    _
+} ==> @Publishing
+
+@Wait_Approval Licensor : response(z)[]{
+    if(z == response) {
+        if(z == 0){
+            "Not publish" -> Licensee
+            }
+        else if(z == 1){
+            "Can publish" -> Licensee
+            _
+            }
+     };
+     _
+} ==> @Publishing
+
+
+@Publishing fun: arbitration(x)[] {
+    x -> _;
+    _
+} ==> @Dispute_Resolution
+
+}

@@ -483,7 +483,7 @@ public class Contract {
 								globalParties.get(indexRight).setValueStr(globalParties.get(indexRight).getValueStr()+vars.get(indexLeft).getValueStr());
 							}
 						}
-						vars.get(indexRight).setType(t1);
+						vars.get(indexLeft).setType(t1);
 					}
 					else if(!partyLeft && !globalLeft && everyParty) {
 
