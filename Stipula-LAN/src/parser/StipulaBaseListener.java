@@ -1,9 +1,8 @@
-// Generated from Stipula.g4 by ANTLR 4.4
+// Generated from java-escape by ANTLR 4.11.1
 package parser;
 
 
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -12,306 +11,307 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  * which can be extended to create a listener which only needs to handle a subset
  * of the available methods.
  */
+@SuppressWarnings("CheckReturnValue")
 public class StipulaBaseListener implements StipulaListener {
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStat(@NotNull StipulaParser.StatContext ctx) { }
+	@Override public void enterProg(StipulaParser.ProgContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStat(@NotNull StipulaParser.StatContext ctx) { }
+	@Override public void exitProg(StipulaParser.ProgContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAgreement(@NotNull StipulaParser.AgreementContext ctx) { }
+	@Override public void enterAgreement(StipulaParser.AgreementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAgreement(@NotNull StipulaParser.AgreementContext ctx) { }
+	@Override public void exitAgreement(StipulaParser.AgreementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDec(@NotNull StipulaParser.DecContext ctx) { }
+	@Override public void enterAssetdecl(StipulaParser.AssetdeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDec(@NotNull StipulaParser.DecContext ctx) { }
+	@Override public void exitAssetdecl(StipulaParser.AssetdeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterReal(@NotNull StipulaParser.RealContext ctx) { }
+	@Override public void enterFielddecl(StipulaParser.FielddeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitReal(@NotNull StipulaParser.RealContext ctx) { }
+	@Override public void exitFielddecl(StipulaParser.FielddeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterType(@NotNull StipulaParser.TypeContext ctx) { }
+	@Override public void enterFun(StipulaParser.FunContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitType(@NotNull StipulaParser.TypeContext ctx) { }
+	@Override public void exitFun(StipulaParser.FunContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterProg(@NotNull StipulaParser.ProgContext ctx) { }
+	@Override public void enterAssign(StipulaParser.AssignContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitProg(@NotNull StipulaParser.ProgContext ctx) { }
+	@Override public void exitAssign(StipulaParser.AssignContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIfelse(@NotNull StipulaParser.IfelseContext ctx) { }
+	@Override public void enterDec(StipulaParser.DecContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIfelse(@NotNull StipulaParser.IfelseContext ctx) { }
+	@Override public void exitDec(StipulaParser.DecContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNumber(@NotNull StipulaParser.NumberContext ctx) { }
+	@Override public void enterType(StipulaParser.TypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNumber(@NotNull StipulaParser.NumberContext ctx) { }
+	@Override public void exitType(StipulaParser.TypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVardec(@NotNull StipulaParser.VardecContext ctx) { }
+	@Override public void enterState(StipulaParser.StateContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVardec(@NotNull StipulaParser.VardecContext ctx) { }
+	@Override public void exitState(StipulaParser.StateContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAssetdec(@NotNull StipulaParser.AssetdecContext ctx) { }
+	@Override public void enterParty(StipulaParser.PartyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAssetdec(@NotNull StipulaParser.AssetdecContext ctx) { }
+	@Override public void exitParty(StipulaParser.PartyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFielddecl(@NotNull StipulaParser.FielddeclContext ctx) { }
+	@Override public void enterVardec(StipulaParser.VardecContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFielddecl(@NotNull StipulaParser.FielddeclContext ctx) { }
+	@Override public void exitVardec(StipulaParser.VardecContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPrec(@NotNull StipulaParser.PrecContext ctx) { }
+	@Override public void enterAssetdec(StipulaParser.AssetdecContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPrec(@NotNull StipulaParser.PrecContext ctx) { }
+	@Override public void exitAssetdec(StipulaParser.AssetdecContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAssetdecl(@NotNull StipulaParser.AssetdeclContext ctx) { }
+	@Override public void enterVarasm(StipulaParser.VarasmContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAssetdecl(@NotNull StipulaParser.AssetdeclContext ctx) { }
+	@Override public void exitVarasm(StipulaParser.VarasmContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpr(@NotNull StipulaParser.ExprContext ctx) { }
+	@Override public void enterStat(StipulaParser.StatContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpr(@NotNull StipulaParser.ExprContext ctx) { }
+	@Override public void exitStat(StipulaParser.StatContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTerm(@NotNull StipulaParser.TermContext ctx) { }
+	@Override public void enterIfelse(StipulaParser.IfelseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTerm(@NotNull StipulaParser.TermContext ctx) { }
+	@Override public void exitIfelse(StipulaParser.IfelseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterState(@NotNull StipulaParser.StateContext ctx) { }
+	@Override public void enterEvents(StipulaParser.EventsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitState(@NotNull StipulaParser.StateContext ctx) { }
+	@Override public void exitEvents(StipulaParser.EventsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVarasm(@NotNull StipulaParser.VarasmContext ctx) { }
+	@Override public void enterPrec(StipulaParser.PrecContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVarasm(@NotNull StipulaParser.VarasmContext ctx) { }
+	@Override public void exitPrec(StipulaParser.PrecContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFactor(@NotNull StipulaParser.FactorContext ctx) { }
+	@Override public void enterExpr(StipulaParser.ExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFactor(@NotNull StipulaParser.FactorContext ctx) { }
+	@Override public void exitExpr(StipulaParser.ExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterValue(@NotNull StipulaParser.ValueContext ctx) { }
+	@Override public void enterTerm(StipulaParser.TermContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitValue(@NotNull StipulaParser.ValueContext ctx) { }
+	@Override public void exitTerm(StipulaParser.TermContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFun(@NotNull StipulaParser.FunContext ctx) { }
+	@Override public void enterFactor(StipulaParser.FactorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFun(@NotNull StipulaParser.FunContext ctx) { }
+	@Override public void exitFactor(StipulaParser.FactorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterParty(@NotNull StipulaParser.PartyContext ctx) { }
+	@Override public void enterValue(StipulaParser.ValueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitParty(@NotNull StipulaParser.PartyContext ctx) { }
+	@Override public void exitValue(StipulaParser.ValueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEvents(@NotNull StipulaParser.EventsContext ctx) { }
+	@Override public void enterReal(StipulaParser.RealContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEvents(@NotNull StipulaParser.EventsContext ctx) { }
+	@Override public void exitReal(StipulaParser.RealContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAssign(@NotNull StipulaParser.AssignContext ctx) { }
+	@Override public void enterNumber(StipulaParser.NumberContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAssign(@NotNull StipulaParser.AssignContext ctx) { }
+	@Override public void exitNumber(StipulaParser.NumberContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEveryRule(@NotNull ParserRuleContext ctx) { }
+	@Override public void enterEveryRule(ParserRuleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEveryRule(@NotNull ParserRuleContext ctx) { }
+	@Override public void exitEveryRule(ParserRuleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void visitTerminal(@NotNull TerminalNode node) { }
+	@Override public void visitTerminal(TerminalNode node) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void visitErrorNode(@NotNull ErrorNode node) { }
+	@Override public void visitErrorNode(ErrorNode node) { }
 }

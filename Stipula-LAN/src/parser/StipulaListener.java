@@ -1,7 +1,6 @@
-// Generated from Stipula.g4 by ANTLR 4.4
+// Generated from java-escape by ANTLR 4.11.1
 package parser;
 
-import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -10,233 +9,233 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface StipulaListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link StipulaParser#stat}.
-	 * @param ctx the parse tree
-	 */
-	void enterStat(@NotNull StipulaParser.StatContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link StipulaParser#stat}.
-	 * @param ctx the parse tree
-	 */
-	void exitStat(@NotNull StipulaParser.StatContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link StipulaParser#agreement}.
-	 * @param ctx the parse tree
-	 */
-	void enterAgreement(@NotNull StipulaParser.AgreementContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link StipulaParser#agreement}.
-	 * @param ctx the parse tree
-	 */
-	void exitAgreement(@NotNull StipulaParser.AgreementContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link StipulaParser#dec}.
-	 * @param ctx the parse tree
-	 */
-	void enterDec(@NotNull StipulaParser.DecContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link StipulaParser#dec}.
-	 * @param ctx the parse tree
-	 */
-	void exitDec(@NotNull StipulaParser.DecContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link StipulaParser#real}.
-	 * @param ctx the parse tree
-	 */
-	void enterReal(@NotNull StipulaParser.RealContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link StipulaParser#real}.
-	 * @param ctx the parse tree
-	 */
-	void exitReal(@NotNull StipulaParser.RealContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link StipulaParser#type}.
-	 * @param ctx the parse tree
-	 */
-	void enterType(@NotNull StipulaParser.TypeContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link StipulaParser#type}.
-	 * @param ctx the parse tree
-	 */
-	void exitType(@NotNull StipulaParser.TypeContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link StipulaParser#prog}.
 	 * @param ctx the parse tree
 	 */
-	void enterProg(@NotNull StipulaParser.ProgContext ctx);
+	void enterProg(StipulaParser.ProgContext ctx);
 	/**
 	 * Exit a parse tree produced by {@link StipulaParser#prog}.
 	 * @param ctx the parse tree
 	 */
-	void exitProg(@NotNull StipulaParser.ProgContext ctx);
+	void exitProg(StipulaParser.ProgContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link StipulaParser#ifelse}.
+	 * Enter a parse tree produced by {@link StipulaParser#agreement}.
 	 * @param ctx the parse tree
 	 */
-	void enterIfelse(@NotNull StipulaParser.IfelseContext ctx);
+	void enterAgreement(StipulaParser.AgreementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link StipulaParser#ifelse}.
+	 * Exit a parse tree produced by {@link StipulaParser#agreement}.
 	 * @param ctx the parse tree
 	 */
-	void exitIfelse(@NotNull StipulaParser.IfelseContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link StipulaParser#number}.
-	 * @param ctx the parse tree
-	 */
-	void enterNumber(@NotNull StipulaParser.NumberContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link StipulaParser#number}.
-	 * @param ctx the parse tree
-	 */
-	void exitNumber(@NotNull StipulaParser.NumberContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link StipulaParser#vardec}.
-	 * @param ctx the parse tree
-	 */
-	void enterVardec(@NotNull StipulaParser.VardecContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link StipulaParser#vardec}.
-	 * @param ctx the parse tree
-	 */
-	void exitVardec(@NotNull StipulaParser.VardecContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link StipulaParser#assetdec}.
-	 * @param ctx the parse tree
-	 */
-	void enterAssetdec(@NotNull StipulaParser.AssetdecContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link StipulaParser#assetdec}.
-	 * @param ctx the parse tree
-	 */
-	void exitAssetdec(@NotNull StipulaParser.AssetdecContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link StipulaParser#fielddecl}.
-	 * @param ctx the parse tree
-	 */
-	void enterFielddecl(@NotNull StipulaParser.FielddeclContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link StipulaParser#fielddecl}.
-	 * @param ctx the parse tree
-	 */
-	void exitFielddecl(@NotNull StipulaParser.FielddeclContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link StipulaParser#prec}.
-	 * @param ctx the parse tree
-	 */
-	void enterPrec(@NotNull StipulaParser.PrecContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link StipulaParser#prec}.
-	 * @param ctx the parse tree
-	 */
-	void exitPrec(@NotNull StipulaParser.PrecContext ctx);
+	void exitAgreement(StipulaParser.AgreementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link StipulaParser#assetdecl}.
 	 * @param ctx the parse tree
 	 */
-	void enterAssetdecl(@NotNull StipulaParser.AssetdeclContext ctx);
+	void enterAssetdecl(StipulaParser.AssetdeclContext ctx);
 	/**
 	 * Exit a parse tree produced by {@link StipulaParser#assetdecl}.
 	 * @param ctx the parse tree
 	 */
-	void exitAssetdecl(@NotNull StipulaParser.AssetdeclContext ctx);
+	void exitAssetdecl(StipulaParser.AssetdeclContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link StipulaParser#expr}.
+	 * Enter a parse tree produced by {@link StipulaParser#fielddecl}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpr(@NotNull StipulaParser.ExprContext ctx);
+	void enterFielddecl(StipulaParser.FielddeclContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link StipulaParser#expr}.
+	 * Exit a parse tree produced by {@link StipulaParser#fielddecl}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpr(@NotNull StipulaParser.ExprContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link StipulaParser#term}.
-	 * @param ctx the parse tree
-	 */
-	void enterTerm(@NotNull StipulaParser.TermContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link StipulaParser#term}.
-	 * @param ctx the parse tree
-	 */
-	void exitTerm(@NotNull StipulaParser.TermContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link StipulaParser#state}.
-	 * @param ctx the parse tree
-	 */
-	void enterState(@NotNull StipulaParser.StateContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link StipulaParser#state}.
-	 * @param ctx the parse tree
-	 */
-	void exitState(@NotNull StipulaParser.StateContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link StipulaParser#varasm}.
-	 * @param ctx the parse tree
-	 */
-	void enterVarasm(@NotNull StipulaParser.VarasmContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link StipulaParser#varasm}.
-	 * @param ctx the parse tree
-	 */
-	void exitVarasm(@NotNull StipulaParser.VarasmContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link StipulaParser#factor}.
-	 * @param ctx the parse tree
-	 */
-	void enterFactor(@NotNull StipulaParser.FactorContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link StipulaParser#factor}.
-	 * @param ctx the parse tree
-	 */
-	void exitFactor(@NotNull StipulaParser.FactorContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link StipulaParser#value}.
-	 * @param ctx the parse tree
-	 */
-	void enterValue(@NotNull StipulaParser.ValueContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link StipulaParser#value}.
-	 * @param ctx the parse tree
-	 */
-	void exitValue(@NotNull StipulaParser.ValueContext ctx);
+	void exitFielddecl(StipulaParser.FielddeclContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link StipulaParser#fun}.
 	 * @param ctx the parse tree
 	 */
-	void enterFun(@NotNull StipulaParser.FunContext ctx);
+	void enterFun(StipulaParser.FunContext ctx);
 	/**
 	 * Exit a parse tree produced by {@link StipulaParser#fun}.
 	 * @param ctx the parse tree
 	 */
-	void exitFun(@NotNull StipulaParser.FunContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link StipulaParser#party}.
-	 * @param ctx the parse tree
-	 */
-	void enterParty(@NotNull StipulaParser.PartyContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link StipulaParser#party}.
-	 * @param ctx the parse tree
-	 */
-	void exitParty(@NotNull StipulaParser.PartyContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link StipulaParser#events}.
-	 * @param ctx the parse tree
-	 */
-	void enterEvents(@NotNull StipulaParser.EventsContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link StipulaParser#events}.
-	 * @param ctx the parse tree
-	 */
-	void exitEvents(@NotNull StipulaParser.EventsContext ctx);
+	void exitFun(StipulaParser.FunContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link StipulaParser#assign}.
 	 * @param ctx the parse tree
 	 */
-	void enterAssign(@NotNull StipulaParser.AssignContext ctx);
+	void enterAssign(StipulaParser.AssignContext ctx);
 	/**
 	 * Exit a parse tree produced by {@link StipulaParser#assign}.
 	 * @param ctx the parse tree
 	 */
-	void exitAssign(@NotNull StipulaParser.AssignContext ctx);
+	void exitAssign(StipulaParser.AssignContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link StipulaParser#dec}.
+	 * @param ctx the parse tree
+	 */
+	void enterDec(StipulaParser.DecContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link StipulaParser#dec}.
+	 * @param ctx the parse tree
+	 */
+	void exitDec(StipulaParser.DecContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link StipulaParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void enterType(StipulaParser.TypeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link StipulaParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void exitType(StipulaParser.TypeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link StipulaParser#state}.
+	 * @param ctx the parse tree
+	 */
+	void enterState(StipulaParser.StateContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link StipulaParser#state}.
+	 * @param ctx the parse tree
+	 */
+	void exitState(StipulaParser.StateContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link StipulaParser#party}.
+	 * @param ctx the parse tree
+	 */
+	void enterParty(StipulaParser.PartyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link StipulaParser#party}.
+	 * @param ctx the parse tree
+	 */
+	void exitParty(StipulaParser.PartyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link StipulaParser#vardec}.
+	 * @param ctx the parse tree
+	 */
+	void enterVardec(StipulaParser.VardecContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link StipulaParser#vardec}.
+	 * @param ctx the parse tree
+	 */
+	void exitVardec(StipulaParser.VardecContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link StipulaParser#assetdec}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssetdec(StipulaParser.AssetdecContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link StipulaParser#assetdec}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssetdec(StipulaParser.AssetdecContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link StipulaParser#varasm}.
+	 * @param ctx the parse tree
+	 */
+	void enterVarasm(StipulaParser.VarasmContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link StipulaParser#varasm}.
+	 * @param ctx the parse tree
+	 */
+	void exitVarasm(StipulaParser.VarasmContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link StipulaParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void enterStat(StipulaParser.StatContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link StipulaParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void exitStat(StipulaParser.StatContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link StipulaParser#ifelse}.
+	 * @param ctx the parse tree
+	 */
+	void enterIfelse(StipulaParser.IfelseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link StipulaParser#ifelse}.
+	 * @param ctx the parse tree
+	 */
+	void exitIfelse(StipulaParser.IfelseContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link StipulaParser#events}.
+	 * @param ctx the parse tree
+	 */
+	void enterEvents(StipulaParser.EventsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link StipulaParser#events}.
+	 * @param ctx the parse tree
+	 */
+	void exitEvents(StipulaParser.EventsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link StipulaParser#prec}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrec(StipulaParser.PrecContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link StipulaParser#prec}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrec(StipulaParser.PrecContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link StipulaParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpr(StipulaParser.ExprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link StipulaParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpr(StipulaParser.ExprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link StipulaParser#term}.
+	 * @param ctx the parse tree
+	 */
+	void enterTerm(StipulaParser.TermContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link StipulaParser#term}.
+	 * @param ctx the parse tree
+	 */
+	void exitTerm(StipulaParser.TermContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link StipulaParser#factor}.
+	 * @param ctx the parse tree
+	 */
+	void enterFactor(StipulaParser.FactorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link StipulaParser#factor}.
+	 * @param ctx the parse tree
+	 */
+	void exitFactor(StipulaParser.FactorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link StipulaParser#value}.
+	 * @param ctx the parse tree
+	 */
+	void enterValue(StipulaParser.ValueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link StipulaParser#value}.
+	 * @param ctx the parse tree
+	 */
+	void exitValue(StipulaParser.ValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link StipulaParser#real}.
+	 * @param ctx the parse tree
+	 */
+	void enterReal(StipulaParser.RealContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link StipulaParser#real}.
+	 * @param ctx the parse tree
+	 */
+	void exitReal(StipulaParser.RealContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link StipulaParser#number}.
+	 * @param ctx the parse tree
+	 */
+	void enterNumber(StipulaParser.NumberContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link StipulaParser#number}.
+	 * @param ctx the parse tree
+	 */
+	void exitNumber(StipulaParser.NumberContext ctx);
 }

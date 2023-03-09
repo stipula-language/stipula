@@ -7,7 +7,7 @@ agreement (Licensor, Licensee)(t_start, t_limit, cost){
 		Licensor , Licensee : t_start, t_limit, cost
 } ==> @Inactive
 
-@Inactive Licensor : offerLicense (x)[n]{
+@Inactive Licensee : offerLicense (x)[n]{
     n -o token
     x -> code;
     now + t_start >> @Proposal{

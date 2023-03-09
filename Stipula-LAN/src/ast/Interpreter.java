@@ -10,6 +10,7 @@ import lib.Pair;
 import parser.StipulaBaseListener;
 import parser.StipulaBaseVisitor;
 import parser.StipulaParser;
+import parser.StipulaParser.PartyContext;
 import parser.StipulaParser.*;
 
 public class Interpreter extends StipulaBaseVisitor {
@@ -78,6 +79,9 @@ public class Interpreter extends StipulaBaseVisitor {
 		}
 		for(FunContext f : ctx.fun()) {
 			Contract cnt = visitFun(f);
+			if(cnt.getParty()==null) {
+				cnt.setParties(program.getParties());
+			}
 			cnt.setGlobalParties(program.getParties());
 			program.addContract(cnt);
 
@@ -184,9 +188,14 @@ public class Interpreter extends StipulaBaseVisitor {
 	public Contract visitFun(FunContext ctx) {
 		index++;
 		ArrayList<Party> disp = new ArrayList<Party>();
-		for(PartyContext n : ctx.party()) {
-			Party tmp = new Party(n.getText());
-			disp.add(tmp);
+		if(ctx.TILDE()!=null) {
+			disp = null;
+		}
+		else {
+			for(PartyContext n : ctx.party()) {
+				Party tmp = new Party(n.getText());
+				disp.add(tmp);
+			}
 		}
 
 		ArrayList<Field> fields = new ArrayList<Field>();

@@ -43,6 +43,10 @@ public class Contract {
 	public int getIndex() {
 		return index;
 	}
+	
+	public void setParties(ArrayList<Party> parties) {
+		disputers = parties;
+	}
 
 	public void addEvent(Event e) {
 		events = e;

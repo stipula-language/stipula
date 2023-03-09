@@ -1,6 +1,5 @@
-// Generated from Stipula.g4 by ANTLR 4.4
+// Generated from java-escape by ANTLR 4.11.1
 package parser;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -12,141 +11,141 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface StipulaVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link StipulaParser#stat}.
+	 * Visit a parse tree produced by {@link StipulaParser#prog}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStat(@NotNull StipulaParser.StatContext ctx);
+	T visitProg(StipulaParser.ProgContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link StipulaParser#agreement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitAgreement(@NotNull StipulaParser.AgreementContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link StipulaParser#dec}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDec(@NotNull StipulaParser.DecContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link StipulaParser#real}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitReal(@NotNull StipulaParser.RealContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link StipulaParser#type}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitType(@NotNull StipulaParser.TypeContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link StipulaParser#prog}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitProg(@NotNull StipulaParser.ProgContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link StipulaParser#ifelse}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIfelse(@NotNull StipulaParser.IfelseContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link StipulaParser#number}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNumber(@NotNull StipulaParser.NumberContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link StipulaParser#vardec}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVardec(@NotNull StipulaParser.VardecContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link StipulaParser#assetdec}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAssetdec(@NotNull StipulaParser.AssetdecContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link StipulaParser#fielddecl}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFielddecl(@NotNull StipulaParser.FielddeclContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link StipulaParser#prec}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPrec(@NotNull StipulaParser.PrecContext ctx);
+	T visitAgreement(StipulaParser.AgreementContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link StipulaParser#assetdecl}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitAssetdecl(@NotNull StipulaParser.AssetdeclContext ctx);
+	T visitAssetdecl(StipulaParser.AssetdeclContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link StipulaParser#expr}.
+	 * Visit a parse tree produced by {@link StipulaParser#fielddecl}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExpr(@NotNull StipulaParser.ExprContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link StipulaParser#term}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTerm(@NotNull StipulaParser.TermContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link StipulaParser#state}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitState(@NotNull StipulaParser.StateContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link StipulaParser#varasm}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVarasm(@NotNull StipulaParser.VarasmContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link StipulaParser#factor}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFactor(@NotNull StipulaParser.FactorContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link StipulaParser#value}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitValue(@NotNull StipulaParser.ValueContext ctx);
+	T visitFielddecl(StipulaParser.FielddeclContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link StipulaParser#fun}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFun(@NotNull StipulaParser.FunContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link StipulaParser#party}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitParty(@NotNull StipulaParser.PartyContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link StipulaParser#events}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitEvents(@NotNull StipulaParser.EventsContext ctx);
+	T visitFun(StipulaParser.FunContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link StipulaParser#assign}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitAssign(@NotNull StipulaParser.AssignContext ctx);
+	T visitAssign(StipulaParser.AssignContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link StipulaParser#dec}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDec(StipulaParser.DecContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link StipulaParser#type}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitType(StipulaParser.TypeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link StipulaParser#state}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitState(StipulaParser.StateContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link StipulaParser#party}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParty(StipulaParser.PartyContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link StipulaParser#vardec}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVardec(StipulaParser.VardecContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link StipulaParser#assetdec}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssetdec(StipulaParser.AssetdecContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link StipulaParser#varasm}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVarasm(StipulaParser.VarasmContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link StipulaParser#stat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStat(StipulaParser.StatContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link StipulaParser#ifelse}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIfelse(StipulaParser.IfelseContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link StipulaParser#events}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEvents(StipulaParser.EventsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link StipulaParser#prec}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPrec(StipulaParser.PrecContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link StipulaParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpr(StipulaParser.ExprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link StipulaParser#term}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTerm(StipulaParser.TermContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link StipulaParser#factor}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFactor(StipulaParser.FactorContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link StipulaParser#value}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitValue(StipulaParser.ValueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link StipulaParser#real}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReal(StipulaParser.RealContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link StipulaParser#number}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNumber(StipulaParser.NumberContext ctx);
 }

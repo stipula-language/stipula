@@ -127,6 +127,7 @@ public class TypeChecker extends StipulaBaseVisitor<Object> {
 					}
 				}
 			}
+			/*
 			if(contractNames == null) {
 				contractNames = new ArrayList<String>();
 			}
@@ -135,7 +136,10 @@ public class TypeChecker extends StipulaBaseVisitor<Object> {
 				name = name+dc.ID().getText();
 			}
 			name = name+"."+f.ID().getText();
-			contractNames.add(name);
+			
+			
+			
+			contractNames.add(name);*/
 		}
 		return types;
 	}
@@ -169,6 +173,23 @@ public class TypeChecker extends StipulaBaseVisitor<Object> {
 		Map<Pair<String,Integer>,Type> toRet = new LinkedHashMap<Pair<String,Integer>,Type>();
 		ArrayList<Pair<String,Type>> tmpFuns = new ArrayList<Pair<String,Type>> ();
 		n_scope++;
+		if(contractNames == null) {
+			contractNames = new ArrayList<String>();
+		}
+		String name = "";
+		if(ctx.TILDE()!=null) {
+			name = name + "~";
+		}
+		else {
+			for(int i=0; i<ctx.party().size(); i++) {
+				name = name+ctx.party().get(i).ID().getText();
+				if(i!=ctx.party().size()-1) {
+					name = name + ",";
+				}
+			}
+		}
+		name = name+"."+ctx.ID().getText();
+		contractNames.add(name);
 		if(ctx.vardec()!=null) {
 			for(VardecContext n : ctx.vardec()) {
 				toRet.put(new Pair<String, Integer>(n.ID().getText(),n_scope),new GeneralType(n_types));

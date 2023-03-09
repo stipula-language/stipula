@@ -1,7 +1,6 @@
-// Generated from Stipula.g4 by ANTLR 4.4
+// Generated from java-escape by ANTLR 4.11.1
 package parser;
 
-import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**
@@ -12,6 +11,7 @@ import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
  * @param <T> The return type of the visit operation. Use {@link Void} for
  * operations with no return type.
  */
+@SuppressWarnings("CheckReturnValue")
 public class StipulaBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements StipulaVisitor<T> {
 	/**
 	 * {@inheritDoc}
@@ -19,159 +19,159 @@ public class StipulaBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitStat(@NotNull StipulaParser.StatContext ctx) { return visitChildren(ctx); }
+	@Override public T visitProg(StipulaParser.ProgContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAgreement(@NotNull StipulaParser.AgreementContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAgreement(StipulaParser.AgreementContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDec(@NotNull StipulaParser.DecContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAssetdecl(StipulaParser.AssetdeclContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitReal(@NotNull StipulaParser.RealContext ctx) { return visitChildren(ctx); }
+	@Override public T visitFielddecl(StipulaParser.FielddeclContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitType(@NotNull StipulaParser.TypeContext ctx) { return visitChildren(ctx); }
+	@Override public T visitFun(StipulaParser.FunContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitProg(@NotNull StipulaParser.ProgContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAssign(StipulaParser.AssignContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitIfelse(@NotNull StipulaParser.IfelseContext ctx) { return visitChildren(ctx); }
+	@Override public T visitDec(StipulaParser.DecContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitNumber(@NotNull StipulaParser.NumberContext ctx) { return visitChildren(ctx); }
+	@Override public T visitType(StipulaParser.TypeContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitVardec(@NotNull StipulaParser.VardecContext ctx) { return visitChildren(ctx); }
+	@Override public T visitState(StipulaParser.StateContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAssetdec(@NotNull StipulaParser.AssetdecContext ctx) { return visitChildren(ctx); }
+	@Override public T visitParty(StipulaParser.PartyContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitFielddecl(@NotNull StipulaParser.FielddeclContext ctx) { return visitChildren(ctx); }
+	@Override public T visitVardec(StipulaParser.VardecContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitPrec(@NotNull StipulaParser.PrecContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAssetdec(StipulaParser.AssetdecContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAssetdecl(@NotNull StipulaParser.AssetdeclContext ctx) { return visitChildren(ctx); }
+	@Override public T visitVarasm(StipulaParser.VarasmContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpr(@NotNull StipulaParser.ExprContext ctx) { return visitChildren(ctx); }
+	@Override public T visitStat(StipulaParser.StatContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitTerm(@NotNull StipulaParser.TermContext ctx) { return visitChildren(ctx); }
+	@Override public T visitIfelse(StipulaParser.IfelseContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitState(@NotNull StipulaParser.StateContext ctx) { return visitChildren(ctx); }
+	@Override public T visitEvents(StipulaParser.EventsContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitVarasm(@NotNull StipulaParser.VarasmContext ctx) { return visitChildren(ctx); }
+	@Override public T visitPrec(StipulaParser.PrecContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitFactor(@NotNull StipulaParser.FactorContext ctx) { return visitChildren(ctx); }
+	@Override public T visitExpr(StipulaParser.ExprContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitValue(@NotNull StipulaParser.ValueContext ctx) { return visitChildren(ctx); }
+	@Override public T visitTerm(StipulaParser.TermContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitFun(@NotNull StipulaParser.FunContext ctx) { return visitChildren(ctx); }
+	@Override public T visitFactor(StipulaParser.FactorContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitParty(@NotNull StipulaParser.PartyContext ctx) { return visitChildren(ctx); }
+	@Override public T visitValue(StipulaParser.ValueContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitEvents(@NotNull StipulaParser.EventsContext ctx) { return visitChildren(ctx); }
+	@Override public T visitReal(StipulaParser.RealContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAssign(@NotNull StipulaParser.AssignContext ctx) { return visitChildren(ctx); }
+	@Override public T visitNumber(StipulaParser.NumberContext ctx) { return visitChildren(ctx); }
 }

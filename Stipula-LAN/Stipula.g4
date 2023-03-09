@@ -19,7 +19,7 @@ assetdecl :  ASSET idAsset+=ID (',' idAsset+=ID)* ;
 
 fielddecl : FIELD idField+=ID (',' idField+=ID)* ;
 
-fun	:  ((AT state)* party (COMMA party)* COLON funId=ID LPAR (vardec ( COMMA vardec)* )? RPAR SLPAR (assetdec ( COMMA assetdec)* )? SRPAR (LPAR prec RPAR)? CLPAR (stat)+ SEMIC (events)+ CRPAR IMPL AT state )   ;
+fun	:  ((AT state)* (party (COMMA party)* | TILDE) COLON funId=ID LPAR (vardec ( COMMA vardec)* )? RPAR SLPAR (assetdec ( COMMA assetdec)* )? SRPAR (LPAR prec RPAR)? CLPAR (stat)+ SEMIC (events)+ CRPAR IMPL AT state )   ;
 		
 assign : (party (COMMA party)* COLON vardec (COMMA vardec)*);
 
@@ -94,6 +94,7 @@ MINUS  	: '-' ;
 TIMES  	: '*' ;
 DIV    	: '/' ;
 AT	   	: '@' ;
+TILDE	: '~';
 TRUE   	: 'true' ;
 FALSE  	: 'false' ;
 LPAR   	: '(' ;
