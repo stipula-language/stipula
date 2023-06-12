@@ -9,7 +9,7 @@ agreement (Licensor, Licensee)(t_start, t_limit, cost){
 
 @Inactive Licensee : offerLicense (x)[n]{
     n -o token
-    x -> code;
+    (x+1*3) -> code;
     now + t_start >> @Proposal{
         token -o Licensor
         } ==> @End

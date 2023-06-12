@@ -349,7 +349,7 @@ public class Interpreter extends StipulaBaseVisitor {
 			else if(ctx.left.expr()!=null) {
 
 				Expression expr = visitExpr(ctx.left.expr());
-
+				expr.printExpression();
 				double fract = 0;
 				Entity fractExpr = null;
 
@@ -395,10 +395,17 @@ public class Interpreter extends StipulaBaseVisitor {
 			}
 		}
 		else if(ctx.FIELDUP()!=null) {
-			Field left = new Field(ctx.left.getText());
-			Field right = new Field(ctx.right.getText());
+			System.out.println("SONO QUA! " + ctx.left.getText() + " " + ctx.right.getText()) ;
 			ArrayList<Statement> tmpArray = new ArrayList<Statement>();
-			tmpArray.add(new Statement(left,right,"FIELDUP"));
+			Field right = new Field(ctx.right.getText());
+			if(ctx.left.expr()!=null ) {
+				Expression expr = visitExpr(ctx.left.expr());
+				tmpArray.add(new Statement(expr,right,"FIELDUP"));
+			}
+			else {
+				Field left = new Field(ctx.left.getText());
+				tmpArray.add(new Statement(left,right,"FIELDUP"));
+			}
 			Pair<Expression,ArrayList<Statement>> tmpPair =  new Pair<Expression,ArrayList<Statement>>(null,tmpArray);
 			ret = new ArrayList<Pair<Expression,ArrayList<Statement>>>();
 			ret.add(tmpPair);

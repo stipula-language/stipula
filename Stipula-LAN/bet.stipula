@@ -1,11 +1,10 @@
 stipula Bet {
 asset wallet1, wallet2
-field val1, val2, source, alea, amount, t_before, t_after 
+field val1, val2, event, amount, t_before, t_after 
 init Init
 
 agreement (Better1 , Better2 , DataProvider)(source, alea, amount, t_before, t_after){
-		DataProvider , Better1 , Better2 : source, alea, t_after
-		Better1 , Better2 : amount , t_before 
+		Better1 , Better2 : event, amount, t_before, t_after  
 } ==> @Init
 
 @Init Better1 : place_bet(x)[h] (h == amount){
@@ -16,15 +15,14 @@ agreement (Better1 , Better2 , DataProvider)(source, alea, amount, t_before, t_a
 
 @First Better2 : place_bet(x)[h] (h == amount){
 	h -o wallet2
-	x -> val2
-	alea -> DataProvider;
+	x -> val2;
 	t_after >> @Run { 
 		wallet1 -o Better1 
 		wallet2 -o Better2
 	} ==> @Fail
 } ==> @Run
 
-@Run DataProvider : data(x,y,z)[](x==source && x==alea){
+@Run DataProvider : data(x,z)[](x==event){
 	if (z==val1 && z==val2){
 		wallet1 -o Better1 
 		wallet2 -o Better2

@@ -7,11 +7,18 @@ public class Statement {
 	private Entity leftExpr;
 	private Entity rightExpr;
 	private Entity fractExpr;
-
+	private Expression left ;
 	private String operator;
 	
 	public Statement(Entity lE, Entity rE, String op) {
 		leftExpr = lE;
+		rightExpr = rE;
+		operator = op;
+	}
+	
+	public Statement(Expression lE, Entity rE, String op) {
+		left = lE;
+		leftExpr = null;
 		rightExpr = rE;
 		operator = op;
 	}
@@ -39,6 +46,10 @@ public class Statement {
 	
 	public Entity getLeftExpr() {
 		return leftExpr;
+	}
+	
+	public Expression getLeftExpression() {
+		return left;
 	}
 	
 	public double getFract() {
