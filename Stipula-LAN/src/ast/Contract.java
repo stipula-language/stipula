@@ -1050,6 +1050,7 @@ public class Contract {
 						if(!flag) {
 							valid = runStatements(valid,tc,pair.getValue());
 							flag = true;
+							break;
 						}
 
 					}
@@ -1058,6 +1059,7 @@ public class Contract {
 
 							valid = runStatements(valid,tc,pair.getValue());
 							flag = true;
+							break;
 						}
 
 					}

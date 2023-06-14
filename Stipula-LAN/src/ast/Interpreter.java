@@ -395,7 +395,6 @@ public class Interpreter extends StipulaBaseVisitor {
 			}
 		}
 		else if(ctx.FIELDUP()!=null) {
-			System.out.println("SONO QUA! " + ctx.left.getText() + " " + ctx.right.getText()) ;
 			ArrayList<Statement> tmpArray = new ArrayList<Statement>();
 			Field right = new Field(ctx.right.getText());
 			if(ctx.left.expr()!=null ) {

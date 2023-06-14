@@ -677,14 +677,14 @@ public class Program {
 					}
 				}
 				if(running) {caseExec = 10;}
-				if(!running && tmpContr!=null && success) {
+				else if(!running && tmpContr!=null && success) {
 					state = tmpContr.getEndState();
 					runningState = tmpContr.getEndState();
 					System.out.println("############");
 					System.out.println("Next state " + state);
 					caseExec = 1;
 				}
-				if(!running && ((!success && tmpContr==null)|| !found) && howManyThreads==0) {
+				else if(!running && ((!success && tmpContr==null)|| !found) && howManyThreads==0) {
 					caseExec = 4;
 				}
 				else if(!running && ((!success && tmpContr==null)|| !found) && howManyThreads!=0) {
