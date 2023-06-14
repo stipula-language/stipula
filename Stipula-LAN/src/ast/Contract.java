@@ -1049,7 +1049,6 @@ public class Contract {
 					if(pair.getKey().getLeftComplexExpr()!=null && pair.getKey().getRightComplexExpr()!=null && valid) {
 						pair.getKey().printExpression();
 						if(!flag) {
-							System.out.println("sono qua");
 							for(Statement el : pair.getValue()) {
 								el.printStatement();
 							}
