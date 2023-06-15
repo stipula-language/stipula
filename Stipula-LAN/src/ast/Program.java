@@ -676,8 +676,17 @@ public class Program {
 						}
 					}
 				}
+				
+
 				if(running) {caseExec = 10;}
 				else if(!running && tmpContr!=null && success) {
+					state = tmpContr.getEndState();
+					runningState = tmpContr.getEndState();
+					System.out.println("############");
+					System.out.println("Next state " + state);
+					caseExec = 1;
+				}
+				else if(!running && tmpContr!=null && !success) {
 					state = tmpContr.getEndState();
 					runningState = tmpContr.getEndState();
 					System.out.println("############");
@@ -691,6 +700,7 @@ public class Program {
 					caseExec = 5;
 
 				}
+				
 				found = false;
 				break;
 

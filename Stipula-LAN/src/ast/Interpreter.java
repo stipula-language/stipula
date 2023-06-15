@@ -441,12 +441,11 @@ public class Interpreter extends StipulaBaseVisitor {
 		Pair<Expression,ArrayList<Statement>> tmp = new Pair<Expression,ArrayList<Statement>>(condIf,tmpStat);
 		toRet.add(tmp);
 		if(ctx.condElseIf!=null) {
-			tmpStat = new ArrayList<Statement>();
 			for(ExprContext expr : ctx.condElseIf) {
 				flag = false;
-				
-				for(int i=start; i<ctx.elseIfBranch.size() && !flag; i++) {
+				tmpStat = new ArrayList<Statement>();
 
+				for(int i=start; i<ctx.elseIfBranch.size() && !flag; i++) {
 					if(ctx.elseIfBranch.get(i).getText().equals("_")) {
 						flag = true;
 						start = i+1;
@@ -462,6 +461,7 @@ public class Interpreter extends StipulaBaseVisitor {
 						}
 					}
 				}
+
 				tmp = new Pair<Expression,ArrayList<Statement>>(visitExpr(expr),tmpStat);
 				toRet.add(tmp);
 			}
@@ -481,6 +481,7 @@ public class Interpreter extends StipulaBaseVisitor {
 			tmp = new Pair<Expression,ArrayList<Statement>>(new Expression(new Entity("_")),tmpStat);
 			toRet.add(tmp);
 		}
+		
 		return toRet;
 	}
 

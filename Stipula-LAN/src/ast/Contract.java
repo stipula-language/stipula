@@ -910,9 +910,6 @@ public class Contract {
 					}
 				}
 				else if(!globalLeft && globalRight) {
-					System.out.println(globalAssets.get(indexRight).getId() + " = " + globalAssets.get(indexRight).getValue() );
-					System.out.println(assets.get(indexLeft).getId() + " = " + assets.get(indexLeft).getValue() );
-
 					if(s.getFract()!=0) {
 						assets.get(indexLeft).move(((float)s.getFract())*assets.get(indexLeft).getValue(),globalAssets.get(indexRight));
 						//assets.get(indexLeft).setValue((float) (((float)(-s.getFract())))*assets.get(indexLeft).getValue());
@@ -1047,30 +1044,30 @@ public class Contract {
 
 					}
 					if(pair.getKey().getLeftComplexExpr()!=null && pair.getKey().getRightComplexExpr()!=null && valid) {
-						pair.getKey().printExpression();
 						if(!flag) {
-							for(Statement el : pair.getValue()) {
-								el.printStatement();
-							}
-
 							valid = runStatements(valid,tc,pair.getValue());
 							flag = true;
+
 							break;
+
 						}
 
 					}
 					else if((pair.getKey().getLeftComplexExpr()==null && pair.getKey().getLeft().getId().equals("_"))  || pair.getKey().isValidExpr(pair.getKey()) ) {
-						if(!flag) {
 
+						if(!flag) {
 							valid = runStatements(valid,tc,pair.getValue());
 							flag = true;
 							break;
 						}
+
+
 
 					}
 				}
 
 			}
+
 		}
 		for(Field f : globalVars) {
 			for(Pair<String,Integer> pair : typedVars.keySet()) {

@@ -31,7 +31,7 @@ public class Test {
 
 	public static void main(String[] args) throws Exception {
 	    
-		String fileName = "bet.stipula";
+		String fileName = args[0];
 		FileInputStream is = new FileInputStream(fileName);
 		ANTLRInputStream input = new ANTLRInputStream(is);
 		StipulaLexer lexer = new StipulaLexer(input);
