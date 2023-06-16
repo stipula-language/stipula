@@ -686,13 +686,6 @@ public class Program {
 					System.out.println("Next state " + state);
 					caseExec = 1;
 				}
-				else if(!running && tmpContr!=null && !success) {
-					state = tmpContr.getEndState();
-					runningState = tmpContr.getEndState();
-					System.out.println("############");
-					System.out.println("Next state " + state);
-					caseExec = 1;
-				}
 				else if(!running && ((!success && tmpContr==null)|| !found) && howManyThreads==0) {
 					caseExec = 4;
 				}

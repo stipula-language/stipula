@@ -808,7 +808,7 @@ public class Contract {
 			}
 
 			else if(s.getOperator().equals("ASSETUP")) {
-
+				valid = true;
 				Asset leftExpr = (Asset) s.getLeftExpr();
 				Asset rightExpr = (Asset) s.getRightExpr();
 
@@ -842,6 +842,7 @@ public class Contract {
 						globalRight = true;
 					}
 				}
+				
 
 				if(partyLeft && partyRight) {
 					if(s.getFract()!=0) {
