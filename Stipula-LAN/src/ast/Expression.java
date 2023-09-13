@@ -17,6 +17,7 @@ public class Expression {
 	public Expression(Expression lE, Expression rE, String o) {
 		leftComplexExpr = lE;
 		rightComplexExpr = rE;
+		
 		op = o;
 	}
 	
@@ -108,9 +109,11 @@ public class Expression {
 	public void printExpression() {
 		if(leftComplexExpr!=null) {
 			if(rightComplexExpr!=null) {
+
 				leftComplexExpr.printExpression();
 				System.out.print(" "+op+" ");
 				rightComplexExpr.printExpression();
+				
 			}
 			else {
 				leftComplexExpr.printExpression();
@@ -129,6 +132,34 @@ public class Expression {
 
 	}
 
+	public String getLLeftId() {
+		if(leftComplexExpr.getLeft()==null) {
+			return leftComplexExpr.getTextExpression();
+		}
+		return leftComplexExpr.getLeft().getId();
+	}
+	
+	public String getLRightId() {
+		if(leftComplexExpr.getLeft()==null) {
+			return leftComplexExpr.getTextExpression();
+		}
+		return leftComplexExpr.getRight().getId();
+	}
+	
+	public String getRLeftId() {
+		if(rightComplexExpr.getLeft()==null) {
+			return rightComplexExpr.getTextExpression();
+		}
+		return rightComplexExpr.getLeft().getId();
+	}
+	
+	public String getRRightId() {
+		if(rightComplexExpr.getLeft()==null) {
+			return rightComplexExpr.getTextExpression();
+		}
+		return rightComplexExpr.getRight().getId();
+	}
+	
 	public String getTextExpression() {
 		String ret = "";
 		if(leftComplexExpr!=null) {

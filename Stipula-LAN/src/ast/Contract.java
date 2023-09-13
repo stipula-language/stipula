@@ -1009,6 +1009,7 @@ public class Contract {
 		if(ifThenElse!=null && valid) {
 			boolean flag = false;
 			for(Pair<Expression,ArrayList<Statement>> pair : ifThenElse) {
+				
 				if(pair.getKey()!=null ){
 					if(pair.getKey().getLeftComplexExpr()!=null && pair.getKey().getRightComplexExpr()!=null) {
 						boolean validLeft = true;

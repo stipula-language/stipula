@@ -41,7 +41,7 @@ public class Interpreter extends StipulaBaseVisitor {
 			progFields = visitFielddecl(ctx.fielddecl());
 		}
 
-		
+
 		tmpState = ctx.init_state.getText();
 
 		if(progAssets.size()==0) {
@@ -314,13 +314,13 @@ public class Interpreter extends StipulaBaseVisitor {
 						}
 					}
 					else {
-						left = new Asset(expr.getRightComplexExpr().getLeft().getId());
+						left = new Asset(expr.getRLeftId());
 						right = new Asset(ctx.rightPlus.getText());
 						try{
-							fract = Double.parseDouble(expr.getLeftComplexExpr().getLeft().getId());
+							fract = Double.parseDouble(expr.getLLeftId());
 						}
 						catch(NumberFormatException e){
-							fractExpr = new Entity((expr.getLeftComplexExpr().getLeft().getId()));
+							fractExpr = new Entity((expr.getLLeftId()));
 						}
 					}
 
@@ -364,13 +364,13 @@ public class Interpreter extends StipulaBaseVisitor {
 					}
 				}
 				else {
-					left = new Asset(expr.getRightComplexExpr().getLeft().getId());
+					left = new Asset(expr.getRightComplexExpr().getRLeftId());
 					right = new Asset(ctx.right.getText());
 					try{
-						fract = Double.parseDouble(expr.getLeftComplexExpr().getLeft().getId());
+						fract = Double.parseDouble(expr.getLeftComplexExpr().getLLeftId());
 					}
 					catch(NumberFormatException e){
-						fractExpr = new Entity((expr.getLeftComplexExpr().getLeft().getId()));
+						fractExpr = new Entity((expr.getLeftComplexExpr().getLLeftId()));
 					}
 				}
 				ArrayList<Statement> tmpArray = new ArrayList<Statement>();
@@ -481,7 +481,7 @@ public class Interpreter extends StipulaBaseVisitor {
 			tmp = new Pair<Expression,ArrayList<Statement>>(new Expression(new Entity("_")),tmpStat);
 			toRet.add(tmp);
 		}
-		
+
 		return toRet;
 	}
 
@@ -508,9 +508,7 @@ public class Interpreter extends StipulaBaseVisitor {
 
 					left = visitValue(ctx.left.left.left).getLeft();
 					right = visitValue(ctx.left.left.right).getLeft();
-
 					String op = ctx.left.left.operator.getText();
-
 					Expression toRet = new Expression(left,right,op);
 
 					return toRet;
@@ -519,17 +517,17 @@ public class Interpreter extends StipulaBaseVisitor {
 			else {
 				Expression expr = visitFactor(ctx.left.left);
 				Expression expr2 = visitTerm(ctx.left.right);
-
-
-
+				
 				String op = ctx.left.operator.getText();
-
 				Expression toRet = new Expression(expr,expr2,op);
+				
+
 				return toRet;
 			}
 		}
 
 		else {
+
 			Expression leftExpr = visitTerm(ctx.left);
 			Expression rightExpr = visitExpr(ctx.right);
 			String op = ctx.operator.getText();
@@ -559,16 +557,18 @@ public class Interpreter extends StipulaBaseVisitor {
 	public Expression visitFactor(StipulaParser.FactorContext ctx) {
 
 		if(ctx.right!=null) {
+
 			Entity left = visitValue( ctx.left ).getLeft();
 			Entity right = visitValue( ctx.right ).getLeft();
 			Expression toRet = new Expression(left,right,ctx.operator.getText());
 			return toRet;
 		}
 		else if(ctx.operator!=null){
+
 			return new Expression(visitValue(ctx.left).getLeft(),ctx.operator.getText());
 		}
 		else {
-			return new Expression(visitValue(ctx.left).getLeft());
+			return new Expression(visitValue(ctx.left),null,null);
 		}
 
 	}
@@ -592,11 +592,9 @@ public class Interpreter extends StipulaBaseVisitor {
 			ret = new Expression(new Entity(""),null);
 		}
 		else if (ctx.RAWSTRING()!=null) {
-
 			ret = new Expression(new Entity(ctx.RAWSTRING().getText()),null);
 		}
 		else if (ctx.ID()!=null) {
-
 			ret = new Expression(new Entity(ctx.ID().getText()),null);
 		}
 		else if(ctx.number()!=null) {
