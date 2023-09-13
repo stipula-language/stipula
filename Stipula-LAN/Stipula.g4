@@ -1,5 +1,7 @@
 grammar Stipula ;
-
+@header {
+    package parser;
+}
 @lexer::members {
    //there is a much better way to do this, check the ANTLR guide
    //I will leave it like this for now just becasue it is quick

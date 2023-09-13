@@ -8,3 +8,9 @@
 /StipulaVisitor.java
 /Stipula.interp
 /StipulaLexer.interp
+/HOStipula.tokens
+/HOStipulaBaseListener.java
+/HOStipulaLexer.java
+/HOStipulaLexer.tokens
+/HOStipulaListener.java
+/HOStipulaParser.java

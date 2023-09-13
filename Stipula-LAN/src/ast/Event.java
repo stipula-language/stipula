@@ -71,7 +71,6 @@ public class Event  {
 			int indexVarRight;
 			if(left!=null && left.getId().equals("now")) {
 				left.setValue(0);
-				System.out.println(right.getId());
 				indexVarRight = contract.findVar(right.getId(), program.getFields()) ;
 				if(indexVarRight == -1) {
 					if(right.getId().matches("-?\\d+(\\.\\d+)?")) {

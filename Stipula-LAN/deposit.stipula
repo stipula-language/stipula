@@ -20,8 +20,8 @@ _
 } ==> @Run
 
 @Run Farm : buy()[](w<=(flour*cost_flour)){
-_;
+  ((10/flour) * cost_flour) -o flour, Client;
 _
-}==> @Run
+} ==> @Run
 
 }
