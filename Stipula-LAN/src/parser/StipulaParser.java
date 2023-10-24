@@ -1,4 +1,4 @@
-// Generated from java-escape by ANTLR 4.11.1
+// Generated from Stipula.g4 by ANTLR 4.13.1
 
     package parser;
 
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast", "CheckReturnValue"})
 public class StipulaParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.11.1", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.13.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -99,7 +99,7 @@ public class StipulaParser extends Parser {
 	}
 
 	@Override
-	public String getGrammarFileName() { return "java-escape"; }
+	public String getGrammarFileName() { return "Stipula.g4"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }
@@ -213,7 +213,7 @@ public class StipulaParser extends Parser {
 				setState(61); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( ((_la) & ~0x3f) == 0 && ((1L << _la) & 4503599627468800L) != 0 );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 4503599627468800L) != 0) );
 			setState(63);
 			match(CRPAR);
 			}
@@ -765,7 +765,7 @@ public class StipulaParser extends Parser {
 				setState(169); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( ((_la) & ~0x3f) == 0 && ((1L << _la) & 6473971709902848L) != 0 );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 6473971709902848L) != 0) );
 			setState(171);
 			match(SEMIC);
 			setState(173); 
@@ -781,7 +781,7 @@ public class StipulaParser extends Parser {
 				setState(175); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( ((_la) & ~0x3f) == 0 && ((1L << _la) & 6473937350168576L) != 0 );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 6473937350168576L) != 0) );
 			setState(177);
 			match(CRPAR);
 			setState(178);
@@ -992,7 +992,7 @@ public class StipulaParser extends Parser {
 			{
 			setState(202);
 			_la = _input.LA(1);
-			if ( !(((_la) & ~0x3f) == 0 && ((1L << _la) & 65970697666560L) != 0) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 65970697666560L) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -1435,7 +1435,7 @@ public class StipulaParser extends Parser {
 			setState(240);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (((_la) & ~0x3f) == 0 && ((1L << _la) & 6473971709902848L) != 0) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 6473971709902848L) != 0)) {
 				{
 				{
 				setState(237);
@@ -1468,7 +1468,7 @@ public class StipulaParser extends Parser {
 				setState(251);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while (((_la) & ~0x3f) == 0 && ((1L << _la) & 6473971709902848L) != 0) {
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 6473971709902848L) != 0)) {
 					{
 					{
 					setState(248);
@@ -1503,7 +1503,7 @@ public class StipulaParser extends Parser {
 				setState(267);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while (((_la) & ~0x3f) == 0 && ((1L << _la) & 6473971709902848L) != 0) {
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 6473971709902848L) != 0)) {
 					{
 					{
 					setState(264);
@@ -1619,7 +1619,7 @@ public class StipulaParser extends Parser {
 					setState(283); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-				} while ( ((_la) & ~0x3f) == 0 && ((1L << _la) & 6473971709902848L) != 0 );
+				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 6473971709902848L) != 0) );
 				setState(285);
 				match(CRPAR);
 				setState(286);
@@ -1747,12 +1747,12 @@ public class StipulaParser extends Parser {
 			setState(300);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (((_la) & ~0x3f) == 0 && ((1L << _la) & 536877056L) != 0) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 536877056L) != 0)) {
 				{
 				setState(298);
 				((ExprContext)_localctx).operator = _input.LT(1);
 				_la = _input.LA(1);
-				if ( !(((_la) & ~0x3f) == 0 && ((1L << _la) & 536877056L) != 0) ) {
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 536877056L) != 0)) ) {
 					((ExprContext)_localctx).operator = (Token)_errHandler.recoverInline(this);
 				}
 				else {
@@ -1823,12 +1823,12 @@ public class StipulaParser extends Parser {
 			setState(305);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (((_la) & ~0x3f) == 0 && ((1L << _la) & 1073766400L) != 0) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 1073766400L) != 0)) {
 				{
 				setState(303);
 				((TermContext)_localctx).operator = _input.LT(1);
 				_la = _input.LA(1);
-				if ( !(((_la) & ~0x3f) == 0 && ((1L << _la) & 1073766400L) != 0) ) {
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 1073766400L) != 0)) ) {
 					((TermContext)_localctx).operator = (Token)_errHandler.recoverInline(this);
 				}
 				else {
@@ -1902,12 +1902,12 @@ public class StipulaParser extends Parser {
 			setState(310);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (((_la) & ~0x3f) == 0 && ((1L << _la) & 503316576L) != 0) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 503316576L) != 0)) {
 				{
 				setState(308);
 				((FactorContext)_localctx).operator = _input.LT(1);
 				_la = _input.LA(1);
-				if ( !(((_la) & ~0x3f) == 0 && ((1L << _la) & 503316576L) != 0) ) {
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 503316576L) != 0)) ) {
 					((FactorContext)_localctx).operator = (Token)_errHandler.recoverInline(this);
 				}
 				else {
