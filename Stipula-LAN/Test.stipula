@@ -1,6 +1,6 @@
 stipula Bet {
 	asset wallet1
-	field val1, event, amount, t_before, t_after
+	field val1 = 1, event, amount, t_before, t_after
 	init Init
 	
 	agreement (Better1)(event, amount, t_before, t_after){

@@ -37,6 +37,12 @@ public interface StipulaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFielddecl(StipulaParser.FielddeclContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link StipulaParser#fieldassign}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFieldassign(StipulaParser.FieldassignContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link StipulaParser#fun}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

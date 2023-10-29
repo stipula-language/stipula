@@ -67,6 +67,18 @@ public class StipulaBaseListener implements StipulaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterFieldassign(StipulaParser.FieldassignContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFieldassign(StipulaParser.FieldassignContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterFun(StipulaParser.FunContext ctx) { }
 	/**
 	 * {@inheritDoc}

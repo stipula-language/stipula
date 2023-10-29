@@ -153,15 +153,27 @@ public class TypeChecker extends StipulaBaseVisitor<Object> {
 	}
 
 	public Map<Pair<String,Integer>,Type> visitFielddecl(FielddeclContext ctx){
-		// TODO DSE qui bisogna inserire un nuovo nodo che rappresenta la dichiarazione del field
-		// In questo modo è possibile parsare sia il nome che il valore
-		// Probabilmente si andrà ad aggiungere un nuovo nodo di cui fare override in questa classe
-		// All'interno della mappa ci devo mettere il tipo corretto prendendolo dai child del nodo
-		// Basta controllare che in nodo di assegnamento contenga il valore
-		// Nel valore basta controllare quale tipo di token contiene per determinare il valore effettivo
 		Map<Pair<String,Integer>,Type> retAssets = new LinkedHashMap<Pair<String,Integer>,Type>();
-		for(int i=0; i<ctx.idField.size(); i++) {
-			retAssets.put(new Pair<String, Integer>(ctx.idField.get(i).getText(),n_scope),new GeneralType(n_types));
+		for(int i=0; i<ctx.fieldassign().size(); i++) {
+			Map<Pair<String,Integer>,Type> tmpFields = new LinkedHashMap<Pair<String,Integer>,Type>();
+			tmpFields = visitFieldassign(ctx.fieldassign(i));
+			for(Pair<String,Integer> el : tmpFields.keySet()) {
+				retAssets.put(el,tmpFields.get(el));
+			}
+		}
+		return retAssets;
+	}
+	
+	public Map<Pair<String,Integer>,Type> visitFieldassign(FieldassignContext ctx){
+		Map<Pair<String,Integer>,Type> retAssets = new LinkedHashMap<Pair<String,Integer>,Type>();
+		if(ctx.INT() != null) {
+			retAssets.put(new Pair<String, Integer>(ctx.idField.getText(),n_scope),new RealType());
+		} else if(ctx.REAL() != null) {
+			retAssets.put(new Pair<String, Integer>(ctx.idField.getText(),n_scope),new RealType());
+		} else if(ctx.RAWSTRING() != null) {
+			retAssets.put(new Pair<String, Integer>(ctx.idField.getText(),n_scope),new StringType());
+		} else {
+			retAssets.put(new Pair<String, Integer>(ctx.idField.getText(),n_scope),new GeneralType(n_types));
 			n_types++;
 		}
 		return retAssets;

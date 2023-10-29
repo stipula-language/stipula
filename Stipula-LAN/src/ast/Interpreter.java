@@ -103,10 +103,20 @@ public class Interpreter extends StipulaBaseVisitor {
 	@Override
 	public ArrayList<Field> visitFielddecl(FielddeclContext ctx) {
 		ArrayList<Field> retFields = new ArrayList<Field>();
-		for(int i=0; i<ctx.idField.size(); i++) {
-			Field tmpField = new Field(ctx.idField.get(i).getText());
-			retFields.add(tmpField);
+		for(int i=0; i<ctx.fieldassign().size(); i++) {
+			ArrayList<Field> tmpFields = visitFieldassign(ctx.fieldassign(i));
+			for(Field el : tmpFields) {
+				retFields.add(el);
+			}
 		}
+		return retFields;
+	}
+	
+	@Override
+	public ArrayList<Field> visitFieldassign(FieldassignContext ctx) {
+		ArrayList<Field> retFields = new ArrayList<Field>();
+		Field tmpField = new Field(ctx.idField.getText());
+		retFields.add(tmpField);
 		return retFields;
 	}
 

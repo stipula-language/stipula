@@ -50,6 +50,16 @@ public interface StipulaListener extends ParseTreeListener {
 	 */
 	void exitFielddecl(StipulaParser.FielddeclContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link StipulaParser#fieldassign}.
+	 * @param ctx the parse tree
+	 */
+	void enterFieldassign(StipulaParser.FieldassignContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link StipulaParser#fieldassign}.
+	 * @param ctx the parse tree
+	 */
+	void exitFieldassign(StipulaParser.FieldassignContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link StipulaParser#fun}.
 	 * @param ctx the parse tree
 	 */

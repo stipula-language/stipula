@@ -19,7 +19,9 @@ agreement : (AGREEMENT LPAR party (COMMA party)* RPAR LPAR vardec (COMMA vardec)
 
 assetdecl :  ASSET idAsset+=ID (',' idAsset+=ID)* ;
 
-fielddecl : FIELD idField+=ID (',' idField+=ID)* ;
+fielddecl : FIELD fieldassign (',' fieldassign)* ;
+
+fieldassign : idField=ID (ASM valueField=(INT | REAL | RAWSTRING))? ;
 
 fun	:  ((AT state)* (party (COMMA party)* | TILDE) COLON funId=ID LPAR (vardec ( COMMA vardec)* )? RPAR SLPAR (assetdec ( COMMA assetdec)* )? SRPAR (LPAR prec RPAR)? CLPAR (stat)+ SEMIC (events)+ CRPAR IMPL AT state )   ;
 		
