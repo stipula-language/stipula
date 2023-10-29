@@ -6,3 +6,5 @@
 /StipulaListener.java
 /StipulaParser.java
 /StipulaVisitor.java
+/Stipula.interp
+/StipulaLexer.interp
