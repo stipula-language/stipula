@@ -172,6 +172,10 @@ public class TypeChecker extends StipulaBaseVisitor<Object> {
 			retAssets.put(new Pair<String, Integer>(ctx.idField.getText(),n_scope),new RealType());
 		} else if(ctx.RAWSTRING() != null) {
 			retAssets.put(new Pair<String, Integer>(ctx.idField.getText(),n_scope),new StringType());
+		} else if(ctx.TRUE() != null) {
+			retAssets.put(new Pair<String, Integer>(ctx.idField.getText(),n_scope),new BooleanType());
+		} else if(ctx.FALSE() != null) {
+			retAssets.put(new Pair<String, Integer>(ctx.idField.getText(),n_scope),new BooleanType());
 		} else {
 			retAssets.put(new Pair<String, Integer>(ctx.idField.getText(),n_scope),new GeneralType(n_types));
 			n_types++;

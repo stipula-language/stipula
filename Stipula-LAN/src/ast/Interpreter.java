@@ -116,6 +116,17 @@ public class Interpreter extends StipulaBaseVisitor {
 	public ArrayList<Field> visitFieldassign(FieldassignContext ctx) {
 		ArrayList<Field> retFields = new ArrayList<Field>();
 		Field tmpField = new Field(ctx.idField.getText());
+		if(ctx.INT() != null) {
+			tmpField.setValue(Float.parseFloat(ctx.INT().getText()));
+		} else if(ctx.REAL() != null) {
+			tmpField.setValue(Float.parseFloat(ctx.REAL().getText()));
+		} else if(ctx.RAWSTRING() != null) {
+			tmpField.setValueStr(ctx.RAWSTRING().getText());
+		} else if(ctx.TRUE() != null) {
+			tmpField.setValueBool(true);
+		} else if(ctx.FALSE() != null) {
+			tmpField.setValueBool(false);
+		}
 		retFields.add(tmpField);
 		return retFields;
 	}
