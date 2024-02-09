@@ -1,0 +1,49 @@
+stipula Loan {
+asset a
+field amount, interest, t_0, t_1, t_2, due, payed
+init Q1
+
+agreement (Lender, Borrower)(amount, interest, t_0, t_1, t_2){
+	Lender, Borrower : amount, interest, t_0, t_1, t_2
+} ==> @Q1
+
+    @Q1 Borrower: request()[] {
+        "request" -> Lender;
+        t_0 >> @Requested {"end" -> lender} ==> @End
+    } ==> @Requested
+
+    @Requested Lender: advance()[l] (l == amount){
+        l -o Borrower;
+        t_1 >> @Outstanding {550 -> due} ==> @Default
+        t_2 >> @Outstanding1 {525 -> due} ==> @Default
+    } ==> @Outstanding
+
+    @Outstanding Borrower: pay()[a] (a == 550){
+        a -o Lender
+        a -> payed;
+        _
+    } ==> @Outstanding1
+
+    @Outstanding1 Borrower: pay()[a] (a == 525){
+        a -o Lender;
+        _
+    } ==> @End
+
+
+    @Default Borrower: cure ()[d] (d == due){
+        d -o Lender;
+        _
+    } ==> @Outstanding
+
+    @Default Lender: acceleration (x)[]{
+        "order_for_payment" -> Borrower;
+        _
+    } ==> @Injunction
+
+
+    @Injunction Borrower: pay_all()[a] (a == amount + (amount * interest) - payed){
+        a -o Lender;
+        _
+    } ==> @End
+
+}
