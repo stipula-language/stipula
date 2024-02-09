@@ -1,4 +1,4 @@
-// Generated from Stipula.g4 by ANTLR 4.13.1
+// Generated from java-escape by ANTLR 4.11.1
 
     package parser;
 
@@ -138,6 +138,12 @@ public interface StipulaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitValue(StipulaParser.ValueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link StipulaParser#date}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDate(StipulaParser.DateContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link StipulaParser#real}.
 	 * @param ctx the parse tree

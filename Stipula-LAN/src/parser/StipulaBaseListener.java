@@ -1,4 +1,4 @@
-// Generated from Stipula.g4 by ANTLR 4.13.1
+// Generated from java-escape by ANTLR 4.11.1
 
     package parser;
 
@@ -266,6 +266,18 @@ public class StipulaBaseListener implements StipulaListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitValue(StipulaParser.ValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDate(StipulaParser.DateContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDate(StipulaParser.DateContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

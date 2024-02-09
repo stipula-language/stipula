@@ -1,4 +1,4 @@
-// Generated from Stipula.g4 by ANTLR 4.13.1
+// Generated from java-escape by ANTLR 4.11.1
 
     package parser;
 
@@ -161,6 +161,13 @@ public class StipulaBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitValue(StipulaParser.ValueContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitDate(StipulaParser.DateContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

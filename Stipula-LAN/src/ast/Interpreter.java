@@ -364,13 +364,13 @@ public class Interpreter extends StipulaBaseVisitor {
 					}
 				}
 				else {
-					left = new Asset(expr.getRLeftId());
+					left = new Asset(expr.getRightComplexExpr().getRLeftId());
 					right = new Asset(ctx.right.getText());
 					try{
-						fract = Double.parseDouble(expr.getLLeftId());
+						fract = Double.parseDouble(expr.getLeftComplexExpr().getLLeftId());
 					}
 					catch(NumberFormatException e){
-						fractExpr = new Entity((expr.getLLeftId()));
+						fractExpr = new Entity((expr.getLeftComplexExpr().getLLeftId()));
 					}
 				}
 				ArrayList<Statement> tmpArray = new ArrayList<Statement>();

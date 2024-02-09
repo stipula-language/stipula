@@ -31,8 +31,8 @@ public class Test {
 
 	public static void main(String[] args) throws Exception {
 	    
-		String fileName = args[0];
-		FileInputStream is = new FileInputStream(fileName);
+		//String fileName = args[0];
+		FileInputStream is = new FileInputStream("loan.stipula");
 		ANTLRInputStream input = new ANTLRInputStream(is);
 		StipulaLexer lexer = new StipulaLexer(input);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);

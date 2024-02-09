@@ -1,4 +1,4 @@
-// Generated from Stipula.g4 by ANTLR 4.13.1
+// Generated from java-escape by ANTLR 4.11.1
 
     package parser;
 
@@ -219,6 +219,16 @@ public interface StipulaListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitValue(StipulaParser.ValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link StipulaParser#date}.
+	 * @param ctx the parse tree
+	 */
+	void enterDate(StipulaParser.DateContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link StipulaParser#date}.
+	 * @param ctx the parse tree
+	 */
+	void exitDate(StipulaParser.DateContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link StipulaParser#real}.
 	 * @param ctx the parse tree

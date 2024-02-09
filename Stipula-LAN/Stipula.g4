@@ -64,7 +64,9 @@ term   : left=factor (operator=(TIMES | DIV  | AND) right=term)?
 factor : left=value (operator = (EQ | LE | GE | LEQ | GEQ | NEQ ) right=value)?
       ;       
       
-value  :  number    
+value  :  
+      | date
+	  | number    
 	  | ID
 	  | NOW
       | LPAR expr RPAR                      
@@ -72,6 +74,8 @@ value  :  number
       | EMPTY
       | (TRUE | FALSE)				
       ;      
+
+date : val+=INT DIV val+=INT DIV val+=INT COLON val+=INT COLON val+=INT ;
 
 real : number DOT number ; 
       
