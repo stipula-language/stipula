@@ -63,7 +63,7 @@ agreement (Lender, Borrower)(maximal_amount, interest, t0, t_first, t_second){
     } ==> @Injunction
 
 
-    @Injunction Borrower: pay_all()[a] (a == (amount - payed)*(1 + 1.5*interest)){
+    @Injunction Borrower: pay_all()[a] (a == (amount - payed)*(1 + 2*interest)){
         a -o Lender;
         _
     } ==> @End
