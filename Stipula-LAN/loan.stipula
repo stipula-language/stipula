@@ -1,4 +1,4 @@
-
+/*
 THE LOAN CONTRACT
 
 * this is a simple loan contract where the Borrower takes some money and
@@ -14,7 +14,7 @@ agreed at the beginning with the Lender
 
 * in case the Borrower misses any instalment, he has to pay the double of the interest rate.
 
-
+*/
 
 stipula Loan {
 	assets a
