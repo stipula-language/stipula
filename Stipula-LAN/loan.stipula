@@ -1,30 +1,52 @@
+
+THE LOAN CONTRACT
+
+* this is a simple loan contract where the Borrower takes some money and
+has to give it back in two instalments at times t_first and t_second after the
+money is given.
+
+* the first instalment has to be 40% of the amount + the interest rate
+
+* the second instalment has to be 60% of the amount + the interest rate
+
+* the interest rate, t_first, t_second, maximal_amount of money the Borrower can grab are
+agreed at the beginning with the Lender
+
+* in case the Borrower misses any instalment, he has to pay the double of the interest rate.
+
+
+
 stipula Loan {
-asset a
-field amount, interest, t_0, t_1, t_2, due, payed
-init Q1
+	assets a
+	fields maximal_amount, interest, t0, t_first, t_second, due, payed
+	init Init
 
-agreement (Lender, Borrower)(amount, interest, t_0, t_1, t_2){
-	Lender, Borrower : amount, interest, t_0, t_1, t_2
-} ==> @Q1
+agreement (Lender, Borrower)(maximal_amount, interest, t0, t_first, t_second){
+	Lender, Borrower : maximal_amount, interest, t_0, t_1, t_2
+} ==> @Init
 
-    @Q1 Borrower: request()[] {
-        "request" -> Lender;
-        t_0 >> @Requested {"end" -> lender} ==> @End
+    @Init Borrower: request(x)[] (x <= maximal_amount){
+        "request" -> Lender
+        now + t0 >> @Requested { "You didn't reply: end" -> Lender } ==> @End
     } ==> @Requested
 
-    @Requested Lender: advance()[l] (l == amount){
-        l -o Borrower;
-        t_1 >> @Outstanding {550 -> due} ==> @Default
-        t_2 >> @Outstanding1 {525 -> due} ==> @Default
-    } ==> @Outstanding
+    @Requested Lender: advance()[l] (l <= maximal_amount){
+	l -> due 
+        l -o Borrower
+	0 -> payed
+        now + t_first >> @FirstInstal { "Pay the double of the interest!" -> Borrower
+				      } ==> @Default
+        now + t_second >> @SecondInstal {  "Pay the double of the interest!" -> Borrower
+				        } ==> @Default 
+    } ==> @FirstInstal 
 
-    @Outstanding Borrower: pay()[a] (a == 550){
+    @FirstInstal Borrower: pay()[a] (a == 0.4 * due * (1 + interest)){
         a -o Lender
-        a -> payed;
+	0.4 * amount -> payed 
         _
-    } ==> @Outstanding1
+    } ==> @SecondInstal
 
-    @Outstanding1 Borrower: pay()[a] (a == 525){
+    @SecondInstal Borrower: pay()[a] (a == 0.6 * due * (1 + interest)){
         a -o Lender;
         _
     } ==> @End
@@ -35,13 +57,13 @@ agreement (Lender, Borrower)(amount, interest, t_0, t_1, t_2){
         _
     } ==> @Outstanding
 
-    @Default Lender: acceleration (x)[]{
+    @Default Lender: acceleration ()[]{
         "order_for_payment" -> Borrower;
         _
     } ==> @Injunction
 
 
-    @Injunction Borrower: pay_all()[a] (a == amount + (amount * interest) - payed){
+    @Injunction Borrower: pay_all()[a] (a == (amount - payed)*(1 + 1.5*interest)){
         a -o Lender;
         _
     } ==> @End
