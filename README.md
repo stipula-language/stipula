@@ -38,7 +38,7 @@ There are two possibilities:
 * After downloading the zip, go to the correct folder (./Stipula Executable)
 * To run the prototype type the following code
 ```
-java -jar stipula_lan.jar name_of_the_example.stipula
+java -jar Stipula-LAN.jar name_of_the_example.stipula
 ```
  
 ### Execution
