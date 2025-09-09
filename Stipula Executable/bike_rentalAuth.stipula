@@ -1,0 +1,37 @@
+stipula BikeRentalAuth {
+    assets wallet
+    fields cost, rentingTime, code
+
+    agreement (Lender,Borrower,Authority)(rentingTime,cost){
+	    Lender, Borrower: rentingTime, cost
+    } => @Inactive
+
+    @Inactive Lender: offer(x)[] {
+	    x -> code
+    } => @Payment
+
+    @Payment Borrower: pay()[h] (h == cost){
+	    h -o wallet
+	    code -> Borrower
+	    now+rentingTime >> @Using { "EndReached" -> Borrower } => @Return
+    } => @Using
+
+    @Using Borrower: end()[] {
+	    "EndReached" -> Lender
+    } => @Return
+
+    @Return Lender: rentalOk()[] {
+	    wallet -o Lender
+    } => @End
+
+    @Using @Return Lender, Borrower: dispute(x)[] {
+	    x -> _
+    } => @Dispute
+
+    @Dispute Authority: verdict(x,y)[] (y>=0 && y<=1) {
+	    x -> Lender
+	    x -> Borrower
+	    (y*wallet) -o wallet, Lender
+	    wallet -o Borrower
+    } => @End
+}
