@@ -702,7 +702,7 @@ public class Program {
 					caseExec = 10;
 					break;
 				}
-				else {
+				else if (timer!=null){
 					for(Timer t_i : timer) {
 						t_i.cancel();
 						t_i.purge();
