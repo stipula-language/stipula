@@ -137,6 +137,7 @@ public class Program {
 	}
 
 	public void updateFieldsTypes(Map<Pair<String, Integer>, Type> typedVars) {
+		if (fields == null) return;
 		for(Pair<String,Integer> pair : typedVars.keySet()) {
 			for(Field f : fields) {
 				if(f.getId().equals(pair.getKey())) {
@@ -147,6 +148,7 @@ public class Program {
 	}
 
 	public void updateFields(Contract cnt) {
+		if (cnt.getGlobalVars() == null || fields == null) return;
 		for(Field fc : cnt.getGlobalVars()) {
 			for(Field f : fields) {
 				if(f.getId().equals(fc.getId())) {
@@ -162,6 +164,7 @@ public class Program {
 	}
 
 	public void updateParties(Contract cnt) {
+		if (cnt.getGlobalParties() == null || parties == null) return;
 		for(Party fc : cnt.getGlobalParties()) {
 			for(Party f : parties) {
 				if(f.getId().equals(fc.getId())) {
@@ -174,6 +177,7 @@ public class Program {
 	}
 
 	public void updateFieldsAgreement(ArrayList<ArrayList<Pair<Field,String>>> values) {
+		if (fields == null) return;
 		ArrayList<Pair<Field,String>> tmp = new ArrayList<Pair<Field,String>>();
 		for(ArrayList<Pair<Field,String>> el : values) {
 			tmp.addAll(el);
@@ -204,16 +208,20 @@ public class Program {
 	}
 
 	public void updateAssets(Contract cnt) {
-		for(Asset ac : cnt.getGlobalAssets()) {
-			for(Asset a : assets) {
-				if(a.getId().equals(ac.getId())) {
-					a.setCalcValue((float) ac.getValue());
+		// FIXED: Added null check to prevent NullPointerException
+		if (cnt.getGlobalAssets() != null && assets != null) {
+			for (Asset ac : cnt.getGlobalAssets()) {
+				for (Asset a : assets) {
+					if (a.getId().equals(ac.getId())) {
+						a.setCalcValue((float) ac.getValue());
+					}
 				}
 			}
 		}
 	}
 
 	public void printFields() {
+		if (fields == null) return;
 		for(Field f : fields) {
 
 			System.out.print("\t");
@@ -222,6 +230,7 @@ public class Program {
 	}
 
 	public void printAssets() {
+		if (assets == null) return;
 		for(Asset f : assets) {
 			System.out.print("\t");
 			f.printAsset();
@@ -231,6 +240,7 @@ public class Program {
 
 
 	public void printParties() {
+		if (parties == null) return;
 		for(Party d : parties) {
 			System.out.print("\t");
 			d.printParty();
@@ -257,7 +267,7 @@ public class Program {
 		}
 		timer.add(new Timer());
 		timer.get(index).schedule(new DelayEvent(event,ti), seconds*1000);
-		
+
 
 	}
 
@@ -385,20 +395,35 @@ public class Program {
 		if(this.getAgreement()!=null) {
 			System.out.println("Running the agreement.");
 			System.out.println("--------------------");
+			ArrayList<Party> tmpParties = new ArrayList<>();
 			for(Party disp : this.getAgreement().getParties()) {
 				for(Party disp2 : this.getParties()) {
 					if(disp2.getId().equals(disp.getId())) {
 						disp2.setUserId(disp.getUserId());
 						System.out.println(disp2.getId()+ " " + disp2.getUserId());
+						tmpParties.add(disp);
+					}
+				}
+				for(Party tmp : this.getParties()){
+					if(tmp.getUserId()==null){
+						for(Party tmp2 : this.agreement.getParties()) {
+							if (!tmp.getId().equals(tmp2.getId())) {
+								String id = this.agreement.generateUserId(this.agreement.getLen()).toString();
+								tmp.setUserId(id);
+								System.out.println(tmp.getId()+ " " + tmp.getUserId());
 
+							}
+						}
 					}
 				}
 			}
 			for(Contract c : this.getContracts()) {
-				for(Party d : c.getParty()) {
-					for(Party d2 : this.getParties()) {
-						if(d2.getId().equals(d.getId())) {
-							d.setUserId(d2.getUserId());
+				if(c.getParty() != null) {
+					for (Party d : c.getParty()) {
+						for (Party d2 : this.getParties()) {
+							if (d2.getId().equals(d.getId())) {
+								d.setUserId(d2.getUserId());
+							}
 						}
 					}
 				}
@@ -419,7 +444,7 @@ public class Program {
 			for(int index = 0; index<events.size(); index++) {
 				long secs = events.get(index).evaluateEvent(this);
 				setTimer(index,secs,events.get(index),typeinferencer);
-				lock.add(new Object());				
+				lock.add(new Object());
 				howManyThreads++;
 			}
 		}
@@ -431,303 +456,310 @@ public class Program {
 			boolean success = true;
 			if(running) {caseExec = 10;}
 			switch(caseExec) {
-			case 0: // first execution
+				case 0: // first execution
 
-				System.out.println("############");
-				if(this.getFields()!=null) {
-					System.out.println("Initialized fields:");
-					for(Field f : this.getFields()) {
-						if(f.getType()!=null && ( f.getType() instanceof TimeType ||  f.getType() instanceof BooleanType || f.getType() instanceof RealType || f.getType() instanceof StringType)) {
-							System.out.print("\t");
-							f.printField();
-						}
-					}
-				}
-
-				caseExec = 1;
-				if(running) {caseExec = 10;}
-				break;
-
-			case 1: 
-				System.out.println("############");
-				System.out.println("# Please, choose which function should run: ");
-
-				for(Contract c : this.getContracts()) {
-					boolean rightInitState = false;
-					for(String initState : c.getInitState()) {
-						if(initState.equals(state)) {
-							rightInitState = true;
-						}
-					}
-
-					if(rightInitState) {
-						found = true;
-						for(int i=0; i<c.getParty().size(); i++) {
-							if(i==0) {
+					System.out.println("############");
+					if(this.getFields()!=null) {
+						System.out.println("Initialized fields:");
+						for(Field f : this.getFields()) {
+							if(f.getType()!=null && ( f.getType() instanceof TimeType ||  f.getType() instanceof BooleanType || f.getType() instanceof RealType || f.getType() instanceof StringType)) {
 								System.out.print("\t");
-							}
-							if(i==c.getParty().size()-1) {
-								System.out.print(c.getParty().get(i).getId()+".");
-							}
-							else {
-								System.out.print(c.getParty().get(i).getId()+",");
-							}
-						}
-						System.out.print(c.getId()+"(");
-						if(c.getVars()!=null){
-							for(int i=0; i<c.getVars().size(); i++) {
-								if(i!=c.getVars().size()-1) {
-									System.out.print(c.getVars().get(i).getType().getTypeName()+" "+c.getVars().get(i).getId()+",");
-								}
-								else {
-									System.out.print(c.getVars().get(i).getType().getTypeName()+" "+c.getVars().get(i).getId());
-								}
-							}
-						}
-						System.out.print(")[");
-						if(c.getAssets()!=null){
-							for(int i=0; i<c.getAssets().size(); i++) {
-								if(i!=c.getAssets().size()-1) {
-									System.out.print(c.getAssets().get(i).getType().getTypeName()+" "+c.getAssets().get(i).getId()+",");
-								}
-								else {
-									System.out.print(c.getAssets().get(i).getType().getTypeName()+" "+c.getAssets().get(i).getId());
-								}
-							}
-						}
-						System.out.println("]");
-					}
-				}
-				if(running) {caseExec = 10;}
-				else if(!found && howManyThreads==0) {
-					System.out.println("### No more functions to run!");
-					System.out.println("############");
-
-					caseExec = 4;
-					break;
-				}
-				else if(!found && howManyThreads!=0) {
-					System.out.println("### No more functions to run, but still some events! Waiting..");
-					System.out.println("############");
-					caseExec = 5; 
-					break;
-				}
-				else if(found){
-					caseExec = 3;
-					break;
-				}
-
-			case 3:
-				String s;
-				GetInputThread input = new GetInputThread();
-				Thread thread = new Thread(input);
-				thread.start();
-				while (input.getInput().equals("") && !running) {
-					Thread.sleep(1500);
-				}
-				checkEvent = false;
-				s = input.getInput();
-				thread.interrupt();
-
-				if(running) {
-					caseExec = 10;
-					break;
-				}
-
-				String variables = s.substring(s.indexOf("(") + 1, s.indexOf(")"));
-				String assetsVar = s.substring(s.indexOf("[") + 1, s.indexOf("]"));
-
-				String userID = s.substring(0,s.indexOf(".") );
-				String nameContract = s.substring(s.indexOf(".") + 1, s.indexOf("("));;
-
-				String[] varsItems = variables.split(",");
-				String[] assetsItems = assetsVar.split(",");
-
-				Contract tmpContr = null;
-				for(int index=0; index< this.getContracts().size(); index++) {
-					Contract c = this.getContracts().get(index);
-					boolean rightId = false;
-					for(Party d : c.getParty()) {
-						if(d.getUserId().equals(userID)) {
-							rightId = true;
-						}
-					}
-					boolean rightInitState = false;
-					for(String initState : c.getInitState()) {
-						if(initState.equals(state)) {
-							rightInitState = true;
-						}
-					}
-					if(rightId && c.getId().equals(nameContract) && rightInitState) {
-						tmpContr = c;
-
-						boolean emptyVars = varsItems.length==1 && varsItems[0].length()==0 && tmpContr.getVars().size()==0;
-						boolean emptyAssets = assetsItems.length==1 && assetsItems[0].length()==0 && tmpContr.getAssets().size()==0;
-						boolean equalDimVars = varsItems.length==tmpContr.getVars().size() && varsItems[0].length()!=0 ;
-						boolean equalDimAssets = assetsItems.length==tmpContr.getAssets().size() && assetsItems[0].length()!=0 ;
-
-						boolean rightDimVars = emptyVars ||  equalDimVars;
-						boolean rightDimAssets = emptyAssets ||  equalDimAssets;
-
-						if(rightDimVars && rightDimAssets) {
-							boolean rightTypes = true;
-							for(int i=0; i<tmpContr.getVars().size(); i++) {
-								DateUtils d = new DateUtils();
-								if(d.isValidDate(varsItems[i]) && (!(tmpContr.getVars().get(i).getType() instanceof TimeType) || !(tmpContr.getVars().get(i).getType() instanceof GeneralType))) {
-									rightTypes = false;
-								}
-								else if((varsItems[i].equals("true") || varsItems[i].equals("false")) && !(tmpContr.getVars().get(i).getType() instanceof GeneralType) && !(tmpContr.getVars().get(i).getType() instanceof BooleanType)) {
-									rightTypes = false;
-								}
-								else if(!(tmpContr.getVars().get(i).getType() instanceof GeneralType) && !(tmpContr.getVars().get(i).getType() instanceof RealType) && !(tmpContr.getVars().get(i).getType() instanceof TimeType) && !(tmpContr.getVars().get(i).getType() instanceof StringType)) {
-									rightTypes 	= false;
-								}
-							}
-							if(rightTypes) {
-
-								if(assetsItems[0].length()!=0) {
-									for(int i=0; i<assetsItems.length; i++) {
-										Asset newAsset = new Asset((float) Double.parseDouble(assetsItems[i]));
-										newAsset.move((float) Double.parseDouble(assetsItems[i]),tmpContr.getAssets().get(i));
-										typeinferencer.addType(tmpContr.getAssets().get(i).getId(), new AssetType(),index);
-
-									}
-								}
-
-								if(varsItems[0].length()!=0) {
-									for(int i=0; i<varsItems.length; i++) {
-										DateUtils d = new DateUtils();
-										if(d.isValidDate(varsItems[i]) && (!(tmpContr.getVars().get(i).getType() instanceof TimeType) || !(tmpContr.getVars().get(i).getType() instanceof GeneralType)) ) {
-											tmpContr.getVars().get(i).setValue(d.calculateSeconds(varsItems[i])); 
-											tmpContr.getVars().get(i).setType(new TimeType());
-											typeinferencer.addType(tmpContr.getVars().get(i).getId(), new TimeType(),index);
-										}
-										else if(Program.isNumeric(varsItems[i])) {
-
-											tmpContr.getVars().get(i).setValue((float) Double.parseDouble(varsItems[i]));
-											tmpContr.getVars().get(i).setType(new RealType());
-											typeinferencer.addType(tmpContr.getVars().get(i).getId(), new RealType(),index);
-										}
-										else if(varsItems[i].equals("true") || varsItems[i].equals("false")) {
-											tmpContr.getVars().get(i).setValueBool(Boolean.parseBoolean(varsItems[i]));
-											tmpContr.getVars().get(i).setType(new BooleanType());
-											typeinferencer.addType(tmpContr.getVars().get(i).getId(), new BooleanType(),index);
-
-										}
-										else {
-											tmpContr.getVars().get(i).setValueStr(varsItems[i]);
-											tmpContr.getVars().get(i).setType(new StringType());
-											typeinferencer.addType(tmpContr.getVars().get(i).getId(), new StringType(),index);
-
-										}
-									}
-								}
-
-								if(tmpContr.getVars()!=null) {
-									for(int j=0; j<tmpContr.getVars().size(); j++) {
-										tmpContr.getVars().get(j).printField();
-									}
-								}
-								if(tmpContr.getAssets()!=null) {
-									for(int j=0; j<tmpContr.getAssets().size(); j++) {
-										tmpContr.getAssets().get(j).printAsset();
-									}
-								}
-
-								System.out.println("Executing...");
-								typedVars = typeinferencer.getTypes();
-								success = tmpContr.runContract(typeinferencer,index);
-
-								this.updateFields(tmpContr);
-								this.updateAssets(tmpContr);
-								this.updateParties(tmpContr);
-								for(Field f : tmpContr.getVars()) {
-									typeinferencer.addType(f.getId(),f.getType(),index);
-								}
-								for(Field f : tmpContr.getGlobalVars()) {
-									typeinferencer.addType(f.getId(),f.getType(),0);
-								}
-								System.out.println("=====TYPES======");
-								typedVars = typeinferencer.getTypes();
-								typeinferencer.print_map();
-
-								System.out.println("================");
-
-								typedVars = typeinferencer.getTypes();
-								if(tmpContr.getVars()!=null) {
-									for(int j=0; j<tmpContr.getVars().size(); j++) {
-										tmpContr.getVars().get(j).printField();
-									}
-								}
-								if(tmpContr.getAssets()!=null) {
-									for(int j=0; j<tmpContr.getAssets().size(); j++) {
-										tmpContr.getAssets().get(j).printAsset();
-									}
-								}
-								System.out.println("Updated fields:");
-								this.printFields();
-								System.out.println("Updated assets:");
-								this.printAssets();
-								System.out.println("Updated parties:");
-								this.printParties();
-
-
+								f.printField();
 							}
 						}
 					}
-				}
-				
 
-				if(running) {caseExec = 10;}
-				else if(!running && tmpContr!=null && success) {
-					state = tmpContr.getEndState();
-					runningState = tmpContr.getEndState();
-					System.out.println("############");
-					System.out.println("Next state " + state);
 					caseExec = 1;
-				}
-				else if(!running && ((!success && tmpContr==null)|| !found) && howManyThreads==0) {
-					caseExec = 4;
-				}
-				else if(!running && ((!success && tmpContr==null)|| !found) && howManyThreads!=0) {
-					caseExec = 5;
-
-				}
-				
-				found = false;
-				break;
-
-			case 4:
-				if(running) {
-					caseExec = 10;
+					if(running) {caseExec = 10;}
 					break;
-				}
-				else if (timer!=null){
-					for(Timer t_i : timer) {
-						t_i.cancel();
-						t_i.purge();
+
+				case 1:
+					System.out.println("############");
+					System.out.println("# Please, choose which function should run: ");
+
+					for(Contract c : this.getContracts()) {
+						boolean rightInitState = false;
+						for(String initState : c.getInitState()) {
+							if(initState.equals(state)) {
+								rightInitState = true;
+							}
+						}
+
+						if(rightInitState) {
+							found = true;
+							if(c.getParty() != null) {
+								for (int i = 0; i < c.getParty().size(); i++) {
+									if (i == 0) {
+										System.out.print("\t");
+									}
+									if (i == c.getParty().size() - 1) {
+										System.out.print(c.getParty().get(i).getId() + ".");
+									} else {
+										System.out.print(c.getParty().get(i).getId() + ",");
+									}
+								}
+							}
+							System.out.print(c.getId()+"(");
+							if(c.getVars()!=null){
+								for(int i=0; i<c.getVars().size(); i++) {
+									if(i!=c.getVars().size()-1) {
+										System.out.print(c.getVars().get(i).getType().getTypeName()+" "+c.getVars().get(i).getId()+",");
+									}
+									else {
+										System.out.print(c.getVars().get(i).getType().getTypeName()+" "+c.getVars().get(i).getId());
+									}
+								}
+							}
+							System.out.print(")[");
+							if(c.getAssets()!=null){
+								for(int i=0; i<c.getAssets().size(); i++) {
+									if(i!=c.getAssets().size()-1) {
+										System.out.print(c.getAssets().get(i).getType().getTypeName()+" "+c.getAssets().get(i).getId()+",");
+									}
+									else {
+										System.out.print(c.getAssets().get(i).getType().getTypeName()+" "+c.getAssets().get(i).getId());
+									}
+								}
+							}
+							System.out.println("]");
+						}
 					}
-				}
-				System.out.println("Fields at the end of the execution:");
-				this.printFields();
+					if(running) {caseExec = 10;}
+					else if(!found && howManyThreads==0) {
+						System.out.println("### No more functions to run!");
+						System.out.println("############");
 
-				System.out.println("Assets at the end of the execution:");
-				this.printAssets();
-				flag = false;
-				break;
+						caseExec = 4;
+						break;
+					}
+					else if(!found && howManyThreads!=0) {
+						System.out.println("### No more functions to run, but still some events! Waiting..");
+						System.out.println("############");
+						caseExec = 5;
+						break;
+					}
+					else if(found){
+						caseExec = 3;
+						break;
+					}
+
+				case 3:
+					String s;
+					GetInputThread input = new GetInputThread();
+					Thread thread = new Thread(input);
+					thread.start();
+					while (input.getInput().equals("") && !running) {
+						Thread.sleep(1500);
+					}
+					checkEvent = false;
+					s = input.getInput();
+					thread.interrupt();
+
+					if(running) {
+						caseExec = 10;
+						break;
+					}
+
+					String variables = s.substring(s.indexOf("(") + 1, s.indexOf(")"));
+					String assetsVar = s.substring(s.indexOf("[") + 1, s.indexOf("]"));
+
+					String userID = s.substring(0,s.indexOf(".") );
+					String nameContract = s.substring(s.indexOf(".") + 1, s.indexOf("("));;
+
+					String[] varsItems = variables.split(",");
+					String[] assetsItems = assetsVar.split(",");
+
+					Contract tmpContr = null;
+					for(int index=0; index< this.getContracts().size(); index++) {
+						Contract c = this.getContracts().get(index);
+						boolean rightId = false;
+						if(c.getParty() != null) {
+							for (Party d : c.getParty()) {
+								if (d.getUserId() != null && d.getUserId().equals(userID)) {
+									rightId = true;
+								}
+							}
+						}
+						boolean rightInitState = false;
+						for(String initState : c.getInitState()) {
+							if(initState.equals(state)) {
+								rightInitState = true;
+							}
+						}
+						if(rightId && c.getId().equals(nameContract) && rightInitState) {
+							tmpContr = c;
+
+							boolean emptyVars = varsItems.length==1 && varsItems[0].length()==0 && tmpContr.getVars() != null && tmpContr.getVars().size()==0;
+							boolean emptyAssets = assetsItems.length==1 && assetsItems[0].length()==0 && tmpContr.getAssets() != null && tmpContr.getAssets().size()==0;
+							boolean equalDimVars = tmpContr.getVars() != null && varsItems.length==tmpContr.getVars().size() && varsItems[0].length()!=0 ;
+							boolean equalDimAssets = tmpContr.getAssets() != null && assetsItems.length==tmpContr.getAssets().size() && assetsItems[0].length()!=0 ;
+
+							boolean rightDimVars = emptyVars || equalDimVars;
+							boolean rightDimAssets = emptyAssets || equalDimAssets;
+
+							if(rightDimVars && rightDimAssets) {
+								boolean rightTypes = true;
+								if(tmpContr.getVars() != null) {
+									for (int i = 0; i < tmpContr.getVars().size(); i++) {
+										DateUtils d = new DateUtils();
+										if (d.isValidDate(varsItems[i]) && (!(tmpContr.getVars().get(i).getType() instanceof TimeType) || !(tmpContr.getVars().get(i).getType() instanceof GeneralType))) {
+											rightTypes = false;
+										} else if ((varsItems[i].equals("true") || varsItems[i].equals("false")) && !(tmpContr.getVars().get(i).getType() instanceof GeneralType) && !(tmpContr.getVars().get(i).getType() instanceof BooleanType)) {
+											rightTypes = false;
+										} else if (!(tmpContr.getVars().get(i).getType() instanceof GeneralType) && !(tmpContr.getVars().get(i).getType() instanceof RealType) && !(tmpContr.getVars().get(i).getType() instanceof TimeType) && !(tmpContr.getVars().get(i).getType() instanceof StringType)) {
+											rightTypes = false;
+										}
+									}
+								}
+								if(rightTypes) {
+
+									if(assetsItems[0].length()!=0 && tmpContr.getAssets() != null) {
+										for(int i=0; i<assetsItems.length; i++) {
+											Asset newAsset = new Asset((float) Double.parseDouble(assetsItems[i]));
+											newAsset.move((float) Double.parseDouble(assetsItems[i]),tmpContr.getAssets().get(i));
+											typeinferencer.addType(tmpContr.getAssets().get(i).getId(), new AssetType(),index);
+
+										}
+									}
+
+									if(varsItems[0].length()!=0 && tmpContr.getVars() != null) {
+										for(int i=0; i<varsItems.length; i++) {
+											DateUtils d = new DateUtils();
+											if(d.isValidDate(varsItems[i]) && (!(tmpContr.getVars().get(i).getType() instanceof TimeType) || !(tmpContr.getVars().get(i).getType() instanceof GeneralType)) ) {
+												tmpContr.getVars().get(i).setValue(d.calculateSeconds(varsItems[i]));
+												tmpContr.getVars().get(i).setType(new TimeType());
+												typeinferencer.addType(tmpContr.getVars().get(i).getId(), new TimeType(),index);
+											}
+											else if(Program.isNumeric(varsItems[i])) {
+
+												tmpContr.getVars().get(i).setValue((float) Double.parseDouble(varsItems[i]));
+												tmpContr.getVars().get(i).setType(new RealType());
+												typeinferencer.addType(tmpContr.getVars().get(i).getId(), new RealType(),index);
+											}
+											else if(varsItems[i].equals("true") || varsItems[i].equals("false")) {
+												tmpContr.getVars().get(i).setValueBool(Boolean.parseBoolean(varsItems[i]));
+												tmpContr.getVars().get(i).setType(new BooleanType());
+												typeinferencer.addType(tmpContr.getVars().get(i).getId(), new BooleanType(),index);
+
+											}
+											else {
+												tmpContr.getVars().get(i).setValueStr(varsItems[i]);
+												tmpContr.getVars().get(i).setType(new StringType());
+												typeinferencer.addType(tmpContr.getVars().get(i).getId(), new StringType(),index);
+
+											}
+										}
+									}
+
+									if(tmpContr.getVars()!=null) {
+										for(int j=0; j<tmpContr.getVars().size(); j++) {
+											tmpContr.getVars().get(j).printField();
+										}
+									}
+									if(tmpContr.getAssets()!=null) {
+										for(int j=0; j<tmpContr.getAssets().size(); j++) {
+											tmpContr.getAssets().get(j).printAsset();
+										}
+									}
+
+									System.out.println("Executing...");
+									typedVars = typeinferencer.getTypes();
+									success = tmpContr.runContract(typeinferencer,index);
+
+									this.updateFields(tmpContr);
+									this.updateAssets(tmpContr);
+									this.updateParties(tmpContr);
+									if(tmpContr.getVars() != null) {
+										for (Field f : tmpContr.getVars()) {
+											typeinferencer.addType(f.getId(), f.getType(), index);
+										}
+									}
+									if(tmpContr.getGlobalVars() != null) {
+										for (Field f : tmpContr.getGlobalVars()) {
+											typeinferencer.addType(f.getId(), f.getType(), 0);
+										}
+									}
+									System.out.println("=====TYPES======");
+									typedVars = typeinferencer.getTypes();
+									typeinferencer.print_map();
+
+									System.out.println("================");
+
+									typedVars = typeinferencer.getTypes();
+									if(tmpContr.getVars()!=null) {
+										for(int j=0; j<tmpContr.getVars().size(); j++) {
+											tmpContr.getVars().get(j).printField();
+										}
+									}
+									if(tmpContr.getAssets()!=null) {
+										for(int j=0; j<tmpContr.getAssets().size(); j++) {
+											tmpContr.getAssets().get(j).printAsset();
+										}
+									}
+									System.out.println("Updated fields:");
+									this.printFields();
+									System.out.println("Updated assets:");
+									this.printAssets();
+									System.out.println("Updated parties:");
+									this.printParties();
 
 
-			case 10:
-				synchronized (lock) {
-					try {
-						lock.wait();
+								}
+							}
+						}
+					}
 
-					} catch(InterruptedException e) {
-					}	
-				}
-				found = false;
-				caseExec = 1;
-				break;
+
+					if(running) {caseExec = 10;}
+					else if(!running && tmpContr!=null && success) {
+						state = tmpContr.getEndState();
+						runningState = tmpContr.getEndState();
+						System.out.println("############");
+						System.out.println("Next state " + state);
+						caseExec = 1;
+					}
+					else if(!running && ((!success && tmpContr==null)|| !found) && howManyThreads==0) {
+						caseExec = 4;
+					}
+					else if(!running && ((!success && tmpContr==null)|| !found) && howManyThreads!=0) {
+						caseExec = 5;
+
+					}
+
+					found = false;
+					break;
+
+				case 4:
+					if(running) {
+						caseExec = 10;
+						break;
+					}
+					else if (timer!=null){
+						for(Timer t_i : timer) {
+							t_i.cancel();
+							t_i.purge();
+						}
+					}
+					System.out.println("Fields at the end of the execution:");
+					this.printFields();
+
+					System.out.println("Assets at the end of the execution:");
+					this.printAssets();
+					flag = false;
+					break;
+
+
+				case 10:
+					synchronized (lock) {
+						try {
+							lock.wait();
+
+						} catch(InterruptedException e) {
+						}
+					}
+					found = false;
+					caseExec = 1;
+					break;
 
 			}
 		}

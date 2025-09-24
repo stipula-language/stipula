@@ -42,6 +42,8 @@ public class Agreement {
 
 	}
 
+	public int getLen(){ return LEN; }
+
 	public ArrayList<Party> getParties(){
 		return disputers;
 	}

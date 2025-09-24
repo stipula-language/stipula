@@ -13,7 +13,7 @@ public class Contract {
 	ArrayList<String> initState = null;
 	String endState = null;
 	ArrayList<Field> globalVars = null;
-	ArrayList<Asset> globalAssets = null;
+	ArrayList<Asset> globalAssets = new ArrayList<>();
 	ArrayList<Statement> statements = null;
 	ArrayList<Expression> prec = null;
 	ArrayList<Pair<Expression,ArrayList<Statement>>> ifThenElse = null;
@@ -127,6 +127,7 @@ public class Contract {
 	}
 
 	public int findVar(String expr, ArrayList<Field> array) {
+		if (array == null) return -1;
 		for (int i = 0; i < array.size(); i++) {
 			if (array.get(i).getId().equals(expr)) {
 				return i;
@@ -136,6 +137,7 @@ public class Contract {
 	}
 
 	public int findParty(String expr) {
+		if (globalParties == null) return -1;
 		for (int i = 0; i < globalParties.size(); i++) {
 			if (globalParties.get(i).getId().equals(expr)) {
 				return i;
@@ -145,6 +147,7 @@ public class Contract {
 	}
 
 	public int findAsset(String expr, ArrayList<Asset> array) {
+		if (array == null) return -1;
 		for (int i = 0; i < array.size(); i++) {
 			if (array.get(i).getId().equals(expr)) {
 				return i;

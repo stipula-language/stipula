@@ -25,8 +25,7 @@ public class Interpreter extends StipulaBaseVisitor {
 		String progId = ctx.contract_id.getText();
 		ArrayList<Field> progFields = new ArrayList<Field>();
 		ArrayList<Asset> progAssets = new ArrayList<Asset>();
-		ArrayList<Party> progParties = new ArrayList<Party>();
-		ArrayList<String> progStates = new ArrayList<String>();
+
 		String tmpState = null;
 		if(ctx.assetdecl()!=null) {
 			progAssets = (ArrayList<Asset>) visitAssetdecl(ctx.assetdecl());
@@ -35,57 +34,67 @@ public class Interpreter extends StipulaBaseVisitor {
 			progFields = (ArrayList<Field>) visitFielddecl(ctx.fielddecl());
 		}
 
-
-
 		if(progAssets.size()==0) {
 			progAssets = null;
 		}
-		if(progParties.size()==0) {
-			progParties = null;
-		}
+
 		if(progFields.size()==0) {
 			progFields = null;
 		}
-		if(progStates.size()==0) {
-			progStates = null;
-		}
+
 		if(ctx.agreement()!=null) {
 			tmpState = ctx.agreement().state().getText();
 		}
-		program = new Program(progId, progFields, progAssets, progParties, tmpState);
+
+		// FIXED: Initialize program first, then discover ALL parties.
+		program = new Program(progId, progFields, progAssets, new ArrayList<Party>(), tmpState);
 
 		if(ctx.agreement()!=null) {
 			program.addAgreement(agr);
-			for(Party disp : agr.getParties()){
-				boolean flag = false;
-				if(program.getParties()!=null) {
-					for(Party disp2 : program.getParties()) {
-						if(disp2.getId().equals(disp.getId())) {
-							flag = true;
-						}
-					}
-					if(!flag) {
-						program.addParty(disp);
-					}
+			if (agr.getParties() != null) {
+				for(Party disp : agr.getParties()){
+					addPartyIfNotExists(disp);
 				}
-
 			}
-			if(program.getParties()==null) {
-				program.addParties(agr.getParties());
-			}
-
 		}
 
+		// FIXED: Iterate through all functions to find every party (like B and C).
 		for(StipulaParser.FunContext f : ctx.fun()) {
 			Contract cnt = (Contract) visitFun(f);
+			if (cnt.getParty() != null) {
+				for (Party p : cnt.getParty()) {
+					addPartyIfNotExists(p);
+				}
+			}
+			program.addContract(cnt);
+		}
+
+		// FIXED: After finding all parties, update the global party list for each contract.
+		for (Contract cnt : program.getContracts()) {
+			cnt.setGlobalParties(program.getParties());
 			if(cnt.getParty()==null) {
 				cnt.setParties(program.getParties());
 			}
-			cnt.setGlobalParties(program.getParties());
-			program.addContract(cnt);
-
 		}
+
 		return program ;
+	}
+
+	// Helper function to avoid duplicate parties.
+	private void addPartyIfNotExists(Party partyToAdd) {
+		if (program.getParties() == null) {
+			program.addParties(new ArrayList<>());
+		}
+		boolean found = false;
+		for (Party existingParty : program.getParties()) {
+			if (existingParty.getId().equals(partyToAdd.getId())) {
+				found = true;
+				break;
+			}
+		}
+		if (!found) {
+			program.addParty(partyToAdd);
+		}
 	}
 
 
@@ -114,7 +123,7 @@ public class Interpreter extends StipulaBaseVisitor {
 		ArrayList<Party> disp = new ArrayList<Party>();
 		for(StipulaParser.PartyContext n : ctx.party()) {
 			Party tmp = new Party(n.getText());
-			disp.add(tmp);			
+			disp.add(tmp);
 		}
 		ArrayList<Field> fields = new ArrayList<Field>();
 		for(StipulaParser.VardecContext n : ctx.vardec()) {
@@ -221,7 +230,7 @@ public class Interpreter extends StipulaBaseVisitor {
 			for(int i = 0; i<ctx.state().size(); i++) {
 				String tmp = ctx.state().get(i).getText();
 				if(i==ctx.state().size()-1) {state2 = tmp;}
-				else {				
+				else {
 					state1.add(tmp);
 				}
 			}
@@ -231,7 +240,7 @@ public class Interpreter extends StipulaBaseVisitor {
 		newContract.addFields(program.getFields());
 		newContract.addAssets(program.getAssets());
 
-		if(ctx.prec()!=null) { 
+		if(ctx.prec()!=null) {
 			Expression conds = (Expression) visitPrec(ctx.prec());
 			newContract.addPrecondition(conds);
 		}
@@ -268,23 +277,18 @@ public class Interpreter extends StipulaBaseVisitor {
 
 	@Override
 	public Event visitEvent(StipulaParser.EventContext ctx) {
-		if(ctx.EMPTY()==null) {
-			String init = ctx.ID(0).toString();
-			String end = ctx.ID(ctx.ID().size()-1).toString();
-			ArrayList<Pair<Expression,ArrayList<Statement>>> eventStat = new ArrayList<Pair<Expression,ArrayList<Statement>>>();
+		String init = ctx.ID(0).toString();
+		String end = ctx.ID(ctx.ID().size()-1).toString();
+		ArrayList<Pair<Expression,ArrayList<Statement>>> eventStat = new ArrayList<Pair<Expression,ArrayList<Statement>>>();
 
-			for(StipulaParser.StatContext stm : ctx.stat()) {
-				eventStat.addAll((Collection<? extends Pair<Expression, ArrayList<Statement>>>) visitStat(stm));
-			}
-
-			Expression expr = (Expression) visitExpr(ctx.expr());
-			Event eventToRet = new Event(init,end,eventStat,expr);
-			return eventToRet;
-
+		for(StipulaParser.StatContext stm : ctx.stat()) {
+			eventStat.addAll((Collection<? extends Pair<Expression, ArrayList<Statement>>>) visitStat(stm));
 		}
-		else{
-			return null;
-		}
+
+		Expression expr = (Expression) visitExpr(ctx.expr());
+		Event eventToRet = new Event(init,end,eventStat,expr);
+		return eventToRet;
+
 	}
 
 	@Override

@@ -3,7 +3,7 @@ package ast;
 public class Party extends Entity{
 
 	String name;
-	String userId ;
+	String userId = null;
 	Asset valueAsset = new Asset();
 	float value = 0;
 	String valueStr = "";
@@ -17,9 +17,6 @@ public class Party extends Entity{
 	}
 	
 	public String getUserId() {
-		if(userId==null) {
-			return "";
-		}
 		return userId;
 	}
 	public void setValue(float v) {

@@ -255,7 +255,6 @@ public class TypeChecker extends StipulaBaseVisitor<Object> {
 
 		if(ctx.event()!=null) {
 			for(StipulaParser.EventContext sc : ctx.event()) {
-				if(sc.EMPTY()==null) {
 					Map<Pair<String,Integer>,Type> tmp = (Map<Pair<String, Integer>, Type>) visitEvents(sc);
 					for(Pair<String,Integer> s : tmp.keySet()) {
 						if(!isPresent(s,toRet)){
@@ -266,7 +265,7 @@ public class TypeChecker extends StipulaBaseVisitor<Object> {
 							toRet.put(tmpPair,tmp.get(s));
 						}
 					}
-				}
+
 			}
 
 		}
