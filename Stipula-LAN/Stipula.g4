@@ -17,9 +17,9 @@ prog :  STIPULA contract_id = ID CLPAR (assetdecl)? (fielddecl)? agreement (fun)
 
 agreement : (AGREEMENT LPAR party (COMMA party)* RPAR LPAR vardec (COMMA vardec)* RPAR CLPAR (assign)+ CRPAR IMPL AT state);
 
-assetdecl :  ASSET idAsset+=ID (',' idAsset+=ID)* ;
+assetdecl :  ASSET idAsset+=ID (COMMA idAsset+=ID)* ;
 
-fielddecl : FIELD idField+=ID (',' idField+=ID)* ;
+fielddecl : FIELD idField+=ID (COMMA idField+=ID)* ;
 
 fun	:  ((AT state)* (party (COMMA party)* | TILDE) COLON funId=ID LPAR (vardec ( COMMA vardec)* )? RPAR SLPAR (assetdec ( COMMA assetdec)* )? SRPAR (LPAR prec RPAR)? CLPAR (stat)* (event)* CRPAR IMPL AT state )   ;
 
@@ -46,8 +46,7 @@ stat 	:   left=value operator=ASSETUP right=ID (COMMA rightPlus=ID)?
 
 ifelse : (IF LPAR cond=expr RPAR CLPAR ifBranch+=stat (ifBranch+=stat)* CRPAR (ELSEIF condElseIf+=expr CLPAR elseIfBranch+=stat (elseIfBranch+=stat)* CRPAR)* (ELSE CLPAR elseBranch+=stat (elseBranch+=stat)* CRPAR )?);
 
-event	:   EMPTY
-			|expr TRIGGER AT ID CLPAR stat+ CRPAR IMPL AT ID
+event	:   expr TRIGGER AT ID CLPAR stat* CRPAR IMPL AT ID
 			;
 
 prec  : expr
@@ -82,6 +81,7 @@ number : INT | REAL ;
 SEMIC  	: ';' ;
 COLON  	: ':' ;
 COMMA  	: ',' ;
+EMPTY  	: '_' ;
 DOT    	: '.' ;
 EQ     	: '==' ;
 NEQ     : '!=' ;
@@ -110,7 +110,6 @@ GE		: '>';
 OR		: '||';
 AND		: '&&';
 NOT		: '!';
-EMPTY 	: '_' ;
 NOW 	: 'now' ;
 TRIGGER : '>>';
 IF     : 'if' ;
