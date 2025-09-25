@@ -1,4 +1,4 @@
-stipula License2 {
+stipula LicenseLong {
     assets license, wallet
     fields license_fee, breach_fee, t_removal
 
