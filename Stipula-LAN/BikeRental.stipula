@@ -1,4 +1,4 @@
-stipula Bike_Rental {
+stipula BikeRental {
     assets wallet, bike
     fields cost, k
 
