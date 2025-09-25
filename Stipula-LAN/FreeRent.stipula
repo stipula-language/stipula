@@ -1,4 +1,4 @@
-stipula Free_Rent {
+stipula FreeRent {
     assets token
     fields numBox, t_start, t_limit
 
