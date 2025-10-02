@@ -1,32 +1,18 @@
 package ast;
 
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Scanner;
-import java.lang.Object;
-import java.nio.charset.Charset;
 
 import lib.Pair;
 
 public class Agreement {
-	public static final int LEN = 5;  
+	public static final int LEN = 5;
 
 	ArrayList<Party> disputers = null;
-	ArrayList<Field> vars = null;
 	ArrayList<Pair<Party,ArrayList<Field>>> vals = null;
 
-	public Agreement(ArrayList<Party> d, ArrayList<Field> v) {
+	public Agreement(ArrayList<Party> d,  ArrayList<Pair<Party,ArrayList<Field>>> l) {
 		disputers = d;
-		vars = v;
-		for(Party disp : disputers) {
-			disp.setUserId(generateUserId(LEN).toString());
-		}
-
-	}
-
-	public Agreement(ArrayList<Party> d, ArrayList<Field> v, ArrayList<Pair<Party,ArrayList<Field>>> l) {
-		disputers = d;
-		vars = v;
 		vals = l;
 		for(Party disp : disputers) {
 			disp.setUserId(generateUserId(LEN).toString());
@@ -37,7 +23,7 @@ public class Agreement {
 					pair.getKey().setUserId(disp.getUserId());
 				}
 			}
-			
+
 		}
 
 	}
@@ -68,7 +54,7 @@ public class Agreement {
 			System.out.println();
 			System.out.println("# Please, " + pair.getKey().getId() + " insert your id: ");
 			String read1 = input.nextLine();
-			
+
 			if(read1.equals(pair.getKey().getUserId())) {
 				System.out.println("# Please, " + pair.getKey().getId() + " insert the values for the fields: ");
 				for(int i=0; i<pair.getValue().size(); i++) {
@@ -126,9 +112,6 @@ public class Agreement {
 		for(Party d : disputers) {
 			d.printParty();
 		}
-		for(Field f : vars) {
-			f.printField();
 		}
-	}
 
 }
