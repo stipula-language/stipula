@@ -1,0 +1,30 @@
+stipula License {
+    assets balance, token
+    fields t_start, t_limit, cost, code
+
+    agreement (Licensor, Licensee){
+		Licensor, Licensee : t_start, t_limit, cost
+    } => @Inactive
+
+    @Inactive Licensee: offerLicense (x)[n]{
+        n -o token
+        ((x+1)*3) -> code
+        now + t_start >> @Proposal {
+            token -o Licensor
+        } => @End
+    } => @Proposal
+
+    @Proposal Licensee: activateLicense()[b] (b == cost) {
+        b -o balance
+        code -> Licensee
+        now + t_limit >> @Trial {
+            balance -o Licensee
+            token -o Licensor
+        } => @End
+    } => @Trial
+
+    @Trial Licensee: buy ()[]{
+        balance -o Licensor
+        token -o Licensee
+    } => @End
+}

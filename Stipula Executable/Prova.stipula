@@ -1,0 +1,13 @@
+stipula deposit {
+  assets wallet, house
+  fields cost, deadline
+  agreement (A, B) {
+    A, B : cost
+    B : deadline
+  } => @INIT
+
+  @INIT A : begin()[u]{
+    u -> B
+    u -o wallet
+  } => @RUN
+}

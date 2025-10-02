@@ -1,0 +1,12 @@
+stipula WrongWrongTime {
+    fields x
+    agreement(A,B,C){
+		A: x
+    } => @Q0
+
+    @Q0 A: f()[] {} => @Q1
+
+    @Q0 B: g()[] {} => @Q1
+
+    @Q1 C: h()[] {} => @Q0
+}

@@ -1,0 +1,29 @@
+stipula Deposit {
+    assets flour
+    fields cost_flour
+
+    agreement (Client, Farm) {
+        Client, Farm: cost_flour
+    } => @Start
+
+    @Start Farm: begin()[h]{
+        h -> Client
+        h -o flour
+        now + 365 >> @Run {
+            flour -o Farm
+            "contract ended" -> Client
+            "contract ended" -> Farm
+         } => @End
+    } => @Run
+
+    @Run Farm: send()[h]{
+        h -> Client
+        h -o flour
+    } => @Run
+
+    @Run Client: buy()[w] (w <= (flour*cost_flour)){
+        (w/cost_flour) -o flour, Client
+        w -o Farm
+    } => @Run
+
+}

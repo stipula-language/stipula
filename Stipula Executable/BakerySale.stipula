@@ -1,0 +1,82 @@
+/*
+SALE OF A BAKERY
+
+This example concerns the sale of a bakery from the seller, Eva, to the buyer, Chris,
+which includes a warranty guaranteeing that the bakery has a production capacity
+of N pretzels per day.
+
+After Eva has transferred ownership (@Init Eva : transfer) and Chris has made the
+payment (@Init1 Chris : pay), the contract enters the closing phase (@Closing).
+In this phase, the warranty clause becomes effective.
+
+The warranty stipulates that:
+
+* If the bakery is unable to meet the warranty (N pretzels per day), Chris must
+  assert this breach by invoking the function
+
+	@Closing Chris: pretzel_warranty_breach
+
+  within 14 days from the closing of the contract (ev.32 @Closing => @End).
+
+* If Chris files a claim, Eva must repair the bakery with the function
+
+  	@Breach Eva: repair
+
+  within 28 days from the date Chris filed the claim (ev.41 @Breach => @Refund).
+
+* If Eva fails to repair the bakery within 28 days from the claim, then she must
+  compensate Chris with a monetary refund, the 20% of the price of the bakery
+
+	@Refund Eva: refund
+
+  within 14 days from the expiration of the repair deadline (ev: @Refund => @Fail).
+
+* A general clause provides that any warranty claim must be made within 42 days from
+  closing (@Closing).
+
+NOTE
+The final clause limiting any warranty claim to 42 days after @Closing contradicts
+the clause obliging Eva to pay compensation within 14 days after the repair deadline
+has expired.
+
+Indeed: repair deadline = 28 days from claim; claim deadline = 14 days from @Closing.
+Therefore, 14 + 28 + 14 = 56 days from @Closing, which exceeds the 42-day limit.
+*/
+
+stipula BakerySale {
+	assets wallet, property
+	fields price, N, missedPretzel
+
+	agreement(Chris, Eva) {
+		Chris, Eva: price, N
+	} => @Init
+
+	@Init Eva : transfer()[p] {
+		p -o property
+	} => @ContInit
+
+	@ContInit Chris : pay()[w] (w == price) {
+		w -o wallet
+		property -o Chris
+
+		now + 14 >> @Closing { wallet -o Eva } => @End
+		now + 42 >> @Closing { wallet -o Eva } => @End
+   	} => @Closing
+
+	@Closing Chris: pretzel_warranty_breach(x)[] (x < N){
+		x -> Eva
+		(N-x) -> missedPretzel
+		now + 28 >> @Breach {} => @Refund
+		now + 42 >> @Refund {} => @Fail
+	} => @Breach
+
+	@Breach Eva: repair(x)[] (x == missedPretzel){
+		x -> Chris
+		wallet -o Eva
+	} => @End
+
+	@Refund Eva: refund()[] {
+		(wallet*0.2) -o wallet, Chris
+		wallet -o Eva
+	} => @End
+}

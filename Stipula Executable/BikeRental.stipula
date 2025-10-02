@@ -1,0 +1,25 @@
+stipula BikeRental {
+    assets wallet, bike
+    fields cost, k
+
+    agreement (Lender,Borrower){
+	    Lender, Borrower: cost, k
+    } => @Inactive
+
+    @Inactive Lender : offer()[b] {
+	    b -o bike
+    } => @Payment
+
+    @Payment Borrower : pay()[x]  {
+	    x -o wallet
+	    bike -o Borrower
+	    now + k >> @Using {
+		      wallet -o Lender
+		} => @End
+    } => @Using
+
+    @Using Borrower : end()[] {
+	    (0.5*wallet) -o wallet, Lender
+	    wallet -o Borrower
+    } => @End
+}

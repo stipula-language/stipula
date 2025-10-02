@@ -1,0 +1,29 @@
+stipula FreeRent {
+    assets token
+    fields numBox, t_start, t_limit
+
+    agreement (Lender, Borrower) {
+	    Lender, Borrower: t_start , t_limit
+    } => @Inactive
+
+    @Inactive Lender: boxProposal(n)[t] {
+	    t -o token
+	    n -> numBox
+	    now + t_start >> @Proposal {
+		    token -o Lender
+	    } => @End
+    } => @Proposal
+
+    @Proposal Borrower : boxUse()[] {
+	    numBox -> Borrower
+	    token -o Borrower
+	    now + t_limit >> @Using {
+		    "Time_Limit_Reached" -> Borrower
+		    token -o Lender
+	    } => @End
+    } => @Using
+
+    @Using Borrower: returnBox()[] {
+	    token -o Lender
+    } => @End
+}
