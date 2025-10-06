@@ -36,11 +36,10 @@ public class Event  {
 	public long evaluateEvent(Program program) {
 		long seconds = 0;
 		DateUtils d = new DateUtils();
-
-		if(expr.getOp()==null){
+		if(expr.getOp()==null && !expr.getTextExpression().equals("now")){
 			Entity left = expr.getLeft();
 			int indexVar = contract.findVar(left.getId(), program.getFields()) ;
-			
+
 			if(program.getFields().get(indexVar).getValueStr()==null) {
 				left.setValue(program.getFields().get(indexVar).getValue());
 
@@ -81,7 +80,6 @@ public class Event  {
 			int indexVarRight;
 			if(left!=null && left.getId().equals("now")) {
 				left.setValue(0);
-				System.out.println(right.getId());
 				indexVarRight = contract.findVar(right.getId(), program.getFields()) ;
 				if(indexVarRight == -1) {
 					if(right.getId().matches("-?\\d+(\\.\\d+)?")) {
@@ -125,7 +123,6 @@ public class Event  {
 					seconds = (int) (left.getValue()*SECS*MINS+d.calculateSeconds(right.getValueStr()));
 				}
 				else {
-
 					seconds = (int) (left.getValue()+right.getValue()*SECS*MINS);
 				}
 			}

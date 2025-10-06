@@ -125,11 +125,7 @@ public class Interpreter extends StipulaBaseVisitor {
 			Party tmp = new Party(n.getText());
 			disp.add(tmp);
 		}
-		ArrayList<Field> fields = new ArrayList<Field>();
-		for(StipulaParser.VardecContext n : ctx.vardec()) {
-			Field tmp = new Field(n.getText());
-			fields.add(tmp);
-		}
+
 		ArrayList<Pair<Party,ArrayList<Field>>> vals = new ArrayList<Pair<Party,ArrayList<Field>>>();
 		for(StipulaParser.AssignContext ac : ctx.assign()) {
 			vals.addAll((Collection<? extends Pair<Party, ArrayList<Field>>>) visitAssign(ac));
@@ -168,7 +164,7 @@ public class Interpreter extends StipulaBaseVisitor {
 
 
 
-		Agreement agreement = new Agreement(disp,fields,valsToRet);
+		Agreement agreement = new Agreement(disp,valsToRet);
 		return agreement;
 	}
 
