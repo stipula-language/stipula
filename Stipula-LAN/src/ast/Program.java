@@ -748,6 +748,18 @@ public class Program {
 					flag = false;
 					break;
 
+				case 5:
+					synchronized (lock) {
+						try {
+							if (howManyThreads > 0) {
+								lock.wait();
+							}
+						} catch(InterruptedException e) {
+							Thread.currentThread().interrupt();
+						}
+					}
+					caseExec = 1;
+					break;
 
 				case 10:
 					synchronized (lock) {

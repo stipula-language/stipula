@@ -125,7 +125,6 @@ public class Event  {
 				else {
 					seconds = (int) (left.getValue()+right.getValue()*SECS*MINS);
 				}
-				System.out.println("i secondi sono " + seconds);
 			}
 
 		}
