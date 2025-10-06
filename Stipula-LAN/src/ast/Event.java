@@ -9,7 +9,7 @@ import lib.Pair;
 public class Event  {
 
 	final int SECS = 60;
-	final int MINS = 60;
+	final int MINS = 1; // now + 1 : 60 seconds, change in case you want to express in hours
 
 	String init = null;
 	String end = null;
@@ -125,6 +125,7 @@ public class Event  {
 				else {
 					seconds = (int) (left.getValue()+right.getValue()*SECS*MINS);
 				}
+				System.out.println("i secondi sono " + seconds);
 			}
 
 		}
