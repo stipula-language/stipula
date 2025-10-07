@@ -33,108 +33,181 @@ public class Event  {
 		return contract;
 	}
 
+	private long evalTextualDelay(Program program) {
+		DateUtils d = new DateUtils();
+		long total = 0L;
+		String text = expr.getTextExpression();
+		if (text == null) return 0L;
+		text = text.replaceAll("\\s+", " ").trim();
+		String[] parts = text.split("\\+");
+		for (String raw : parts) {
+			String term = raw.trim();
+			if (term.equals("now")) continue;
+			if (term.matches("-?\\d+(?:\\.\\d+)?")) {
+				total += (long)(Float.parseFloat(term) * SECS * MINS);
+				continue;
+			}
+			int idx = contract.findVar(term, program.getFields());
+			if (idx >= 0) {
+				String vstr = program.getFields().get(idx).getValueStr();
+				if (vstr != null && !vstr.equals("")) {
+					total += d.calculateSeconds(vstr);
+				} else {
+					total += (long)(program.getFields().get(idx).getValue() * SECS * MINS);
+				}
+			}
+		}
+		return total;
+	}
+
 	public long evaluateEvent(Program program) {
 		long seconds = 0;
 		DateUtils d = new DateUtils();
-		if(expr.getOp()==null && !expr.getTextExpression().equals("now")){
-			Entity left = expr.getLeft();
-			int indexVar = contract.findVar(left.getId(), program.getFields()) ;
 
-			if(program.getFields().get(indexVar).getValueStr()==null) {
-				left.setValue(program.getFields().get(indexVar).getValue());
+		if (expr.getTextExpression() != null && expr.getTextExpression().contains("+")) {
+			String text = expr.getTextExpression().replaceAll("\\s+", " ").trim();
+			String[] parts = text.split("\\+");
 
-			}
-			else {
-				left.setValueStr(program.getFields().get(indexVar).getValueStr());
+			long totalSecs = 0L;
 
-			}
-			
-			program.getFields().get(indexVar).setType(new TimeType());
-			contract.setValuesConditions(left,null);
-			if(!left.getValueStr().equals("")) {
-				seconds = d.calculateSeconds(left.getValueStr());
-			}
-			else {
-				seconds = (int) (left.getValue()*SECS*MINS);
+			Entity firstTerm = null;
+			Entity secondTerm = null;
+
+			for (String raw : parts) {
+				String term = raw.trim();
+				if (term.isEmpty() || term.equals("now")) continue;
+
+				if (firstTerm == null) {
+					firstTerm = new Entity(term);
+				} else if (secondTerm == null) {
+					secondTerm = new Entity(term);
+				}
+
+				if (term.matches("-?\\d+(?:\\.\\d+)?")) {
+					double minutes = Double.parseDouble(term);
+					totalSecs += Math.round(minutes * SECS * MINS);
+					continue;
+				}
+
+				int idx = contract.findVar(term, program.getFields());
+				if (idx >= 0) {
+					program.getFields().get(idx).setType(new TimeType());
+
+					float minutes = program.getFields().get(idx).getValue();
+					totalSecs += Math.round(minutes * SECS * MINS);
+				}
 			}
 
+			if (firstTerm != null && secondTerm != null) {
+				contract.setValuesConditions(firstTerm, secondTerm);
+			} else if (firstTerm != null) {
+				contract.setValuesConditions(firstTerm, null);
+			} else {
+				contract.setValuesConditions(null, null);
+			}
+
+			return totalSecs;
 		}
-		else if(expr.getLeftComplexExpr()!=null){
 
+
+		if (expr.getOp() == null && !expr.getTextExpression().equals("now")) {
+			Entity left = expr.getLeft();
+			int indexVar = contract.findVar(left.getId(), program.getFields());
+
+			if (program.getFields().get(indexVar).getValueStr() == null) {
+				left.setValue(program.getFields().get(indexVar).getValue());
+			} else {
+				left.setValueStr(program.getFields().get(indexVar).getValueStr());
+			}
+
+			program.getFields().get(indexVar).setType(new TimeType());
+			contract.setValuesConditions(left, null);
+
+			if (!left.getValueStr().equals("")) {
+				seconds = d.calculateSeconds(left.getValueStr());
+			} else {
+				seconds = (int) (left.getValue() * SECS * MINS);
+			}
+		}
+		else if (expr.getLeftComplexExpr() != null) {
 			Entity left = expr.getLeftComplexExpr().getLeft();
-			if(left==null) {
+			if (left == null) {
 				left = new Entity(expr.getLeftComplexExpr().getTextExpression());
 			}
 			Entity right = null;
 
-			if(expr.getRightComplexExpr()!=null) {
+			expr.printExpression();
+
+			if (expr.getRightComplexExpr() != null) {
 				right = expr.getRightComplexExpr().getLeft();
-			}
-			else {
+			} else if (expr.getLeftComplexExpr() != null) {
 				right = expr.getLeftComplexExpr().getRight();
 			}
-
 
 			String op = expr.getOp();
 			int indexVarLeft;
 			int indexVarRight;
-			if(left!=null && left.getId().equals("now")) {
+
+			if (left != null && "now".equals(left.getId())) {
 				left.setValue(0);
-				indexVarRight = contract.findVar(right.getId(), program.getFields()) ;
-				if(indexVarRight == -1) {
-					if(right.getId().matches("-?\\d+(\\.\\d+)?")) {
-						right.setValue(Float.parseFloat(right.getId()));
+
+				if (right != null) {
+					indexVarRight = contract.findVar(right.getId(), program.getFields());
+					if (indexVarRight == -1) {
+						if (right.getId() != null && right.getId().matches("-?\\d+(\\.\\d+)?")) {
+							right.setValue(Float.parseFloat(right.getId()));
+						}
+					} else {
+						right.setValue(program.getFields().get(indexVarRight).getValue());
+						program.getFields().get(indexVarRight).setType(new TimeType());
 					}
 				}
-				else {
-					right.setValue(program.getFields().get(indexVarRight).getValue());
-					program.getFields().get(indexVarRight).setType(new TimeType());
 
-				}
-
-
-				contract.setValuesConditions(null,right);
+				contract.setValuesConditions(null, right);
 			}
-			else if(right.getId().equals("now")) {
+			else if (right != null && "now".equals(right.getId())) {
 				right.setValue(0);
-				indexVarLeft = contract.findVar(left.getId(), program.getFields()) ;
+				indexVarLeft = contract.findVar(left.getId(), program.getFields());
 				program.getFields().get(indexVarLeft).setType(new TimeType());
 				left.setValue(program.getFields().get(indexVarLeft).getValue());
-				contract.setValuesConditions(left,null);
+				contract.setValuesConditions(left, null);
 			}
 			else {
-
-				indexVarLeft = contract.findVar(left.getId(), program.getFields()) ;
-				program.getFields().get(indexVarLeft).setType(new TimeType());
-				left.setValue(program.getFields().get(indexVarLeft).getValue());
-
-				indexVarRight = contract.findVar(right.getId(), program.getFields()) ;
-				program.getFields().get(indexVarRight).setType(new TimeType());
-				right.setValue(program.getFields().get(indexVarRight).getValue());
-
-				contract.setValuesConditions(left,right);
-			}
-			if(op.equals("+")) {
-
-				if(!left.getValueStr().equals("")) {
-					seconds = (int) (d.calculateSeconds(left.getValueStr())+right.getValue()*SECS*MINS);
+				if (left != null) {
+					indexVarLeft = contract.findVar(left.getId(), program.getFields());
+					program.getFields().get(indexVarLeft).setType(new TimeType());
+					left.setValue(program.getFields().get(indexVarLeft).getValue());
 				}
-				else if(!right.getValueStr().equals("")){
-					seconds = (int) (left.getValue()*SECS*MINS+d.calculateSeconds(right.getValueStr()));
+				if (right != null) {
+					indexVarRight = contract.findVar(right.getId(), program.getFields());
+					program.getFields().get(indexVarRight).setType(new TimeType());
+					right.setValue(program.getFields().get(indexVarRight).getValue());
+				}
+				contract.setValuesConditions(left, right);
+			}
+
+			if ("+".equals(op)) {
+				if (left != null && left.getValueStr() != null && !left.getValueStr().equals("")) {
+					seconds = (int) (d.calculateSeconds(left.getValueStr())
+							+ (right != null ? right.getValue() * SECS * MINS : 0));
+				}
+				else if (right != null && right.getValueStr() != null && !right.getValueStr().equals("")) {
+					seconds = (int) ((left != null ? left.getValue() * SECS * MINS : 0)
+							+ d.calculateSeconds(right.getValueStr()));
 				}
 				else {
-					seconds = (int) (left.getValue()+right.getValue()*SECS*MINS);
+					seconds = (int) ((left != null ? left.getValue() * SECS * MINS : 0)
+							+ (right != null ? right.getValue() * SECS * MINS : 0));
 				}
 			}
-
 		}
-
-		else if(expr.getTextExpression().equals("now")) {
-			seconds = 0; 
+		else if (expr.getTextExpression().equals("now")) {
+			seconds = 0;
 		}
 
 		return seconds;
 	}
+
 
 	public void setTimer(int seconds) {
 		Object lock = new Object();
