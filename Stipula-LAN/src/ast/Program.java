@@ -28,6 +28,7 @@ public class Program {
 	private int howManyThreads = 0;
 	private boolean checkEvent = false;
 	private int caseExec = 0;
+	private boolean eventsArmed = false;
 
 
 	public Program(String name, ArrayList<Field> f, ArrayList<Asset> a, ArrayList<Party> d, String s){
@@ -440,14 +441,7 @@ public class Program {
 				typedVars = typeinferencer.getTypes();
 			}
 		}
-		if(events!=null) {
-			for(int index = 0; index<events.size(); index++) {
-				long secs = events.get(index).evaluateEvent(this);
-				setTimer(index,secs,events.get(index),typeinferencer);
-				lock.add(new Object());
-				howManyThreads++;
-			}
-		}
+		/* Events are deferred until after the first successful function call. */
 		boolean found = false;
 
 		while(flag) {
@@ -714,6 +708,15 @@ public class Program {
 					else if(!running && tmpContr!=null && success) {
 						state = tmpContr.getEndState();
 						runningState = tmpContr.getEndState();
+						if(!eventsArmed && events!=null) {
+							for(int index = 0; index<events.size(); index++) {
+								long secs = events.get(index).evaluateEvent(this);
+								setTimer(index,secs,events.get(index),typeinferencer);
+								lock.add(new Object());
+								howManyThreads++;
+							}
+							eventsArmed = true;
+						}
 						System.out.println("############");
 						System.out.println("Next state " + state);
 						caseExec = 1;
